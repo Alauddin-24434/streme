@@ -5,12 +5,11 @@ import toast, { Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { FaGoogle } from 'react-icons/fa';
 import Link from 'next/link';
-import useUserInfo from '@/hooks/useUser';
 export default function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const userInfo = useUserInfo();
+
     const router = useRouter()
     const handleLogin = async (e) => {
         setError(''); // Clear error state
@@ -19,14 +18,8 @@ export default function LoginPage() {
             await login(email, password);
             // Redirect to dashboard or another page upon successful login
             toast.success('Logged in successfully');
-            if (userInfo && userInfo.isAdmin) {
-                await router.push('/dashboard');
-            } else if (userInfo && userInfo.isPayment){
-                await router.push('/home');
-            }
-            else {
-                await router.push('/home');
-            }
+            await router.push('/subscribe');
+
         } catch (error) {
             setError(error.message);
         }
@@ -42,11 +35,7 @@ export default function LoginPage() {
 
 
             toast.success("Login successfully");
-            if (userInfo && userInfo.isAdmin) {
-                await router.push('/dashboard');
-            } else {
-                await router.push('/home');
-            }
+            await router.push('/subscribe');
 
 
         } catch (error) {
@@ -97,7 +86,7 @@ export default function LoginPage() {
                     </div>
 
                     <div>
-                        <button type="submit"  className="w-full flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium border-gray-300 placeholder-gray-500 text-gray-300 bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <button type="submit" className=" w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium  text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
 
                             Sign in
                         </button>
@@ -106,7 +95,7 @@ export default function LoginPage() {
 
                 <button
                     onClick={handleGoogleSignIn}
-                    className="flex items-center w-full justify-center gap-2 py-2 px-4 border border-transparent shadow-sm text-sm font-medium text-gray-300 bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                    className="flex items-center w-full justify-center gap-2 py-2 px-4 border border-transparent shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                 >
                     <FaGoogle />
                     Sign Up with Google

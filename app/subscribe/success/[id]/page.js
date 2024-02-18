@@ -2,27 +2,25 @@ import { Box, Button, Link, Typography } from '@mui/material';
 import React from 'react';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import axios from 'axios';
+import useUserInfo from '@/hooks/useUser';
+
 const SuccessPageId = async ({ params }) => {
     console.log('params', params)
-    const res = await axios.get(`http://localhost:5000/payments/${params?.id}`)
+    const res = await axios.get(`https://endgame-team-server.vercel.app/payments/${params?.id}`)
     const paymentData = await res.data;
-
-    
-    // const userInfo = useUserInfo();
-    // const userAge = userInfo?.age;
+    const userInfo = useUserInfo();
+    const userAge = userInfo?.age;
 
     // Conditional routing logic
-    // const handleRoute = () => {
-    //     if (userAge && userAge < 18) {
-    //         // Route to kids page if user is 18 or younger
-    //         window.location.href = '/kids';
-    //     } else {
-    //         // Route to home page if user is older than 18
-    //         window.location.href = '/home';
-    //     }
-    // };
-
-
+    const handleRoute = () => {
+        if (userAge && userAge < 18) {
+            // Route to kids page if user is 18 or younger
+            window.location.href = '/kids';
+        } else {
+            // Route to home page if user is older than 18
+            window.location.href = '/home';
+        }
+    };
 
     return (
         <Box margin={2} marginTop={6}>
@@ -40,7 +38,7 @@ const SuccessPageId = async ({ params }) => {
                     </Box>
                 </Box>
                 <Box paddingBottom={3} display={'flex'} justifyContent={'center'}>
-                    <Link href={"/home"}><Button variant="outlined" className='text-white border-rose-300'>Enjoy Video</Button></Link>
+                    <Button variant="outlined" className='text-white border-rose-300' onClick={handleRoute}>Enjoy Video</Button>
                 </Box>
             </Box>
         </Box>

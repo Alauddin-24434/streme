@@ -2,11 +2,9 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import { initializeApp } from 'firebase/app';
-import { GoogleAuthProvider, GithubAuthProvider, signInWithPopup, getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from 'firebase/auth';
-import axios from 'axios';
-
+import {GoogleAuthProvider,GithubAuthProvider,signInWithPopup, getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from 'firebase/auth';
+import axios from 'axios'
 const firebaseConfig = {
-  // Your Firebase config details here
   apiKey: "AIzaSyBv5o9wisLho90U-2XgJSl7Z3PT7sSHfgE",
   authDomain: "endgame-team-project.firebaseapp.com",
   projectId: "endgame-team-project",
@@ -19,21 +17,14 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 const githubProvider = new GithubAuthProvider();
-
 export const AuthContext = React.createContext();
-
 const getUserFromLocalStorage = () => {
-  if (typeof window !== 'undefined') {
-    const user = localStorage.getItem('currentUser');
-    return user ? JSON.parse(user) : null;
-  }
-  return null;
+  const user = localStorage.getItem('currentUser');
+  return user ? JSON.parse(user) : null;
 };
 
 const setUserInLocalStorage = (user) => {
-  if (typeof window !== 'undefined') {
-    localStorage.setItem('currentUser', JSON.stringify(user));
-  }
+  localStorage.setItem('currentUser', JSON.stringify(user));
 };
 
 export const login = async (email, password) => {
@@ -46,27 +37,27 @@ export const login = async (email, password) => {
   }
 };
 
-export const signup = async (email, password, username, gender, age, country) => {
+export const signup = async (email, password,username,gender, age) => {
   try {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password,username,gender, age);
     setUserInLocalStorage(userCredential?.user);
 
+    // Check if the user is signing up for the first time
     if (userCredential) {
-      const currentDate = new Date().toISOString();
+      const currentDate = new Date().toISOString(); // Get the current date and time in ISO string format
+
+      // Send user data to your server endpoint using Axios
       await axios.post('https://endgame-team-server.vercel.app/users', {
         uid: userCredential.user.uid,
-        userName: username,
-        photoURL: userCredential.user.photoURL,
+        userName:username,
+        photoURL:userCredential.user.photoURL,
         email: userCredential.user.email,
-        provider: 'manual',
-        isAdmin: false,
-        isPayment: false,
-        signupDate: currentDate,
-        gender: gender,
-        age: age,
-        status: 'enable',
-        country: country,
-        isVerify: false,
+        provider: 'google',
+        isAdmin: false, // Set isAdmin to false by default
+        isPayment: false, // Set isPayment to false by default
+        signupDate: currentDate ,// Include the current date
+        gender:gender,
+         age:age
       });
     }
   } catch (error) {
@@ -74,7 +65,6 @@ export const signup = async (email, password, username, gender, age, country) =>
     throw error;
   }
 };
-
 export const logout = async () => {
   try {
     await signOut(auth);
@@ -85,27 +75,31 @@ export const logout = async () => {
   }
 };
 
+
+
+
+
 export const signInWithGoogle = async () => {
   try {
-    const userCredential = await signInWithPopup(auth, provider);
+    const userCredential = await signInWithPopup(auth, provider); // Open Google Sign-In popup
     setUserInLocalStorage(userCredential.user);
 
+    // Check if the user is signing in with Google for the first time
     if (userCredential) {
-      const currentDate = new Date().toISOString();
+      const currentDate = new Date().toISOString(); // Get the current date and time in ISO string format
+
+      // Send user data to your server endpoint using Axios
       await axios.post('https://endgame-team-server.vercel.app/users', {
         uid: userCredential.user.uid,
-        userName: userCredential.user.displayName,
-        photoURL: userCredential.user.photoURL,
+        userName:userCredential.user.displayName,
+        photoURL:userCredential.user.photoURL,
         email: userCredential.user.email,
         provider: 'google',
-        isAdmin: false,
-        isPayment: false,
-        signupDate: currentDate,
-        gender: "",
-        age: "",
-        status: 'enable',
-        country: "",
-        isVerify: false,
+        isAdmin: false, // Set isAdmin to false by default
+        isPayment: false, // Set isPayment to false by default
+        signupDate: currentDate ,// Include the current date
+        gender:"",
+        age:"",
       });
     }
   } catch (error) {
@@ -113,14 +107,14 @@ export const signInWithGoogle = async () => {
     throw error;
   }
 };
-
 export const getCurrentUser = () => {
   return getUserFromLocalStorage();
 };
 
+
 export const signInWithGithub = async () => {
   try {
-    await signInWithPopup(auth, githubProvider);
+    await signInWithPopup(auth, githubProvider); // Open Facebook Sign-In popup
   } catch (error) {
     console.error(error.message);
     throw error;
@@ -135,11 +129,13 @@ const AuthProvider = ({ children }) => {
       setCurrentUser(user);
     });
 
-    return () => unsubscribe();
+    return () => unsubscribe(); // Cleanup
   }, []);
 
+
+
   return (
-    <AuthContext.Provider value={{ currentUser, getCurrentUser, login, signup, logout, signInWithGoogle, signInWithGithub }}>
+    <AuthContext.Provider value={{ currentUser,  getCurrentUser, login, signup, logout ,signInWithGoogle,signInWithGithub}}>
       {children}
     </AuthContext.Provider>
   );

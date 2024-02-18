@@ -1,19 +1,21 @@
 // useUserInfo.js
+"use client"
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
+
 const useUserInfo = () => {
+    const userDataString = localStorage.getItem('currentUser');
+
+    // Parse user data into a JavaScript object
+    const currentUser = userDataString ? JSON.parse(userDataString) : null;
+    
+  
     const [userInfo, setUserInfo] = useState(null);
 
     useEffect(() => {
         const fetchUserInfo = async () => {
             try {
-                const userDataString = localStorage.getItem('currentUser');
-                if (!userDataString) {
-                    console.error('No user data found in localStorage');
-                    return;
-                }
-                const currentUser = JSON.parse(userDataString);
                 const response = await axios.get('https://endgame-team-server.vercel.app/users');
                 // Filter the response based on the current user's email
                 const currentUserInfo = response.data.find(user => user.email === currentUser.email);
@@ -23,8 +25,10 @@ const useUserInfo = () => {
             }
         };
 
-        fetchUserInfo(); // Always attempt to fetch user info on component mount
-    }, []); // Empty dependency array ensures the effect runs only once
+        if (currentUser) {
+            fetchUserInfo();
+        }
+    }, [currentUser]);
 
     return userInfo;
 };
