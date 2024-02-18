@@ -1,6 +1,8 @@
 
 import { Inter } from 'next/font/google'
 import './globals.css'
+import Naveber from '@/components/shared/navber/page'
+import Sidebar from '@/components/shared/sidebar/page'
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -14,7 +16,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-          {children}
+      <Naveber></Naveber>
+        <div className='flex'>
+          <div className='w-20 h-[90vh] text-center justify-center items-center bg-slate-800'>
+            <Sidebar></Sidebar>
+          </div>
+          {children}</div>
       </body>
     </html>
   )
