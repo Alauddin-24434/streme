@@ -9,10 +9,12 @@ const SubscribeUser = () => {
         <Box sx={{ textAlign: 'center', maxWidth: '1280px', margin: 'auto' }}>
             <Typography sx={{ color: 'white', fontSize: '40px' }}>CHOOSE A PLAN </Typography>
             <Typography sx={{ color: 'white' }}>AND ENJOY ALL VIDEO PREMIUM CONTENTS</Typography>
-            <SubscribePage />
+        <SubscribePage/>
         </Box>
     );
 };
+
 export default SubscribeUser;
 
 
+ 

@@ -3,8 +3,8 @@ import { Box, Typography } from "@mui/material";
 import axios from "axios";
 
 const PaymentPage = async ({ params }) => {
-console.log(params)
-    const res = await axios.get(`http://localhost:5000/packages/${params?.id}`);
+
+    const res = await axios.get(`https://endgame-team-server.vercel.app/packages/${params?.id}`);
     const packages = await res.data;
     console.log(packages)
 

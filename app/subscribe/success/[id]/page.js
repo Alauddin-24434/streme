@@ -5,7 +5,7 @@ import axios from 'axios';
 import Link from 'next/link';
 const SuccessPageId = async ({ params }) => {
     console.log('params', params)
-    const res = await axios.get(`http://localhost:5000/payments/${params?.id}`)
+    const res = await axios.get(`https://endgame-team-server.vercel.app/payments/${params?.id}`)
     const paymentData = await res.data;
 
     return (
