@@ -8,7 +8,10 @@ const Navbar = () => {
         <img className="w-[120px] pt-3 md:pt-0 md:w-[190px]" src={"https://i.ibb.co/B396qB4/Screenshot-2024-02-07-031511-removebg-preview.png"}></img>
       </div>
       <div className="mt-6 mr-3">
-        <span className="font-bold  py-2 xl:py-3 text-xs md:text-base lg:text-lg xl:text-xl hover:scale-95 duration-300 px-4 lg:px-10 text-white mt-5 bg-[#00b84b] z-[100000]"><LoginButton /></span>
+        <button className="text-red hover:before:bg-redborder-red-500 relative h-[50px] w-40 overflow-hidden border border-green-500 bg-white px-3 text-green-500 shadow-2xl transition-all before:absolute before:bottom-0 before:left-0 before:top-0 before:z-0 before:h-full before:w-0 before:bg-green-500 before:transition-all before:duration-500 hover:text-white hover:shadow-green-500 hover:before:left-0 hover:before:w-full">
+
+        <span className="relative z-10"><LoginButton /></span>
+        </button>
       </div>
     </div>
     );
