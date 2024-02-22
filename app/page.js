@@ -1,12 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
 
+
 "use client"
 
 import Packages from "@/section/Packages";
 import { useState } from "react";
 import Faq from "../section/Faq";
-import Review from "../section/Review";
 import Footer from "../section/Footer";
+import Review from "../section/Review";
 import Navbar from "@/components/LandingNavbar/Navbar";
 
 
@@ -18,6 +19,10 @@ export default function LandingPage() {
   const sliders = [{ img: "https://i.ibb.co/ZhrDhcd/desktop-wallpaper-kgf-chapter-2-stills-first-look-posters-of-kgf-chapter-2-movie-kgf-chapter-2-poste.jpg", tags: "Room", }, { img: "https://i.ibb.co/4RTZrWc/thamb3.jpg", tags: "Room", }, { img: "https://i.ibb.co/LS8DnKg/wp11157463.jpg", tags: "Room", }, { img: "https://i.ibb.co/NSg5SDJ/thamb4.jpg", tags: "Room", }, { img: "https://i.ibb.co/Q6xrkJm/thamb5.jpg", tags: "Room", },];
   const nextSlider = () => setCurrentSlider((currentSlider) => (currentSlider === sliders.length - 1 ? 0 : currentSlider + 1));
   return (
+
+    
+    
+
     <main className="">
     
 
@@ -65,4 +70,5 @@ export default function LandingPage() {
 
     </main>
   );
+
 }
