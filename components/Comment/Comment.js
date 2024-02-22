@@ -4,8 +4,11 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import QuickreplyIcon from '@mui/icons-material/Quickreply';
 import EditIcon from '@mui/icons-material/Edit';
 import CommentForm from "./CommentForm";
-const Comment = ({ comment, replies, currentUserId, deleteComment, updateComment, activeComment, setActiveComment, parentId = null, addComment }) => {
-
+import { Height } from "@mui/icons-material";
+const Comment = ({ comment, replies, currentUserId, deleteComment, updateComment, activeComment, setActiveComment, parentId = null, addComment, handleLike,handleDislike }) => {
+    // console.log(comment.like?.length)
+    const currentUserLikeMap = comment.like?.find(data => data === currentUserId)
+    const currentUserLike = currentUserLikeMap?.length > 0 && currentUserLikeMap?.length;
     // const fiveMinute = 300000;
     // const timePassed = new Date() - new Date(comment.createdAt) > fiveMinute
     const canReply = Boolean(currentUserId);
@@ -17,31 +20,41 @@ const Comment = ({ comment, replies, currentUserId, deleteComment, updateComment
     const replyId = parentId ? parentId : comment?._id;
     return (
         <Box>
-            <Box key={comment._id} sx={{ display: 'flex', marginTop: '8px', marginBottom: 2 ,color:"white"}}>
-                <Avatar sx={{ marginTop: 2 }} alt="Remy Sharp" src={comment?.userImage} />
+            <Box key={comment._id} sx={{ display: 'flex', marginTop: '8px', marginBottom: 2, color: "white" }}>
+                <Avatar sx={{ marginTop: 2, width: { xs: 30, sm: 40 }, height: { xs: 30, sm: 40 } }} alt="Remy Sharp" src={comment?.userImage} />
                 <Box sx={{ width: '100%', marginLeft: 3 }}>
-                    <Divider />
-                    <Typography sx={{ fontWeight: 800, fontSize: 20, marginTop: 2, color: 'white' }}>{comment.username} <span className='text-xs font-normal'>. {createdAt}</span></Typography>
-                    {!isEditing && <Typography sx={{ fontWeight: 200, fontSize: 17, marginTop: 1, marginBottom: 1 }}>{comment.body}</Typography>}
-                    {isEditing && (
-                        <CommentForm
-                            submitLabel="Update"
-                            hasCancelButton
-                            initialText={comment.body}
-                            handleSubmit={(text) => updateComment(text, comment._id)}
-                            handleCancel={() => setActiveComment(null)}
-                        />
-                    )}
-                    <Box sx={{ display: 'flex', '& > :not(style)': { marginRight: '30px', color: 'white' } }} >
-                        <Typography><FavoriteIcon sx={comment.like > 0 ? { color: 'red', marginRight: 1 } : { color: 'white', marginRight: 1 }} />{comment.like > 0 ? comment.like : 'Like'}</Typography>
-                        {canReply && <Typography onClick={() => setActiveComment({ id: comment._id, type: 'replying' })}><QuickreplyIcon />Reply</Typography>}
-                        {canEdit && <Typography onClick={() => setActiveComment({ id: comment._id, type: 'editing' })}><EditIcon />Edit</Typography>}
-                        {canDelete && <Typography onClick={() => deleteComment(comment._id)}><DeleteIcon />Delete</Typography>}
-                    </Box>
 
+                    <Typography sx={{ fontWeight: 700, fontSize: { xs: 14, sm: 17 }, marginTop: 2, color: '#828387' }}>{comment.username} <span className='text-xs font-normal'>. {createdAt}</span></Typography>
+                    {!isEditing && <Typography display={"block"} marginRight={2} sx={{ fontWeight: 200, fontSize: { xs: 14, sm: 17 }, marginTop: 1, marginBottom: 1, color: 'white' }}>{comment.body}</Typography>}
+                    {isEditing && (
+                        <Box marginRight={5} marginY={3}>
+                            <CommentForm
+                                submitLabel="Update"
+                                hasCancelButton
+                                initialText={comment.body}
+                                handleSubmit={(text) => updateComment(text, comment._id)}
+                                handleCancel={() => setActiveComment(null)}
+                            />
+                        </Box>
+                    )}
+                    <Box sx={{ display: 'flex', '& > :not(style)': { marginRight: { xs: '15px', sm: '22px' }, color: '#828387' } }} >
+                        {currentUserLike ? <>
+                            <Typography onClick={() => handleDislike({ parentId: comment?.parentId, _id: comment._id })} sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, alignItems: 'center', fontSize: { xs: 13, sm: 16 }, "&:hover": { color: "rgb(28, 199, 73)" } }}><FavoriteIcon sx={{ color: 'red', marginRight: { xs: 0, sm: 1 }, fontSize: { xs: 19, sm: 22 } }} />{comment.like?.length > 0 ? comment.like?.length : 'Like'}</Typography>
+                        </>
+                            :
+                            <>
+                                <Typography onClick={() => handleLike({ parentId: comment.parentId, _id: comment._id })} sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, alignItems: 'center', fontSize: { xs: 13, sm: 16 }, "&:hover": { color: "rgb(28, 199, 73)" } }}><FavoriteIcon sx={{ marginRight: { xs: 0, sm: 1 }, fontSize: { xs: 19, sm: 22 } }} />{comment.like?.length > 0 ? comment.like?.length : 'Like'}</Typography>
+                            </>}
+
+                        {canReply && <Typography onClick={() => setActiveComment({ id: comment._id, type: 'replying' })} sx={{ alignItems: 'center', fontSize: { xs: 13, sm: 16 }, display: { xs: 'flex', sm: 'flex' }, flexDirection: { xs: 'column', sm: 'row' }, "&:hover": { color: "rgb(28, 199, 73)" } }}><QuickreplyIcon sx={{ fontSize: { xs: 18, sm: 21 }, marginRight: { xs: 0, sm: 1 } }} />Reply</Typography>}
+                        {canEdit && <Typography onClick={() => setActiveComment({ id: comment._id, type: 'editing' })} sx={{ alignItems: 'center', fontSize: { xs: 13, sm: 16 }, display: { xs: 'flex', sm: 'flex' }, flexDirection: { xs: 'column', sm: 'row' }, "&:hover": { color: "rgb(28, 199, 73)" } }}><EditIcon sx={{ fontSize: { xs: 18, sm: 21 }, display: { xs: 'flex', sm: 'flex' }, flexDirection: { xs: 'column', sm: 'row' }, marginRight: { xs: 0, sm: 1 } }} />Edit</Typography>}
+                        {canDelete && <Typography onClick={() => deleteComment(comment._id)} sx={{ alignItems: 'center', fontSize: { xs: 13, sm: 16 }, display: { xs: 'flex', sm: 'flex' }, flexDirection: { xs: 'column', sm: 'row' }, "&:hover": { color: "rgb(28, 199, 73)" } }}><DeleteIcon sx={{ fontSize: { xs: 18, sm: 21 }, display: { xs: 'flex', sm: 'flex' }, flexDirection: { xs: 'column', sm: 'row' }, marginRight: { xs: 0, sm: 1 } }} />Delete</Typography>}
+                    </Box>
                     {/* Reply Comment Sections...................................... */}
                     {isReplying && (
-                        <CommentForm submitLabel="Reply" handleSubmit={(text) => addComment(text, replyId)} />
+                        <Box marginRight={5} marginTop={2}>
+                            <CommentForm submitLabel="Reply" handleSubmit={(text) => addComment(text, replyId)} />
+                        </Box>
                     )}
                     {replies.length > 0 && (
                         <Box>
@@ -55,6 +68,8 @@ const Comment = ({ comment, replies, currentUserId, deleteComment, updateComment
                                 setActiveComment={setActiveComment}
                                 parentId={comment._id}
                                 addComment={addComment}
+                                handleLike={handleLike}
+                                handleDislike={handleDislike}
                             />
                             ))}
                         </Box>
@@ -63,6 +78,7 @@ const Comment = ({ comment, replies, currentUserId, deleteComment, updateComment
                 </Box>
 
             </Box>
+
         </Box>
     );
 };

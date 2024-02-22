@@ -11,7 +11,7 @@ const ProtectedRoute = ({ children }) => {
   useEffect(() => {
     // Check if currentUser exists in context or in local storage
     if (!currentUser && !getCurrentUser()) {
-      router.push('/'); // Redirect to the login page
+      router.push('/login'); // Redirect to the login page
     }
   }, [currentUser, getCurrentUser, router]);
 

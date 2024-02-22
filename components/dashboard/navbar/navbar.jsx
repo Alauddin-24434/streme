@@ -2,10 +2,13 @@
 import React, { useState } from 'react';
 
 import Link from 'next/link';
+import useUserInfo from '@/hooks/useUser';
 
 const DashboardNavbar = () => {
+    
+    const userInfo = useUserInfo();
     const [isSidebarOpen, setSidebarOpen] = useState(false);
-
+    const isAdmin = userInfo?.isAdmin;
     const toggleSidebar = () => {
         setSidebarOpen(!isSidebarOpen);
     };
@@ -13,6 +16,7 @@ const DashboardNavbar = () => {
     const closeSidebar = () => {
         setSidebarOpen(false);
     };
+   
 
     return (
         <div className="flex  lg:hidden">
@@ -25,41 +29,61 @@ const DashboardNavbar = () => {
                 <div className="p-4">
                     {/* Add your sidebar content here */}
                     <nav>
-                        <ul className='flex flex-col gap-4'>
-                            <li>
-                                <Link href="/" onClick={closeSidebar}>
-                                    <p className="route-link bg-gray-700 p-2 hover:bg-gray-600">Home</p>
-                                </Link>
-                            </li>
+                    {isAdmin ?  <ul className='flex flex-col gap-4'>
+                      
+                      <li>
+                          <Link href="/home" onClick={closeSidebar}>
+                              <p className="route-link bg-gray-700 p-2 hover:bg-gray-600">Home</p>
+                          </Link>
+                      </li>
 
-                            <li>
-                                <Link href="/dashboard" onClick={closeSidebar}>
-                                    <p className="route-link bg-gray-700 p-2 hover:bg-gray-600">Dashboard</p>
-                                </Link>
-                            </li>
+                      <li>
+                          <Link href="/dashboard" onClick={closeSidebar}>
+                              <p className="route-link bg-gray-700 p-2 hover:bg-gray-600">Dashboard</p>
+                          </Link>
+                      </li>
 
-                            <li>
-                                <Link href="/dashboard/movies" onClick={closeSidebar}>
-                                    <p className="route-link bg-gray-700 p-2 hover:bg-gray-600">Movie List</p>
-                                </Link>
-                            </li>
+                      <li>
+                          <Link href="/dashboard/movies" onClick={closeSidebar}>
+                              <p className="route-link bg-gray-700 p-2 hover:bg-gray-600">Movie List</p>
+                          </Link>
+                      </li>
 
-                            <li>
-                                <Link href="/dashboard/shows" onClick={closeSidebar}>
-                                    <p className="route-link bg-gray-700 p-2 hover:bg-gray-600">Show</p>
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="/dashboard/season" onClick={closeSidebar}>
-                                    <p className="route-link bg-gray-700 p-2 hover:bg-gray-600">Season</p>
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="/dashboard/episode" onClick={closeSidebar}>
-                                    <p className="route-link bg-gray-700 p-2 hover:bg-gray-600">Episode</p>
-                                </Link>
-                            </li>
-                        </ul>
+                      <li>
+                          <Link href="/dashboard/shows" onClick={closeSidebar}>
+                              <p className="route-link bg-gray-700 p-2 hover:bg-gray-600">Show</p>
+                          </Link>
+                      </li>
+                  
+                      <li>
+                          <Link href="/dashboard/episode" onClick={closeSidebar}>
+                              <p className="route-link bg-gray-700 p-2 hover:bg-gray-600">Episode</p>
+                          </Link>
+                      </li>
+                  </ul> :    <ul className='flex flex-col gap-4'>
+                      
+                      <li>
+                          <Link href="/home" onClick={closeSidebar}>
+                              <p className="route-link bg-gray-700 p-2 hover:bg-gray-600">Home</p>
+                          </Link>
+                      </li>
+
+                      <li>
+                          <Link href="/dashboard" onClick={closeSidebar}>
+                              <p className="route-link bg-gray-700 p-2 hover:bg-gray-600">Profie</p>
+                          </Link>
+                      </li>
+
+                      <li>
+                          <Link href="/dashboard/upload" onClick={closeSidebar}>
+                              <p className="route-link bg-gray-700 p-2 hover:bg-gray-600">Upload</p>
+                          </Link>
+                      </li>
+
+                   
+                  </ul> }
+                  
+                
                     </nav>
                 </div>
             </div>

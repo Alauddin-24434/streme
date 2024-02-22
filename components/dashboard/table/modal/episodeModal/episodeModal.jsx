@@ -1,330 +1,237 @@
-import React, { useState } from 'react';
+"use client";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import toast, { Toaster } from 'react-hot-toast';
+import { storage } from '@/utils/firebase-config';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 
 const EpisodeModal = ({ closeModal }) => {
-  const EpisodeName = [
-    {
-      id: 0,
-      name: "alpa",
-      isisSeason: ["012633", "64454", "7474"],
-    },
-    {
-      id: 1,
-      name: "salpa",
-      isisSeason: ["012633", "64454", "7474"],
-    },
-    {
-      id: 2,
-      name: "glpa",
-      isisSeason: ["012633", "64454", "7474"],
-    },
-    {
-      id: 3,
-      name: "slpa",
-      isisSeason: ["012633", "64454", "7474"],
-    },
-  ];
-
+  const [videoUploadPercent, setVideoUploadPercent] = useState(0)
   const [formData, setFormData] = useState({
-    showName: EpisodeName[0].name,
-    season: EpisodeName[0].isisSeason[0],
+    episodes: 0,
     description: '',
-    castAndCrew: [
-      {
-        id: 0,
-        name: '',
-        role: '',
-        image: null,
-      },
-    ],
-    releaseDate: '',
-    publicDate: '',
-    duration: '',
-    thumbnail: null,
-    poster: null,
-    trailerUrl: '',
-    videoQuality: '480',
-    video: null,
+    title: '', // Changed to empty string
+    thumbnail: { file: null, link: null },
+    poster: { file: null, link: null },
+    video: { file: null, link: null },
+    status: 'enable',
   });
 
-  const handleCastAndCrewChange = (e, index) => {
+  const [isClient, setIsClient] = useState(false);
+  const [showNames, setShowNames] = useState([]);
+  const [selectedShowId, setSelectedShowId] = useState(null);
+  const [insertedEpisodeId, setInsertedEpisodeId] = useState(null);
+
+  useEffect(() => {
+    setIsClient(true);
+
+    const fetchShowNames = async () => {
+      try {
+        const response = await axios.get('https://endgame-team-server.vercel.app/latestShows');
+        setShowNames(response.data);
+      } catch (error) {
+        console.error('Failed to fetch show names:', error.message);
+        toast.error('Failed to fetch show names. Please try again.');
+      }
+    };
+
+    fetchShowNames();
+  }, []);
+
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
-    const updatedCastAndCrew = [...formData.castAndCrew];
-    updatedCastAndCrew[index] = { ...updatedCastAndCrew[index], [name]: value };
-    setFormData({ ...formData, castAndCrew: updatedCastAndCrew });
+    const parsedValue = name === 'episodes' ? parseInt(value, 10) : value;
+    setFormData({
+      ...formData,
+      [name]: parsedValue,
+    });
   };
 
-  const handleFileUpload = (e, index) => {
-    const imageFile = e.target.files[0];
-    const updatedCastAndCrew = [...formData.castAndCrew];
-    updatedCastAndCrew[index] = { ...updatedCastAndCrew[index], image: imageFile };
-    setFormData({ ...formData, castAndCrew: updatedCastAndCrew });
+  const handleFileUpload = async (e) => {
+    if (!isClient) return;
+
+    const { name, files } = e.target;
+
+    if (!files || files.length === 0) {
+      console.error('No files selected for upload');
+      return;
+    }
+
+    const uploadedFile = files[0];
+
+    if (!uploadedFile) {
+      console.error('Uploaded file is not defined');
+      return;
+    }
+
+    const storagePath = `seasons/${uploadedFile.name}`;
+    const storageRef = ref(storage, storagePath);
+
+    try {
+      const uploadTask = uploadBytesResumable(storageRef, uploadedFile);
+
+      uploadTask.on('state_changed', (snapshot) => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        setVideoUploadPercent(progress)
+        console.log(`Upload is ${progress}% done`);
+      });
+
+      await uploadTask;
+
+      const downloadURL = await getDownloadURL(storageRef);
+
+      switch (name) {
+        case 'thumbnail':
+          setFormData((prevData) => ({
+            ...prevData,
+            thumbnail: { file: uploadedFile, link: downloadURL },
+          }));
+          break;
+        case 'poster':
+          setFormData((prevData) => ({
+            ...prevData,
+            poster: { file: uploadedFile, link: downloadURL },
+          }));
+          break;
+        case 'video':
+          setFormData((prevData) => ({
+            ...prevData,
+            video: { file: uploadedFile, link: downloadURL },
+          }));
+          break;
+        default:
+          break;
+      }
+
+      toast.success(`${name} uploaded successfully!`);
+    } catch (error) {
+      console.error(`Error uploading ${name}:`, error);
+      toast.error(`Error uploading ${error}`);
+    }
   };
 
-  const handleAddCastAndCrew = () => {
-    const newId = formData.castAndCrew.length;
-    const updatedCastAndCrew = [...formData.castAndCrew, { id: newId, name: '', role: '', image: null }];
-    setFormData({ ...formData, castAndCrew: updatedCastAndCrew });
-  };
+  const handleSave = async () => {
+    if (formData.episodes === 0) {
+      toast.error('Episode number cannot be 0. Please enter a valid episode number.');
+      return; // Prevent further execution
+    }
 
-  const handleRemoveCastAndCrew = (index) => {
-    const updatedCastAndCrew = formData.castAndCrew.filter((_, i) => i !== index);
-    setFormData({ ...formData, castAndCrew: updatedCastAndCrew });
-  };
+    try {
+      const response = await axios.post('https://endgame-team-server.vercel.app/episodes', formData);
+      const { insertedId, acknowledged } = response.data;
+      if (!insertedId) {
+        console.error('Error saving episode: Inserted ID is missing');
+        toast.error('Error saving episode. Inserted ID is missing.');
+        return;
+      }
+      setInsertedEpisodeId(insertedId); // Update insertedEpisodeId state
 
-  const handleDateAndDurationChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+      // Wait for insertedEpisodeId state to update
+      await new Promise(resolve => setTimeout(resolve, 100));
 
-  const handleMediaFileUpload = (e, name) => {
-    const file = e.target.files[0];
-    setFormData({ ...formData, [name]: file });
-  };
+      toast.success(`Episode saved successfully! Acknowledged: ${acknowledged}`, {
+        autoClose: 5000,
+      });
 
-  const handleSave = () => {
-    console.log('Form Data:', formData);
-    closeModal();
+      const showResponse = await axios.put(`https://endgame-team-server.vercel.app/shows/${selectedShowId}/episodes`, {
+        episodeId: insertedId,
+      });
+      console.log('Show updated successfully:', showResponse.data);
+    } catch (error) {
+      console.error('Error saving episode:', error.message);
+      toast.error('Error saving episode. Please try again.');
+    }
   };
 
   return (
     <div>
-      <div className='flex items-center justify-center bg-black bg-opacity-50'>
-        <div className='w-full p-2'>
-          <form action=''>
-            <fieldset className='border p-4'>
-              <legend>Episodes</legend>
-
-             
-              <div className='flex mb-4 gap-4 flex-col lg:flex-row lg:justify-between items-center'>
-                <div className='w-full'>
-                  <label className='block text-sm font-medium text-gray-600'>Show Name:</label>
-                  <select
-                    name='showName'
-                    value={formData.showName}
-                    onChange={(e) => setFormData({ ...formData, showName: e.target.value })}
-                    className='mt-1 p-2 border bg-slate-800 rounded w-full'
-                  >
-                    {EpisodeName.map((ep) => (
-                      <option key={ep.id} value={ep.name}>
-                        {ep.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className='w-full'>
-                  <label className='block text-sm font-medium text-gray-600'>Season:</label>
-                  <select
-                    name='season'
-                    value={formData.season}
-                    onChange={(e) => setFormData({ ...formData, season: e.target.value })}
-                    className='mt-1 p-2 border bg-slate-800 rounded w-full'
-                  >
-                    {EpisodeName
-                      .find((ep) => ep.name === formData.showName)
-                      .isisSeason.map((season) => (
-                        <option key={season} value={season}>
-                          {season}
-                        </option>
-                      ))}
-                  </select>
-                </div>
-              </div>
-
-              <div className='w-full'>
-                <label className='block text-sm font-medium text-gray-600'>Description:</label>
-                <textarea
-                  name='description'
-                  value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  className='mt-1 p-2 border bg-slate-800 rounded w-full'
-                  placeholder='Description'
-                />
-              </div>
-
-              <fieldset className='border p-4'>
-                <legend>Cast and Crew</legend>
-                {formData.castAndCrew.map((member, index) => (
-                  <div key={index} className='mb-4 flex flex-col lg:flex-row lg:justify-between items-center gap-2 '>
-                    <label className='block text-sm font-medium text-gray-600'>Name:</label>
-                    <input
-                      type='text'
-                      name='name'
-                      value={member.name}
-                      onChange={(e) => handleCastAndCrewChange(e, index)}
-                      className='mt-1 p-2 border bg-slate-800 rounded w-full'
-                      placeholder='Enter Name'
-                    />
-
-                    <label className='block text-sm font-medium text-gray-600'>Role:</label>
-                    <input
-                      type='text'
-                      name='role'
-                      value={member.role}
-                      onChange={(e) => handleCastAndCrewChange(e, index)}
-                      className='mt-1 p-2 border bg-slate-800 rounded w-full'
-                      placeholder='Enter Role'
-                    />
-
-                    <label className='block text-sm font-medium text-gray-600'>Image:</label>
-                    <input
-                      type='file'
-                      name='image'
-                      onChange={(e) => handleFileUpload(e, index)}
-                      className='mt-1 p-2 border bg-slate-800 rounded w-full'
-                    />
-
-                    <button
-                      type='button'
-                      onClick={() => handleRemoveCastAndCrew(index)}
-                      className='bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 mt-2'
-                    >
-                      Remove
-                    </button>
-                  </div>
-                ))}
-              </fieldset>
-
-              <button
-                type='button'
-                onClick={handleAddCastAndCrew}
-                className='bg-blue-500 text-white py-2 px-4 rounded hover:bg-green-600'
-              >
-                Add Cast and Crew
-              </button>
-
-              <div className='flex flex-col lg:flex-row lg:justify-between items-center gap-2'>
-                <div className="">
-                  <label htmlFor="releaseDate" className="text-sm block font-semibold text-gray-600">
-                    Release Date
-                  </label>
-                  <input
-                    type="date"
-                    id="releaseDate"
-                    name="releaseDate"
-                    value={formData.releaseDate}
-                    onChange={handleDateAndDurationChange}
-                    className='mt-1 p-2 border bg-slate-800 rounded w-full'
-                  />
-                </div>
-
-                <div className="">
-                  <label htmlFor="publicDate" className="text-sm block font-semibold text-gray-600">
-                    Public Date
-                  </label>
-                  <input
-                    type="date"
-                    id="publicDate"
-                    name="publicDate"
-                    value={formData.publicDate}
-                    onChange={handleDateAndDurationChange}
-                    className='mt-1 p-2 border bg-slate-800 rounded w-full'
-                  />
-                </div>
-
-                <div className="">
-                  <label htmlFor="duration" className="text-sm block font-semibold text-gray-600">
-                    Duration
-                  </label>
-                  <input
-                    type="text"
-                    id="duration"
-                    name="duration"
-                    value={formData.duration}
-                    onChange={handleDateAndDurationChange}
-                    placeholder="Enter duration (e.g., 120 minutes)"
-                    className='mt-1 p-2 border bg-slate-800 rounded w-full'
-                  />
-                </div>
-              </div>
-
-              <fieldset className='border p-4'>
-                <legend>MEDIA</legend>
-
-                <div className='mb-4'>
-                  <label className='block text-sm font-medium text-gray-600'>Thumbnail:</label>
-                  <input
-                    type='file'
-                    name='thumbnail'
-                    onChange={(e) => handleMediaFileUpload(e, 'thumbnail')}
-                    className='mt-1 p-2 border bg-slate-800 rounded w-full'
-                  />
-                </div>
-
-                <div className='mb-4'>
-                  <label className='block text-sm font-medium text-gray-600'>Poster:</label>
-                  <input
-                    type='file'
-                    name='poster'
-                    onChange={(e) => handleMediaFileUpload(e, 'poster')}
-                    className='mt-1 p-2 border bg-slate-800 rounded w-full'
-                  />
-                </div>
-
-                <div className='mb-4'>
-                  <label className='block text-sm font-medium text-gray-600'>Trailer URL:</label>
-                  <input
-                    type='text'
-                    name='trailerUrl'
-                    value={formData.trailerUrl}
-                    onChange={(e) => setFormData({ ...formData, trailerUrl: e.target.value })}
-                    className='mt-1 p-2 border bg-slate-800 rounded w-full'
-                  />
-                </div>
-
-                <h2>Video Quality</h2>
-                <div className='flex justify-between items-center mb-4 gap-4'>
-
-                  <div className='w-full'>
-                    <label className='block text-sm font-medium text-gray-600'>Quality</label>
-                    <select
-                      id="videoQuality"
-                      name='videoQuality'
-                      value={formData.videoQuality}
-                      onChange={(e) => setFormData({ ...formData, videoQuality: e.target.value })}
-                      className='mt-1 p-2 border bg-slate-800 rounded w-full'
-                      placeholder="select genres"
-                    >
-                      <option value="480">480</option>
-                      <option value="720">720</option>
-                      <option value="1080">1080</option>
-                    </select>
-                  </div>
-
-                  <div className=' w-full'>
-                    <label className='block text-sm font-medium text-gray-600'>Video:</label>
-                    <input
-                      type='file'
-                      name='video'
-                      onChange={(e) => handleMediaFileUpload(e, 'video')}
-                      className='mt-1 p-2 border bg-slate-800 rounded w-full'
-                    />
-                  </div>
-                </div>
-
-                <button
-                  type='button'
-                  onClick={handleSave}
-                  className='bg-blue-500 text-white py-2 px-4 rounded hover:bg-green-600'
-                >
-                  Save
-                </button>
-              </fieldset>
-
-            </fieldset>
-
-          
-
-         
-          
-          </form>
-          <button onClick={closeModal}>Close Modal</button>
-        </div>
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-600">Episodes:</label>
+        <input
+          type="number"
+          name="episodes"
+          value={formData.episodes}
+          onChange={handleInputChange}
+          className="mt-1 p-2 border bg-slate-800 rounded w-full"
+          min="1" // Assuming episode number starts from 1
+        />
       </div>
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-600">Description:</label>
+        <input
+          type="text"
+          name="description"
+          value={formData.description}
+          onChange={handleInputChange}
+          className="mt-1 p-2 border bg-slate-800 rounded w-full"
+          placeholder="Description"
+        />
+      </div>
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-600">Choose Show Name:</label>
+        <select
+          name="title"
+          value={formData.title}
+          onChange={(e) => {
+            const { value } = e.target;
+            setFormData((prevData) => ({
+              ...prevData,
+              title: showNames.find((show) => show._id === value).title, // Set title based on _id
+            }));
+            setSelectedShowId(value);
+          }}
+          className="mt-1 p-2 border bg-slate-800 rounded w-full"
+        >
+          <option value="">Select a show</option>
+          {showNames.map((show) => (
+            <option key={show._id} value={show._id}>
+              {show.title}
+            </option>
+          ))}
+        </select>
+      </div>
+      <span className=' flex justify-center items-center text-center'>
+                                {videoUploadPercent &&
+                                    <h2 className=' bg-green-500 p-2 text-lg  rounded-md'>
+                                        Upload is {videoUploadPercent}% done
+                                    </h2>}
+                            </span>
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-600">Thumbnail:</label>
+        <input
+          type="file"
+          name="thumbnail"
+          onChange={handleFileUpload}
+          className="mt-1 p-2 border bg-slate-800 rounded w-full"
+        />
+      </div>
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-600">Poster:</label>
+        <input
+          type="file"
+          name="poster"
+          onChange={handleFileUpload}
+          className="mt-1 p-2 border bg-slate-800 rounded w-full"
+        />
+      </div>
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-600">Video:</label>
+        <input
+          type="file"
+          name="video"
+          onChange={handleFileUpload}
+          className="mt-1 p-2 border bg-slate-800 rounded w-full"
+        />
+      </div>
+      <button onClick={handleSave} className="bg-blue-500 text-white p-2 rounded mt-4">
+        Save
+      </button>
+      <button onClick={closeModal} className="bg-gray-500 text-white p-2 rounded mt-2">
+        Close Modal
+      </button>
+      <Toaster position="top-center" reverseOrder={false} />
     </div>
   );
 };
 
 export default EpisodeModal;
-
-          
-        

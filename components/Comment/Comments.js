@@ -1,21 +1,24 @@
 "use client";
-import { getComments as getCommentApi, createComment as createCommentApi, deleteComment as deleteCommentApi, updateComment as updateCommentApi } from "./api"
-import { Avatar, Box, Typography } from '@mui/material';
+// import {updateComment as updateCommentApi } from "./api"
+import { Avatar, Box, Divider, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import CommentForm from './CommentForm';
 import Comment from './Comment';
 import axios from "axios";
-const Comments = () => {
+import Swal from 'sweetalert2';
+import useUserInfo from '@/hooks/useUser';
+const Comments = ({videoId}) => {
     const [backendComments, setBackendComment] = useState([]);
     const [activeComment, setActiveComment] = useState(null)
     const [data, setData] = useState(0)
+    const userInfo = useUserInfo();
     const rootComments = backendComments.filter(backendComment => backendComment.parentId === 'null')
     const date = new Date()
-    const videoId = '123456'
+    // const videoId = '123456'
     const user = {
-        displayName: "Alauddin",
-        email: "sajalb1899@gmail.com",
-        photoURL: "https://i.ibb.co/vLy1HMH/2021-02-13-17-38-29-277.jpg",
+        displayName: userInfo?.userName,
+        email: userInfo?.email,
+        photoURL: userInfo?.photoURL,
     }
     console.log(backendComments)
 
@@ -47,55 +50,87 @@ const Comments = () => {
     }
     //delete comment
     const deleteComment = (commentId) => {
-        if (window.confirm('are you sure that you want to remove comment?')) {
 
-            axios.delete(`https://endgame-team-server.vercel.app/comments/${commentId}`)
-                .then(res => {
-                    console.log(res.data)
-                })
-            setData(data + 1)
-            // deleteCommentApi(commentId).then(() => {
-            //     const updateBackendComment = backendComments.filter(backendComment => backendComment.id !== commentId)
-            //     setBackendComment(updateBackendComment)
-            // })
-        }
-
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete(`https://endgame-team-server.vercel.app/comments/${commentId}`)
+                    .then(res => {
+                        console.log(res.data.deletedCount)
+                        if (res.data.deletedCount > 0) {
+                            Swal.fire({
+                                title: "Deleted!",
+                                text: "Your file has been deleted.",
+                                icon: "success"
+                            });
+                            setData(data + 1)
+                        }
+                    })
+            }
+        });
     }
+
+
     //Update Comment 
     const updateComment = (text, commentId) => {
-        updateCommentApi(text, commentId).then(() => {
+        // updateCommentApi(text, commentId).then(() => {
 
 
-            axios.patch(`https://endgame-team-server.vercel.app/comments/${commentId}`, { body: text })
-                .then(res => {
-                    if (res.data.modifiedCount > 0) {
-                        setData(data + 1)
-                    }
-                })
+        axios.patch(`https://endgame-team-server.vercel.app/comments/${commentId}`, { body: text })
+            .then(res => {
+                if (res.data.modifiedCount > 0) {
+                    setData(data + 1)
+                }
+            })
 
-
-
-
-            // const updateBackendComments = backendComments.map(backendComment => {
-            //     if (backendComment.id === commentId) {
-            //         return { ...backendComment, body: text };
-            //     }
-            //     return backendComment;
-            // });
-            // console.log(updateBackendComments)
-            // setBackendComment(updateBackendComments)
-            setActiveComment(null)
-        });
+        setActiveComment(null)
+        // });
     };
-
-
-    // const store = axios.get('https://endgame-team-server.vercel.app/comments?parentId=null').then(res => res.data)
-
-    // console.log('store', store)
-
     //reply data 
     const getReplies = (commentId) => {
         return backendComments.filter(backendComment => backendComment.parentId === commentId).sort((a, b) => new Date(a.createdAd).getTime() - new Date(b.createdAd))
+    }
+
+
+    // Like 
+    const handleLike = ({ parentId, _id }) => {
+        const userLike = user.email
+        const like = { parentId, _id, userLike }
+        console.log(like)
+        axios.patch(`https://endgame-team-server.vercel.app/comment/like`, { like })
+            .then(res => {
+                console.log(res.data)
+                if (res.data.modifiedCount > 0) {
+                    console.log(res.data)
+                    setData(data + 1)
+                }
+            })
+            .catch(error => {
+                console.log('like', error)
+            })
+    }
+    // disLike
+    const handleDislike = ({ parentId, _id }) => {
+        const userDislike = user.email
+        const dislike = { parentId, _id, userDislike }
+        console.log(dislike)
+        axios.patch(`https://endgame-team-server.vercel.app/comment/dislike`, { dislike })
+            .then(res => {
+                console.log(res.data)
+                if (res.data.modifiedCount > 0) {
+                    setData(data + 1)
+                }
+            })
+            .catch(error => {
+                console.log('like', error)
+            })
     }
 
     //Root Comment Data
@@ -111,26 +146,39 @@ const Comments = () => {
 
 
     return (
-        <Box sx={{ maxWidth: '1480px', margin: 'auto', margin: 4, color:"white" }}>
-            <Typography sx={{ fontSize: 30, fontWeight: 700,color:"white" }}>({backendComments.length})Comment</Typography>
-            <Box sx={{ display: 'flex', marginTop: '10px' ,color:"white"}}>
-                <Avatar alt="Remy Sharp" src={user.photoURL} />
-                <CommentForm submitLabel="Comment" handleSubmit={addComment} />
-            </Box>
-            {/* All Comment...................... */}
-            {
-                rootComments.map(rootComment => <Comment key={rootComment._id}
-                    comment={rootComment}
-                    replies={getReplies(rootComment._id)}
-                    currentUserId={user.email}
-                    deleteComment={deleteComment}
-                    updateComment={updateComment}
-                    activeComment={activeComment}
-                    setActiveComment={setActiveComment}
-                    addComment={addComment}
+        <Box maxWidth={'1280px'} margin={'auto'} >
+            <Box marginX={2} sx={{ color: "white", }}>
+                <Typography marginBottom={3} sx={{ fontSize: { xs: 17, sm: 20 }, fontWeight: 700, color: "white" }}>({backendComments.length})Comments</Typography>
+                <Box display={'flex'} justifyContent={'space-between'} marginRight={4} sx={{ color: "white" }}>
+                    <Avatar alt="Remy Sharp" src={user.photoURL} />
+                    <CommentForm submitLabel="Comment" handleSubmit={addComment} />
 
-                ></Comment>)
-            }
+                </Box>
+                <Divider sx={{ backgroundColor: '#3f3f42', marginLeft: '63px', marginTop: '12px', marginRight: '10px' }} />
+                {/* All Comment...................... */}
+                {
+                    rootComments.map(rootComment => <Box key={rootComment._id}>
+                        <Comment
+                            comment={rootComment}
+                            replies={getReplies(rootComment._id)}
+                            currentUserId={user.email}
+                            deleteComment={deleteComment}
+                            updateComment={updateComment}
+                            activeComment={activeComment}
+                            setActiveComment={setActiveComment}
+                            addComment={addComment}
+                            handleLike={handleLike}
+                            handleDislike={handleDislike}
+
+                        ></Comment>
+                        <Divider sx={{ backgroundColor: '#3f3f42', marginLeft: '63px' }} />
+                    </Box>
+                    )
+
+                }
+
+            </Box>
+
         </Box>
     );
 };
