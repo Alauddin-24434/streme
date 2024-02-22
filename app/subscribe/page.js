@@ -1,4 +1,4 @@
-'use clint'
+"use client"
 import SubscribePage from "@/components/Subscribe/SubscribePage";
 import { Box, Typography } from "@mui/material";
 

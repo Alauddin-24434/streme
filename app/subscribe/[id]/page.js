@@ -1,6 +1,5 @@
-
 import PaymentBox from "@/components/Subscribe/PaymentBox";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import axios from "axios";
 
 const PaymentPage = async ({ params }) => {
@@ -26,9 +25,8 @@ const PaymentPage = async ({ params }) => {
                 textAlign: 'center',
                 borderRadius: '10px',
                 marginTop: '20px'
-            }}>Monthly {packages.packageName} - {packages.price} BDT / 1 Month</Typography>
+            }}>Monthly {packages?.packageName} - {packages?.price} BDT / 1 Month</Typography>
             <PaymentBox packages={packages}/>
-            
         </Box>
     );
 };
