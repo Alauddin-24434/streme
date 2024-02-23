@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import useUserInfo from '@/hooks/useUser';
 import LogoutButton from '../Logout/LogoutButton';
+import NotificationMenu from '../Notification/Notification';
 
 
 const MainNavbar = () => {
@@ -69,6 +70,8 @@ const MainNavbar = () => {
                 className="bg-gray-700 text-white rounded-md py-1 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 onChange={handleSearch}
               />
+              {/* Notification Icon Navbar */}
+              <NotificationMenu/>
               {userInfo ? (
                 <div>
                   <button onClick={toggleDropdown} className="flex items-center text-white focus:outline-none">
