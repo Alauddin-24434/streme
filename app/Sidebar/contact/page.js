@@ -76,19 +76,19 @@ const ChatPage = () => {
      <Sidebar isOpen={isOpen} handleSidebarToggle={handleSidebarToggle}/>
     <MainNavbar isOpen={isOpen} handleSidebarToggle={handleSidebarToggle}></MainNavbar>
    
-<div class="bg-gray-900 h-screen flex flex-col max-w-lg mx-auto mt-12 md:mt-20 lg:mt-20 xl:mt-20 2xl:mt-20">
-    <div class="bg-blue-500 p-4 text-white flex justify-between items-center">
-      <button id="login" class="hover:bg-blue-400 rounded-md ">
+<div className="bg-gray-900 h-screen flex flex-col max-w-lg mx-auto mt-12 md:mt-20 lg:mt-20 xl:mt-20 2xl:mt-20">
+    <div className="bg-blue-500 p-4 text-white flex justify-between items-center">
+      <button id="login" className="hover:bg-blue-400 rounded-md ">
         <img className='w-10 h-10 rounded-full' src={userInfo?.photoURL} title={userInfo?.displayName}></img>
       </button>
       <span className='py-2'>Global ChatBox</span>
-      <div class="relative inline-block text-left">
+      <div className="relative inline-block text-left">
       
       </div>
     </div>
 
-    <div class="flex-1 overflow-y-auto p-4">
-        <div class="flex flex-col space-y-2">
+    <div className="flex-1 overflow-y-auto p-4">
+        <div className="flex flex-col space-y-2">
             
            
         <div className="flex-1 overflow-y-auto p-4 pb-20">
@@ -105,10 +105,10 @@ const ChatPage = () => {
         </div>
     </div>
     
-    <div class="bg-gray-800 p-4 flex items-center">
+    <div className="bg-gray-800 p-4 flex items-center">
         <input value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)} type="text" placeholder="Type your message..." class="flex-1 border rounded-full px-4 py-2 focus:outline-none"/>
-        <button type='submit' onClick={sendMessage} class="bg-blue-500 text-white rounded-full p-2 ml-2 hover:bg-blue-600 focus:outline-none">
+            onChange={(e) => setNewMessage(e.target.value)} type="text" placeholder="Type your message..." className="flex-1 border rounded-full px-4 py-2 focus:outline-none"/>
+        <button type='submit' onClick={sendMessage} className="bg-blue-500 text-white rounded-full p-2 ml-2 hover:bg-blue-600 focus:outline-none">
          <IoSend></IoSend>
         </button>
     </div>
