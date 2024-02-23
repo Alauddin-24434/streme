@@ -1,11 +1,8 @@
 
-"use client"
+"use client";
 // pages/video/[id].js
 import { useEffect, useState } from 'react';
-
 import { FaRegStar } from "react-icons/fa6";
-
-
 import VideoPlayer from '@/components/DetailsVideo/VideoPlayer/videoPlayer';
 
 import Comments from "@/components/Comment/Comments";
@@ -24,7 +21,7 @@ import Sidebar from '@/app/Sidebar/Sidebar';
 const VideoDetail = ({ params }) => {
   const { id } = params;
   const [videoData, setVideoData] = useState();
-  // console.log(videoData.views++);
+  const [videoLink, setVideoLink] = useState(null);
   const [likeData, setLikeData] = useState(null);
   const userInfo = useUserInfo();
   const [showFullDescription, setShowFullDescription] = useState(false);
@@ -74,14 +71,6 @@ const VideoDetail = ({ params }) => {
       .then(dataes => setRatingData(dataes))
 
   }, [])
-
-// add view
-
-
-
-
-
- 
 
 
   useEffect(() => {
@@ -139,16 +128,19 @@ const VideoDetail = ({ params }) => {
 
 
 
+
   useEffect(() => {
     const fetchVideoDetails = async () => {
       try {
         const response = await fetch(`https://endgame-team-server.vercel.app/movies/${id}`);
         if (!response.ok) {
-          // console.error(`Failed to fetch video details. Status: ${response.status}`);
+          console.error(`Failed to fetch video details. Status: ${response.status}`);
           return;
         }
         const data = await response.json();
-        setVideoData(data);
+
+        setVideoData(data)
+        setVideoLink(data?.video?.link);
       } catch (error) {
         console.error('Error fetching video details:', error);
       }
@@ -157,35 +149,9 @@ const VideoDetail = ({ params }) => {
     fetchVideoDetails();
   }, [id]);
 
-  useEffect(() =>{
-    
-    console.log("how are you")
-
-  //  const udata = {
-  //     title :videoData.title,
-  //     description: videoData.description,
-  //     access: videoData.access,
-  //     languages:videoData.languages,
-  //     genres: videoData.genres,
-  //     thumbnail: videoData.thumbnail,
-  //     poster:videoData.poster,
-  //     video:videoData.video,
-  //     audience:videoData.audience,
-  //     duration:videoData.duration,
-  //     releaseDate:videoData.releaseDate,
-  //     publisDate:videoData.publisDate,
-  //     status:videoData.status,
-  //     views:videoData.views++,
-  //     episode:videoData.episode
-
-  //   }
-    console.log(udata);
-
-    // axios.patch(`https://endgame-team-server.vercel.app/view`);
-  },[]);
- 
 
 
+console.log("chek genere",videoData)
 
   if (!videoData) {
     // Render loading state or handle loading scenario
@@ -200,100 +166,105 @@ const VideoDetail = ({ params }) => {
     setIsOpen(!isOpen);
   };
 
-  
+  const handlePlayVideo = (VideoLink) => {
+    // console.log('this is playing', VideoLink);
+    setVideoLink(VideoLink)
+  };
 
   return (
-    <div className='w-full h-screen '>
+    <section>
       <Sidebar isOpen={isOpen} handleSidebarToggle={handleSidebarToggle} />
       <MainNavbar isOpen={isOpen} handleSidebarToggle={handleSidebarToggle} />
+      <div className='w-full py-16 h-screen '>
 
-      <div className="max-w-screen-xl mt-6  bg-slate-950 px-1 mx-auto flex-row lg:flex gap-4">
-        <div className="md:col-span-1 lg:col-span-2">
-          <VideoPlayer video={videoData.video.link} />
-        </div>
-        <div className="md:col-span-1 lg:col-span-1 px-1  h-[580px]">
-          <h2 className='text-center py-2 rounded-t-lg text-white bg-slate-900'>Suggested Video</h2>
-          <Playlist></Playlist>
-        </div>
-      </div>
 
-      <div className=' bg-slate-950 px-1 h-[450px] max-w-screen-xl mx-auto '>
-        <h1 className='tex-sm lg:text-3xl  text-white py-5 font-bold'>{videoData?.title}</h1>
-        <div className='flex px-1 mb-2 flex-row gap-4 items-center md:flex-row lg:flex-row xl:flex-row 2xl:flex lg:items-center xl:items-center 2xl:items-center'>
-          <Like setStateLike={setStateLike} likeData={likeData} data={videoData} stateLike={stateLike}></Like>
-          <PlaylistButton playlist={playlist} setStatePlaylike={setStatePlaylike} data={videoData} playList={playList}></PlaylistButton>
-          <Share video={videoData.video.link} />
+        <div className="max-w-screen-xl mt-6  bg-slate-950 px-1 mx-auto flex-row lg:flex gap-4">
+          <div className="md:col-span-1 lg:col-span-2">
+          <VideoPlayer video={videoLink} />
+          </div>
+          <div className="md:col-span-1 lg:col-span-1 px-1  h-[580px]">
+            <h2 className='text-center py-2 rounded-t-lg text-white bg-slate-900'>Suggested Video</h2>
+            <Playlist videoData={videoData} handlePlayVideo={handlePlayVideo}></Playlist>
+          </div>
         </div>
 
-        <div className='flex items-center px-1 gap-2'>
-          <FaRegStar className='text-green-600' />
+        <div className=' bg-slate-950 px-1 h-[450px] max-w-screen-xl mx-auto '>
+          <h1 className='tex-sm lg:text-3xl  text-white py-5 font-bold'>{videoData?.title}</h1>
+          <div className='flex px-1 mb-2 flex-row gap-4 items-center md:flex-row lg:flex-row xl:flex-row 2xl:flex lg:items-center xl:items-center 2xl:items-center'>
+            <Like setStateLike={setStateLike} likeData={likeData} data={videoData} stateLike={stateLike}></Like>
+            <PlaylistButton playlist={playlist} setStatePlaylike={setStatePlaylike} data={videoData} playList={playList}></PlaylistButton>
+            <Share video={videoData.video.link} />
+          </div>
 
-          <p className='flex my-2 gap-4'>
-            <span className='text-white flex'> <p>{
-              parseFloat((((totaluserRating + usersRating)) / 100 * 5).toFixed(3))}</p></span>
-            <div className='max-w-6xl mx-auto'>
-              <h1 className='hove text-green-600 font-bold'>Rate now</h1>
-              <div className='rating'>
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <span
-                    key={star}
-                    onClick={() => handleStarClick(star)}
-                    style={{
-                      cursor: 'pointer',
-                      color: star <= rating ? 'gold' : 'gray',
-                    }}
-                  >
-                    &#9733;
+          <div className='flex items-center px-1 gap-2'>
+            <FaRegStar className='text-green-600' />
 
-                  </span>
-                ))}
-                <br></br>
-                <button onClick={ratingData} className='bg-slate-500 rounded py-0 px-2'>Rating</button>
+            <p className='flex my-2 gap-4'>
+              <span className='text-white flex'> <p>{
+                parseFloat((((totaluserRating + usersRating)) / 100 * 5).toFixed(3))}</p></span>
+              <div className='max-w-6xl mx-auto'>
+                <h1 className='hove text-green-600 font-bold'>Rate now</h1>
+                <div className='rating'>
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <span
+                      key={star}
+                      onClick={() => handleStarClick(star)}
+                      style={{
+                        cursor: 'pointer',
+                        color: star <= rating ? 'gold' : 'gray',
+                      }}
+                    >
+                      &#9733;
 
-              </div>
-              {/* <p className='text-stone-200'>Selected Rating: {rating}</p> */}
-            </div>
-          </p>
-        </div>
-
-        <div>
-          <div className='flex flex-row w-full lg:flex-row gap-4 px-1 mt-3'>
-            {
-              <div>
-                <div>
-                  {videoData?.genres && Array.isArray(videoData.genres) && videoData.genres.map((genre, index) => (
-                    <div key={index} className="inline-block px-2 py-1 text-sm font-semibold rounded-sm bg-gray-500 text-white mr-2 mb-2">
-                      {genre}
-                    </div>
+                    </span>
                   ))}
+                  <br></br>
+                  <button onClick={ratingData} className='bg-slate-500 rounded py-0 px-2'>Rating</button>
+
                 </div>
+                {/* <p className='text-stone-200'>Selected Rating: {rating}</p> */}
               </div>
-            }
-
+            </p>
           </div>
+
           <div>
-            {/* description section start */}
-            <h5 className='mt-3 text-justify px-1'>
-              <span className='text-gray-600 font-bold px-1'>Description: </span>
-              <p className='text-white'>
-                {showFullDescription ? videoData?.description : `${videoData?.description.slice(0, 50)}...`}
-              </p>
-              <button onClick={toggleDescription} className="text-blue-500 hover:text-blue-700">
-                {showFullDescription ? 'See less' : 'See more'}
-              </button>
-            </h5>
-            {/* end */}
-          </div>
+            <div className='flex flex-row w-full lg:flex-row gap-4 px-1 mt-3'>
+              {videoData && 
+                <div>
+                   
+                      <div className="inline-block px-2 py-1 text-sm font-semibold rounded-sm bg-gray-500 text-white mr-2 mb-2">
+                       {videoData.genres}
+                      </div>
+               
+                </div>
+              }
 
-          {/* comment section */}
+            </div>
+            <div>
+              {/* description section start */}
+              <h5 className='mt-3 text-justify px-1'>
+                <span className='text-gray-600 font-bold px-1'>Description: </span>
+                <p className='text-white'>
+                  {showFullDescription ? videoData?.description : `${videoData?.description.slice(0, 50)}...`}
+                </p>
+                <button onClick={toggleDescription} className="text-blue-500 hover:text-blue-700">
+                  {showFullDescription ? 'See less' : 'See more'}
+                </button>
+              </h5>
+              {/* end */}
+            </div>
 
-          <div className='w-full bg-slate-950 h-screen px-1 mt-6'>
-            <Suggest></Suggest>
-            <Comments videoId={id} />
+            {/* comment section */}
+
+            <div className='w-full bg-slate-950 h-screen px-1 mt-6'>
+              <Suggest></Suggest>
+              <Comments videoId={id} />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+
+    </section>
   );
 };
 

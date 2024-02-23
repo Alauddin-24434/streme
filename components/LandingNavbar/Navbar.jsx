@@ -1,4 +1,5 @@
 "use client";
+
 import { useRouter } from "next/navigation";
 
 
@@ -8,6 +9,7 @@ const Navbar = () => {
   const handleLoginClick = () => {
       router.push('/login');
   };
+
     return (
       <div className='flex justify-between max-w-[1400px]  mx-10 lg:mx-auto'>
       <div>

@@ -61,7 +61,7 @@ const MainNavbar = () => {
               <div className="flex justify-center items-center ">
                 {/* Your navigation links */}
                 <Link href="/home">
-                  <span className="text-white text-xs md:text-base lg:text-lg xl:text-lg 2xl:text-lg mr-4 cursor-pointer">For You</span>
+                  <span className="text-white text-xs md:text-base lg:text-lg xl:text-lg 2xl:text-lg mr-4 cursor-pointer">Home</span>
                 </Link>
                
                 <Link href="/movies">

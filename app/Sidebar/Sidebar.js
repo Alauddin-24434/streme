@@ -6,11 +6,11 @@ import React from 'react';
 export default function Sidebar({ isOpen, handleSidebarToggle }) {
   return (
     <div
-      className={`bg-gray-800 text-white overflow-hidden fixed w-56 h-screen overflow-y-auto transition-transform transform ${
+      className={`bg-gray-800 text-white overflow-hidden fixed w-full lg:w-64  h-screen overflow-y-auto transition-transform transform ${
         isOpen ? '' : '-translate-x-full'
       } ease-in-out duration-300 z-50`}
       id="sidebar">
-      <div className="p-4 overflow-hidden">
+      <div className="p-6 overflow-hidden">
         <div className='flex justify-between items-center mt-2'>
         
          
