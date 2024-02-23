@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { storage } from '@/utils/firebase-config';
 import axios from 'axios';
@@ -25,9 +25,6 @@ const ShowModal = ({ closeModal }) => {
 
   });
 
-  useEffect(() => {
-    // Add any initial setup logic here
-  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;

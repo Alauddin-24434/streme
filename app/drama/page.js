@@ -11,7 +11,7 @@ import ShowCard from "@/components/Cards/ShowCard/ShowCard";
 
 
 
-const Videos = () => {
+const DramaPage = () => {
 
 
     return (
@@ -42,4 +42,4 @@ const Videos = () => {
     );
 };
 
-export default Videos;
+export default DramaPage;
