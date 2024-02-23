@@ -15,7 +15,7 @@ const Page = () => {
     const userInfo = useUserInfo();
     const email = userInfo?.email;  
     const [isOpenMenu, setIsOpenMenu] = useState([])
-    console.log(like);
+    // console.log(like);
     
 
     const handleSidebarToggle = () => {

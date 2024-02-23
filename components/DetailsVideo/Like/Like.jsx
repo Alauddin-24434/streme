@@ -15,12 +15,12 @@ const Like = ({ data, likeData, setStateLike, stateLike }) => {
         try {
             
             const response = await axios.post("https://endgame-team-server.vercel.app/like", {data,email});
-            console.log("Response:", response.data);
-            console.log({
-                videos: data,
-                liked: true
+            // console.log("Response:", response.data);
+            // console.log({
+            //     videos: data,
+            //     liked: true
                 
-            });
+            // });
             setLiked(!liked);
             setStateLike(stateLike + 1);
            

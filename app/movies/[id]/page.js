@@ -29,9 +29,6 @@ const VideoDetail = ({ params }) => {
   const userInfo = useUserInfo();
   const [showFullDescription, setShowFullDescription] = useState(false);
   const email = userInfo?.email
-  // console.log(likeData);
-  // console.log("chek", videoData)
-
   const [rating, setRating] = useState(0);
   const [ratingDatas, setRatingData] = useState([])
   const [data, setData] = useState(0)
@@ -41,11 +38,11 @@ const VideoDetail = ({ params }) => {
   const [playList, setPlayList] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
 
-  console.log(likeData);
-  console.log("chek", videoData)
+  // console.log(likeData);
+  // console.log("chek", videoData)
 
   const AllUserRating = ratingDatas.filter(user => user.Id == id);
-  console.log(AllUserRating)
+  // console.log(AllUserRating)
 
   const totaluserRating = AllUserRating.reduce((total, totalRating) => total + totalRating.ratings
     , 0);
@@ -84,7 +81,7 @@ const VideoDetail = ({ params }) => {
 
           const response = await axios.get(`https://endgame-team-server.vercel.app/like/${id}/${email}`);
           const responseData = response.data;
-          console.log(responseData);
+          // console.log(responseData);
           setLikeData(responseData);
         }
 
