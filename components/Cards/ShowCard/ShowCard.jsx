@@ -32,21 +32,22 @@ const ShowCard = () => {
 
     return (
         <>
-            
+        <section className=' max-w-7xl mx-auto'>
+             <h2 className='text-white my-2 text-lg font-semibold'>Latest Shows</h2>
               
-                <div className="grid place-content-center grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4 gap-y-8 max-w-screen-xl mx-auto px-4">
+                <div className="grid place-content-center grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4 gap-y-8 ">
                 {showsData.map((item) => (
                     <div key={item._id} className="relative">
                         <Link href={`/drama/episode/${item._id}`}>
-                            <div className="max-w-lg  text-white h-60 rounded-md shadow-md overflow-hidden">
+                            <div className="max-w-sm  text-white h-[320px] rounded-md shadow-md overflow-hidden">
                                 <img
-                                    className="h-60 w-full object-cover rounded-sm"
+                                    className="h-72 w-full object-cover rounded-sm"
                                     src={item?.thumbnail?.link}
                                     alt="Episode Thumbnail"
                                     width={400}
                                     height={200}
                                 />
-                                <div className=" bottom-0 left-0 w-full bg-gradient-to-t from-slate-950 opacity-100 text-center text-white py-2"> {/* Adjust bottom and other styles as needed */}
+                                <div className=" bottom-0 left-0 h-4 w-full bg-gradient-to-t from-slate-950 opacity-100 text-center text-white py-2"> {/* Adjust bottom and other styles as needed */}
                                    
                                     <span className="text-sm">{item.title.slice(0, 20)}...</span>
                                 </div>
@@ -56,7 +57,7 @@ const ShowCard = () => {
                 ))}
             </div>
          
-
+            </section>
           
         </>
     );

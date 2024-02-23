@@ -8,6 +8,7 @@ import VideoCard from '@/components/Cards/VideoCard/VideoCard';
 import CelibratyCard from '@/components/Cards/CelibratyCard/CelibratyCard';
 
 import ChatModal from '@/components/chat/chatModal';
+import ShowCard from '@/components/Cards/ShowCard/ShowCard';
 
 
 
@@ -27,7 +28,7 @@ export default function HomePage() {
                         
                      <VideoCard/>
                      <CelibratyCard/>
-                    
+                    <ShowCard/>
                      <ChatModal/>
                     </div>
                 </div>
