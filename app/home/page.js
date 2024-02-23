@@ -23,7 +23,7 @@ export default function HomePage() {
                 <Sidebar isOpen={isOpen} handleSidebarToggle={handleSidebarToggle}/>
                 <div className="flex flex-col flex-grow">
                     <MainNavbar isOpen={isOpen} handleSidebarToggle={handleSidebarToggle}/>
-                    <div>
+                    <div className='px-10 py-16'>
                         
                      <VideoCard/>
                      <CelibratyCard/>
