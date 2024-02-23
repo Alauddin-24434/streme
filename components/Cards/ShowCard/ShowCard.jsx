@@ -32,16 +32,16 @@ const ShowCard = () => {
 
     return (
         <>
-        <section className=' max-w-7xl mx-auto'>
+        <section className=' max-w-7xl mx-auto p-4 lg:p-0'>
              <h2 className='text-white my-2 text-lg font-semibold'>Latest Shows</h2>
               
                 <div className="grid place-content-center grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4 gap-y-8 ">
                 {showsData.map((item) => (
                     <div key={item._id} className="relative">
                         <Link href={`/drama/episode/${item._id}`}>
-                            <div className="max-w-sm  text-white h-[320px] rounded-md shadow-md overflow-hidden">
+                            <div className="max-w-sm  text-white h-64 lg:h-[320px] rounded-md shadow-md overflow-hidden">
                                 <img
-                                    className="h-72 w-full object-cover rounded-sm"
+                                    className="h-56 lg:h-72 w-full object-cover rounded-sm"
                                     src={item?.thumbnail?.link}
                                     alt="Episode Thumbnail"
                                     width={400}

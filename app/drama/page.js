@@ -12,29 +12,27 @@ import ShowCard from "@/components/Cards/ShowCard/ShowCard";
 
 
 const Videos = () => {
-  
+
 
     return (
         <ProtectedRoute>
             <div>
-            <MainNavbar  />
+                <MainNavbar />
 
                 <section className="max-w-7xl mx-auto h-screen">
 
-                    <div className='flex '>
 
-                        <div className="flex flex-col ">
 
-                            <div >
-                                <ShowBannerSlide  />
-                                <div >
-                                    <ShowCard />
-                                </div>
 
-                            </div>
 
+                    <div >
+                        <ShowBannerSlide />
+                        <div >
+                            <ShowCard />
                         </div>
+
                     </div>
+
 
 
 

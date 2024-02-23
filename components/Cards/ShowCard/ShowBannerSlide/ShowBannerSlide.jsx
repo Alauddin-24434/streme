@@ -63,7 +63,7 @@ const ShowBannerSlide = () => {
                     >
                         <Link href={`/drama/episode/${slide._id}`}>
                             {/* Image with link */}
-                            <img className='w-full h-[500px] object-cover' src={slide?.banner?.link} alt={`Slide ${index + 1}`} />
+                            <img className='w-full h-40 lg:h-[500px] object-cover' src={slide?.banner?.link} alt={`Slide ${index + 1}`} />
                             {/* Overlay for hover effect */}
                             <div className="absolute top-0 w-full  bg-gradient-to-l from-slate-950 to-transparent opacity-100"></div>
                             {/* Hover icon */}
