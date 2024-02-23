@@ -8,6 +8,7 @@ import VideoCard from '@/components/Cards/VideoCard/VideoCard';
 import CelibratyCard from '@/components/Cards/CelibratyCard/CelibratyCard';
 
 import ChatModal from '@/components/chat/chatModal';
+import ShowCard from '@/components/Cards/ShowCard/ShowCard';
 
 
 
@@ -23,11 +24,11 @@ export default function HomePage() {
                 <Sidebar isOpen={isOpen} handleSidebarToggle={handleSidebarToggle}/>
                 <div className="flex flex-col flex-grow">
                     <MainNavbar isOpen={isOpen} handleSidebarToggle={handleSidebarToggle}/>
-                    <div>
+                    <div className='px-10 py-16'>
                         
                      <VideoCard/>
                      <CelibratyCard/>
-                    
+                    <ShowCard/>
                      <ChatModal/>
                     </div>
                 </div>
