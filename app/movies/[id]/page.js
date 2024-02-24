@@ -171,7 +171,7 @@ const VideoDetail = ({ params }) => {
       <MainNavbar isOpen={isOpen} handleSidebarToggle={handleSidebarToggle} />
 
       <div className="max-w-screen-xl bg-slate-950 px-1 mx-auto flex-row lg:flex gap-4">
-        <div className="md:col-span-1 lg:col-span-2 mt-16 md:mt-16 lg:mt-20 xl:mt-24 2xl:mt-32">
+        <div className="md:col-span-1 lg:col-span-2 mt-0 pt-16 md:mt-16 lg:mt-20 xl:mt-24 2xl:mt-32">
           <VideoPlayer video={videoData.video.link} />
         </div>
         <div className="md:col-span-1 lg:col-span-1 px-1  h-[580px] mt-16 md:mt-16 lg:mt-20 xl:mt-24 2xl:mt-32">

@@ -25,7 +25,7 @@ const Page = () => {
       try {
         if (email) {
           const response = await axios.get(
-            `http://localhost:5000/playlist/${email}`
+            `https://endgame-team-server.vercel.app/playlist/${email}`
           );
           const responseData = response.data;
           setPlaylist(responseData);
@@ -50,10 +50,10 @@ const Page = () => {
   };
 
   const handleDelete = async(data) =>{
-        // console.log('data', data);
+        
         try {
             
-            await axios.delete(`http://localhost:5000/playlist/${data._id}`);
+            await axios.delete(`https://endgame-team-server.vercel.app/playlist/${data._id}`);
             console.log('Video deleted successfully');
             setPlaylist((prevPlaylist) => prevPlaylist.filter(item => item._id !== data._id))
             
@@ -73,7 +73,7 @@ const Page = () => {
         ></MainNavbar>
         <div className="flex mt-24 flex-col md:flex-col lg:flex-row max-w-6xl mx-auto justify-evenly px-3 ">
           <div className="mt-7">
-            <h2 className="text-2xl font-serif">
+            <h2 className="text-sm md:text-lg xl:text-2xl 2xl:text-2xl font-serif">
               Playlist Total Video: {playlist?.length}
             </h2>
           </div>
@@ -82,18 +82,16 @@ const Page = () => {
               {playlist &&
                 playlist.map((data, index) => (
                   <div key={index} className="">
-                    <div className="w-full">
-                      <div className="h-2 bg-red-light"></div>
-                      <div className="flex items-center justify-center mt-7 bg-red-lightest">
+                    <div className="max-w-2xl">
+                      
+                      <div className="flex items-center mt-7 bg-red-lightest">
                         <div
-                          className="bg-slate-900 shadow-lg rounded-lg"
-                          style={{ width: "45em" }}
-                        >
+                          className="bg-slate-900 shadow-lg rounded-lg w-[320px] md:w-[480px] lg:w-[600px] xl:w-[720px] 2xl:w-[720px]">
                           <div className="flex">
                             <div>
                               <Link href={`/movies/${data?.data._id}`}>
                                 <img
-                                  className="w-60 max-h-80 rounded hidden md:block"
+                                  className="w-28 md:w-36 lg:w-40 xl:w-48 2xl:w-60 max-h-80 rounded"
                                   src={data?.data?.thumbnail?.link}
                                   alt="Album Pic"
                                 />
@@ -131,10 +129,10 @@ const Page = () => {
                                   )}
                                 </div>
                               </div>
-                              <div className="flex float-start justify-around items-center mt-8">
+                              <div className="flex float-start justify-around items-center lg:mt-8">
                                 <Link href={`/movies/${data?.data._id}`}>
                                   <button className="relative h-12 w-28 md:w-32 lg:w-40 overflow-hidden border border-green-600 text-green-600 shadow-2xl transition-all duration-200 before:absolute before:bottom-0 before:left-0 before:right-0 before:top-0 before:m-auto before:h-0 before:w-0 before:rounded-sm before:bg-green-600 before:duration-300 before:ease-out hover:text-white hover:shadow-green-600 hover:before:h-40 hover:before:w-40 hover:before:opacity-80">
-                                    <span className="relative z-10">
+                                    <span className="relative text-sm md:text-base lg:text-lg xl:text-xl 2xl:text-xl  z-10">
                                       Watch Now
                                     </span>
                                   </button>
