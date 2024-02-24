@@ -50,7 +50,7 @@ const ChatPage = () => {
         timestamp: serverTimestamp()
       });
       setNewMessage(""); // Clear the input field after sending the message
-      await axios.post('http://localhost:5000/messageData', {
+      await axios.post('https://endgame-team-server.vercel.app/messageData', {
         message: newMessage,
         user: userInfo?.userName,
         

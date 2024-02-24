@@ -19,7 +19,7 @@ const ChatModal = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const res = await fetch('http://localhost:5000/chatbot');
+        const res = await fetch('https://endgame-team-server.vercel.app/chatbot');
         if (!res.ok) {
           throw new Error('Failed to fetch data');
         }

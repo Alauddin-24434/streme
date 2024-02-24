@@ -45,7 +45,7 @@ const Like = ({ data, likeData, setStateLike, stateLike }) => {
         const fetchData = async () => {
             try {
                 {
-                    const response = await axios.get(`http://localhost:5000/like`);
+                    const response = await axios.get(`https://endgame-team-server.vercel.app/like`);
                     const responseData = response.data;
                     setLike(responseData);
                 }

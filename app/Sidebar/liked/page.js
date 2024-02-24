@@ -27,7 +27,7 @@ const Page = () => {
         const fetchData = async () => {
             try {
                 if (email) {
-                    const response = await axios.get(`http://localhost:5000/like/${email}`);
+                    const response = await axios.get(`https://endgame-team-server.vercel.app/like/${email}`);
                     const responseData = response.data;
                     setLike(responseData);
                 }
