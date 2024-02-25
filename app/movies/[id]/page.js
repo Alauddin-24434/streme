@@ -29,8 +29,7 @@ const VideoDetail = ({ params }) => {
   // console.log(likeData);
   // console.log("chek", videoData)
 
-  const [rating, setRating] = useState(0);
-  const [ratingDatas, setRatingData] = useState([])
+   const [ratingDatas, setRatingData] = useState([])
   const [data, setData] = useState(0)
   const [usersRating, setUserRating] = useState(0)
   const [stateLike, setStateLike] = useState(0);
@@ -47,25 +46,21 @@ const VideoDetail = ({ params }) => {
   const totaluserRating = AllUserRating.reduce((total, totalRating) => total + totalRating.ratings
     , 0);
 
-
-  const handleStarClick = (selectedRating) => {
-    setRating(selectedRating);
-  };
-  const ratingData = async () => {
-    await axios.post("https://endgame-team-server.vercel.app/addratings", {
-      ratings: rating,
-      Id: id
-    })
-      .then(res => {
-        if (res.data.acknowledged) {
-          setData(data + 1)
-          // console.log(res)
-        }
+    const handleStarClick = async(selectedRating) => {
+      await axios.post("https://endgame-team-server.vercel.app/addratings", {
+        ratings: selectedRating,
+        Id: id
       })
-      .catch(error => console.error(error))
-    setUserRating(rating)
-  }
-  useEffect(() => {
+        .then(res => {
+          if (res.data.acknowledged) {
+            setData(data + 1)
+            console.log(res)
+          }
+        })
+        .catch(error => console.error(error))
+      setUserRating(selectedRating)
+    };
+   useEffect(() => {
     fetch('https://endgame-team-server.vercel.app/ratings')
       .then(res => res.json())
       .then(dataes => setRatingData(dataes))
@@ -211,7 +206,7 @@ console.log("chek genere",videoData)
                       onClick={() => handleStarClick(star)}
                       style={{
                         cursor: 'pointer',
-                        color: star <= rating ? 'gold' : 'gray',
+                        color: star <= usersRating ? 'gold' : 'gray',
                       }}
                     >
                       &#9733;
@@ -219,8 +214,7 @@ console.log("chek genere",videoData)
                     </span>
                   ))}
                   <br></br>
-                  <button onClick={ratingData} className='bg-slate-500 rounded py-0 px-2'>Rating</button>
-
+                 
                 </div>
                 {/* <p className='text-stone-200'>Selected Rating: {rating}</p> */}
               </div>
