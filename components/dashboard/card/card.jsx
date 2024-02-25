@@ -30,14 +30,7 @@ const Card = () => {
       color: 'linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%)',
       icon: FaUser,
     },
-    {
-      id: 2,
-      title: 'Views',
-      number: 8.236,
-      change: -2,
-      color: 'linear-gradient(90deg, #00DBDE 0%, #7f9de4 72%)',
-      icon: FaEye,
-    },
+   
     {
       id: 3,
       title: 'Subscription',
@@ -46,14 +39,8 @@ const Card = () => {
       color:  'linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%)',
       icon: FaYoutube,
     },
-    {
-      id: 4,
-      title: 'Download',
-      number: 6.642,
-      change: 18,
-      color:'linear-gradient(90deg, #00DBDE 0%, #7f9de4 72%)', // Example gradient for download
-      icon: FaDownload,
-    },
+
+   
   ];
 
   return (

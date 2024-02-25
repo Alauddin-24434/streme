@@ -15,15 +15,14 @@ const Videos = () => {
     return (
         <ProtectedRoute>
             <div>
-            <MainNavbar isOpen={isOpen} handleSidebarToggle={handleSidebarToggle} />
-            <Sidebar isOpen={isOpen} handleSidebarToggle={handleSidebarToggle} />
-                <section className="max-w-7xl mx-auto h-screen">
+
+                <section className="">
 
                     <div className='flex bg-slate-950'>
-                       
+                        <Sidebar isOpen={isOpen} handleSidebarToggle={handleSidebarToggle} />
                         <div className="flex flex-col flex-grow">
-                          
-                            <div className='px-10 py-16'>
+                            <MainNavbar isOpen={isOpen} handleSidebarToggle={handleSidebarToggle} />
+                            <div className="py-20 px-16">
                                 <VideoCard />
                                
                             </div>
