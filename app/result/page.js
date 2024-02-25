@@ -67,7 +67,7 @@ const Page = () => {
       <Sidebar isOpen={isOpen} handleSidebarToggle={handleSidebarToggle}/>
      <MainNavbar isOpen={isOpen} handleSidebarToggle={handleSidebarToggle}/>
       <div className='flex flex-col md:flex-col lg:flex-row xl:flex-row 2xl:flex-row justify-center max-w-5xl mx-auto gap-4'>
-      <div className=" mt-16 md:mt-16 lg:mt-20 xl:mt-24 2xl:mt-32 px-2">
+      <div className=" mt-16 md:mt-20 lg:mt-24 xl:mt-24 2xl:mt-32 px-2">
       <select
     onChange={(event)=>setSelectedGenres(event.target.value)}
     className="px-2 rounded-l-md md:px-4 lg:px-4 py-1 md:py-3 lg:py-3  bg-slate-900 border-transparent text-xs md:text-sm lg:text-sm text-white"

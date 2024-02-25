@@ -37,9 +37,7 @@ const VideoDetail = ({ params }) => {
   const [playlist, setStatePlaylike] = useState(0);
   const [playList, setPlayList] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
-
-  // console.log(likeData);
-  // console.log("chek", videoData)
+   
 
   const AllUserRating = ratingDatas.filter(user => user.Id == id);
   // console.log(AllUserRating)
@@ -59,7 +57,7 @@ const VideoDetail = ({ params }) => {
       .then(res => {
         if (res.data.acknowledged) {
           setData(data + 1)
-          console.log(res)
+          // console.log(res)
         }
       })
       .catch(error => console.error(error))
@@ -119,7 +117,7 @@ const VideoDetail = ({ params }) => {
   useEffect(() => {
     const history = JSON.parse(localStorage.getItem('videoHistory')) || [];
     if (history.includes(id)) {
-      console.log(id);
+      // console.log(id);
     } else {
       console.log('Adding to video history');
       const updatedHistory = [...history, id];
@@ -148,8 +146,6 @@ const VideoDetail = ({ params }) => {
   }, [id]);
 
 
- 
-
 
 
   if (!videoData) {
@@ -171,12 +167,12 @@ const VideoDetail = ({ params }) => {
       <MainNavbar isOpen={isOpen} handleSidebarToggle={handleSidebarToggle} />
 
       <div className="max-w-screen-xl bg-slate-950 px-1 mx-auto flex-row lg:flex gap-4">
-        <div className="md:col-span-1 lg:col-span-2 mt-0 pt-16 md:mt-16 lg:mt-20 xl:mt-24 2xl:mt-32">
+        <div className="md:col-span-1 lg:col-span-2 mt-0 pt-16 md:pt-24 lg:pt-24 xl:pt-24 2xl:mt-16">
           <VideoPlayer video={videoData.video.link} />
         </div>
-        <div className="md:col-span-1 lg:col-span-1 px-1  h-[580px] mt-16 md:mt-16 lg:mt-20 xl:mt-24 2xl:mt-32">
+        <div className="md:col-span-1 lg:col-span-1 px-1  h-[580px] mt-0 pt-16 md:pt-24 lg:pt-24 xl:pt-24 2xl:mt-16">
           <h2 className='text-center py-2 rounded-t-lg text-white bg-slate-900'>Suggested Video</h2>
-          <Playlist></Playlist>
+          <Playlist id={id} genres={videoData.genres}></Playlist>
         </div>
       </div>
 

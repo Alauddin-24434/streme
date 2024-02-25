@@ -76,7 +76,7 @@ const ChatPage = () => {
      <Sidebar isOpen={isOpen} handleSidebarToggle={handleSidebarToggle}/>
     <MainNavbar isOpen={isOpen} handleSidebarToggle={handleSidebarToggle}></MainNavbar>
    
-<div className="bg-gray-900 h-screen flex flex-col max-w-lg mx-auto mt-12 md:mt-20 lg:mt-20 xl:mt-20 2xl:mt-20">
+<div className="bg-gray-900 max-h-[91vh] h-screen flex flex-col max-w-lg mx-auto mt-12 md:mt-20 lg:mt-20 xl:mt-20 2xl:mt-20">
     <div className="bg-blue-500 p-4 text-white flex justify-between items-center">
       <button id="login" className="hover:bg-blue-400 rounded-md ">
         <img className='w-10 h-10 rounded-full' src={userInfo?.photoURL} title={userInfo?.displayName}></img>
@@ -96,7 +96,7 @@ const ChatPage = () => {
               <div key={msg.id} className={`message flex ${msg.data.uid === userInfo?.uid ? 'justify-end' : 'justify-start'}`}>
                 <div className={`message flex flex-row px-3 py-1 mt-3 gap-3 rounded-[20px] items-center ${msg.data.uid === userInfo?.uid ? 'text-white  flex-row-reverse' : 'm-2'}`}>
                   <img className='w-10 h-10 rounded-full' src={msg.data.photoURL} title={msg.data?.displayName} />
-                  <p className={`${msg.data.uid === userInfo?.uid ? 'bg-blue-500 px-2 py-1 rounded-lg' : 'bg-gray-800 px-2 py-1 rounded-lg'}`}>{msg.data.text}</p>
+                  <p className={`${msg.data.uid === userInfo?.uid ? 'bg-blue-500 text-white px-2 py-1 rounded-lg' : 'bg-gray-800 text-white px-2 py-1 rounded-lg'}`}>{msg.data.text}</p>
                 </div>
               </div>
             ))}
