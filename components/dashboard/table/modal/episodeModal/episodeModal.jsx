@@ -130,8 +130,10 @@ const EpisodeModal = ({ closeModal }) => {
 
       const showResponse = await axios.put(`https://endgame-team-server.vercel.app/shows/${selectedShowId}/episodes`, {
         episodeId: insertedId,
+        
       });
       console.log('Show updated successfully:', showResponse.data);
+      closeModal()
     } catch (error) {
       console.error('Error saving episode:', error.message);
       toast.error('Error saving episode. Please try again.');

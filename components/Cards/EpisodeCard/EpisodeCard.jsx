@@ -24,7 +24,9 @@ const EpisodeCard = ({ id }) => {
                     throw new Error(`Failed to fetch episode data. Status: ${episodesResponse.status}`);
                 }
                 const episodes = await episodesResponse.json();
-                setEpisodesData(episodes);
+               
+                const filteredEpisodes =episodes.filter(item => item.status==="enable");
+                setEpisodesData(filteredEpisodes);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }

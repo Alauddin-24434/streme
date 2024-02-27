@@ -1,12 +1,13 @@
 "use client"
 import useUserInfo from '@/hooks/useUser';
+
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import { Box, Button } from "@mui/material";
 import axios from 'axios';
 
 
 const PaymentBox = ({ packages }) => {
-    const userInfo = useUserInfo();
+    const userInfo=useUserInfo()
         const handlePayment = () => {
         console.log(packages)
         axios.post(`https://endgame-team-server.vercel.app/payment?email=${userInfo?.email}`, packages)

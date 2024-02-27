@@ -1,13 +1,16 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Link from 'next/link';
-import useUserInfo from '@/hooks/useUser';
-import LogoutButton from '../Logout/LogoutButton';
+
+
 import { IoMdMenu } from "react-icons/io";
 import Sidebar from '@/app/Sidebar/Sidebar';
-import { HiOutlineMenuAlt4 } from "react-icons/hi";
+
 import { useRouter } from 'next/navigation';
 import NotificationMenu from '../Notification/Notification';
+import { AuthContext } from '@/Provider/AuthProvider';
+
+import useUserInfo from '@/hooks/useUser';
 
 
 
@@ -21,7 +24,14 @@ const MainNavbar = ({ isOpen, handleSidebarToggle }) => {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const userInfo = useUserInfo();
   const router = useRouter()
+  console.log(userInfo)
+  const { logout } = useContext(AuthContext)
+  const handleLogOut = () => {
+    logout()
+  
+    console.log(userInfo)
 
+  }
 
   const handleGenreChange = (e) => {
     const genre = e.target.value;
@@ -102,7 +112,9 @@ const MainNavbar = ({ isOpen, handleSidebarToggle }) => {
                             <span className="text-white"> Dashboard</span>
                           </Link>
                         </div>
-                        <LogoutButton />
+                      <div className='text-white'>
+                      <button onClick={handleLogOut}>Logout</button>
+                      </div>
                       </div>
                     </div>
                   )}
