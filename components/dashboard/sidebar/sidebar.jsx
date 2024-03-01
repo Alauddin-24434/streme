@@ -1,5 +1,6 @@
 "use client"
 import React from 'react';
+import { MdReport } from "react-icons/md";
 import styles from "./sidebar.module.css"
 import {
     MdDashboard,
@@ -65,6 +66,14 @@ const Sidebar = () => {
                     ))}
                 </ul>
             </div>
+            {/* added report link */}
+            <Link href="/dashboard/report">
+                <div className='flex items-center gap-2'>
+                <MdReport className='text-xl ml-3' />
+                    <h2 className=' '>Report</h2>
+
+                </div>
+            </Link>
         </section>
     );
 };

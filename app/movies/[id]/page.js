@@ -224,6 +224,8 @@ const VideoDetail = ({ params }) => {
       })
       .catch(error => console.log(error))
     console.log(selectedOptions1)
+   setOpen(false);
+
   };
   // user Report function
 

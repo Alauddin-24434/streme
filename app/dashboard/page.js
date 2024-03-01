@@ -14,9 +14,7 @@ const Dashboard = () => {
     return (
         <div className="h-screen">
             <div>
-
             {isAdmin ? <Card /> : <UserProfile/>}
-          
             </div>
 
         </div>
