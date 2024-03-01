@@ -21,5 +21,4 @@ const SubscribePage = () => {
         </Box>
     );
 };
-
 export default SubscribePage;

@@ -1,11 +1,12 @@
-"use client"
+"use client";
 import { useContext, useEffect } from 'react';
-
-import { AuthContext } from '@/Provider/AuthProvider';
 import { useRouter } from 'next/navigation';
+import useUserInfo from '@/hooks/useUser';
+import { AuthContext } from '@/Provider/AuthProvider';
 
 const ProtectedRoute = ({ children }) => {
   const { currentUser, getCurrentUser } = useContext(AuthContext);
+  const userInfo = useUserInfo();
   const router = useRouter();
 
   useEffect(() => {
@@ -13,10 +14,15 @@ const ProtectedRoute = ({ children }) => {
     if (!currentUser && !getCurrentUser()) {
       router.push('/'); // Redirect to the login page
     }
-  }, [currentUser, getCurrentUser, router]);
 
-  // Render children only if currentUser exists
-  return currentUser ? <>{children}</> : null;
+    // Check if user is not a payment user and redirect if needed
+    if (userInfo && !userInfo.isPayment) {
+      router.push('/subscribe'); // Redirect to the subscribe page
+    }
+  }, [currentUser, getCurrentUser, userInfo, router]);
+
+  // Render children only if currentUser exists and user is a payment user
+  return currentUser && userInfo?.isPayment ? <>{children}</> : null;
 };
 
 export default ProtectedRoute;

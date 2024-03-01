@@ -1,21 +1,32 @@
 "use client"
 import React, { useState } from 'react';
-import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
+import { storage } from '@/utils/firebase-config';
+import axios from 'axios';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+
 const ShowModal = ({ closeModal }) => {
+  const [videoUploadPercent, setVideoUploadPercent] = useState(0);
   const [showData, setShowData] = useState({
-    showName: '',
+    title: '',
     description: '',
-    showAccess: 'Free',
-    language: 'Bangla',
-    genres: 'Action',
-    releaseDate: '',
-    publicDate: '',
-    duration: '',
-    seasons: [],
+    showAccess: '',
+    language: '',
+    genres: '',
+    thumbnail: { file: null, link: null },
+    banner: { file: null, link: null },
+    publisDate: '',
+    episodes: [],
+    category: '',
+    country: '',
+    status:'enable',
+    views: 0,
+    IsComplete:false,
+
   });
 
-  const handleChange = (e) => {
+
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
     setShowData((prevData) => ({
       ...prevData,
@@ -23,29 +34,80 @@ const ShowModal = ({ closeModal }) => {
     }));
   };
 
+  const handleFileUpload = async (e) => {
+    const { name, files } = e.target;
+
+    if (!files || files.length === 0) {
+      console.error('No files selected for upload');
+      return;
+    }
+
+    const uploadedFile = files[0];
+
+    if (!uploadedFile) {
+      console.error('Uploaded file is not defined');
+      return;
+    }
+
+    const storagePath = `shows/${uploadedFile.name}`;
+    const storageRef = ref(storage, storagePath);
+
+    try {
+      const uploadTask = uploadBytesResumable(storageRef, uploadedFile);
+
+      uploadTask.on('state_changed', (snapshot) => {
+        const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+        setVideoUploadPercent(progress)
+        console.log(`Upload is ${progress}% done`);
+      });
+
+      await uploadTask;
+
+      const downloadURL = await getDownloadURL(storageRef);
+
+      switch (name) {
+        case 'thumbnail':
+          setShowData((prevData) => ({
+            ...prevData,
+            thumbnail: { file: uploadedFile, link: downloadURL },
+          }));
+          break;
+        case 'banner':
+          setShowData((prevData) => ({
+            ...prevData,
+            banner: { file: uploadedFile, link: downloadURL },
+          }));
+          break;
+        default:
+          break;
+      }
+
+      toast.success(`${name} uploaded successfully!`);
+    } catch (error) {
+      console.error(`Error uploading ${name}:`, error);
+      toast.error(`Error uploading ${error}`);
+    }
+  };
+
   const handleSave = async () => {
     try {
       console.log('Show Info:', showData);
-  
+
       const response = await axios.post('https://endgame-team-server.vercel.app/shows', showData);
-  
+
       if (response.status === 200) {
         console.log('Show saved successfully:', response.data);
-  
-        // Access the properties from the response and include them in the toast
+
         const { acknowledged, insertedId } = response.data;
-  
+
         toast.success(`show saved successfully! Acknowledged: ${acknowledged}, Inserted ID: ${insertedId}`, {
-          autoClose: 5000, // Set the duration in milliseconds (e.g., 5000ms or 5 seconds)
-          // Other toast options can be set here
+          autoClose: 5000,
         });
-        
-        // closeModal(); // Close the modal after success
+        closeModal()
       } else {
         console.error('Failed to save show:', response.status, response.statusText);
         toast.error('Failed to save show. Please try again.');
       }
-      
     } catch (error) {
       console.error('Error saving show:', error.message);
       toast.error('Error saving show. Please try again.');
@@ -53,153 +115,170 @@ const ShowModal = ({ closeModal }) => {
   };
 
   return (
-    <div>
-      <div className="flex items-center justify-center p-2 bg-slate-900 bg-opacity-50">
-        <div className="w-full p-6">
+    <div className='w-full'>
+      <div className='flex items-center justify-center bg-slate-900 bg-opacity-50'>
+        <div className='p-6 rounded-lg w-full'>
+          <h2 className='text-2xl font-bold mb-4'>Add Show</h2>
           <form>
-            <fieldset className="border p-6 mb-4">
+            <fieldset className='border p-4'>
               <legend>Show</legend>
-              <div className="">
-                <label className="block text-sm font-medium text-gray-600">Show Name:</label>
+
+              <div className='mb-4'>
+                <label className='block text-sm font-medium text-gray-600'>Show Name:</label>
                 <input
-                  type="text"
-                  name="showName"
-                  value={showData.showName}
-                  onChange={handleChange}
-                  className="mt-1 p-2 border bg-slate-800 rounded w-full"
-                  placeholder="Enter Show Name"
+                  type='text'
+                  name='title'
+                  value={showData.title}
+                  onChange={(e) => handleInputChange(e)}
+                  className='mt-1 p-2 border text-white bg-slate-800 rounded w-full'
+                  placeholder='Enter Show Name'
                 />
               </div>
-              <div className="">
-                <label className="block text-sm font-medium text-gray-600">Description:</label>
+
+              <div className='mb-4'>
+                <label className='block text-sm font-medium text-gray-600'>Description:</label>
                 <textarea
-                  name="description"
+                  name='description'
                   value={showData.description}
-                  onChange={handleChange}
-                  className="mt-1 p-2 border bg-slate-800 rounded w-full"
-                  placeholder="Description"
+                  onChange={(e) => handleInputChange(e)}
+                  className='mt-1 p-2 border bg-slate-800 rounded w-full'
+                  placeholder='Description'
                 />
               </div>
 
-              <div className="flex mb-4 gap-4 flex-col lg:flex-row justify-between items-center">
-                <div className="w-full">
-                  <label className="block text-sm font-medium text-gray-600">Movie Access:</label>
+              <div className='flex mb-4 gap-4 flex-col lg:flex-row lg:justify-between items-center'>
+                <div className='w-full'>
+                  <label className='block text-sm font-medium text-gray-600'>Show Access:</label>
                   <select
-                    name="showAccess"
-                    id="showAccess"
-                    className="mt-1 p-2 border bg-slate-800 rounded w-full"
+                    name='showAccess'
                     value={showData.showAccess}
-                    onChange={handleChange}
+                    onChange={(e) => handleInputChange(e)}
+                    className='mt-1 p-2 border bg-slate-800 rounded w-full'
                   >
-                    <option value="Free">Free</option>
-                    <option value="standard">Standard</option>
-                    <option value="premium">Premium</option>
+                    <option>Select Access</option>
+                    <option value='Free'>Free</option>
+                    <option value='standard'>Standard</option>
+                    <option value='premium'>Premium</option>
                   </select>
                 </div>
 
-                <div className="w-full">
-                  <label className="block text-sm font-medium text-gray-600">Language:</label>
+                <div className='w-full'>
+                  <label className='block text-sm font-medium text-gray-600'>Language:</label>
                   <select
-                    name="language"
-                    id="language"
-                    className="mt-1 p-2 border bg-slate-800 rounded w-full"
+                    name='language'
                     value={showData.language}
-                    onChange={handleChange}
+                    onChange={(e) => handleInputChange(e)}
+                    className='mt-1 p-2 border bg-slate-800 rounded w-full'
                   >
-                    <option value="Bangla">Bangla</option>
-                    <option value="Hindi">Hindi</option>
-                    <option value="English">English</option>
-                    <option value="China">China</option>
+                    <option >Select Language</option>
+                    <option value='Bangla'>Bangla</option>
+                    <option value='Hindi'>Hindi</option>
+                    <option value='English'>English</option>
+                    <option value='China'>China</option>
                   </select>
                 </div>
               </div>
 
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-600">Genres:</label>
+              <div className='mb-4'>
+                <label className='block text-sm font-medium text-gray-600'>Genres:</label>
                 <select
-                  name="genres"
-                  id="genres"
-                  className="mt-1 p-2 border bg-slate-800 rounded w-full"
+                  name='genres'
                   value={showData.genres}
-                  onChange={handleChange}
+                  onChange={(e) => handleInputChange(e)}
+                  className='mt-1 p-2 border bg-slate-800 rounded w-full'
                 >
-                  <option value="Action">Action</option>
-                  <option value="Adventure">Adventure</option>
-                  <option value="Animation">Animation</option>
-                  <option value="Horror">Horror</option>
-                  <option value="Thriller">Thriller</option>
+                  <option >Select Genere</option>
+                  <option value='Action'>Action</option>
+                  <option value='Adventure'>Adventure</option>
+                  <option value='Romance'>Romance</option>
+                  <option value='Horror'>Horror</option>
+                  <option value='Thriller'>Thriller</option>
                 </select>
               </div>
+              <div className='mb-4'>
+                <label className='block text-sm font-medium text-gray-600'>Category:</label>
+                <select
+                  name='category'
+                  value={showData.category}
+                  onChange={(e) => handleInputChange(e)}
+                  className='mt-1 p-2 border bg-slate-800 rounded w-full'
+                >
+                  <option >Select Category</option>
+                  <option value='Drama'>Drama</option>
+                  <option value='Animation'>Animation</option>
+
+                </select>
+              </div>
+
+              <div className='mb-4'>
+                <label className='block text-sm font-medium text-gray-600'>Country:</label>
+                <select
+                  name='country'
+                  value={showData.country}
+                  onChange={(e) => handleInputChange(e)}
+                  className='mt-1 p-2 border bg-slate-800 rounded w-full'
+                >
+                  <option >Select Country</option>
+                  <option value='Bangladesh'>Bangladesh</option>
+                  <option value='South Koria'>South Koria</option>
+                  <option value='China'>China</option>
+                  <option value='UK'>UK</option>
+                  <option value='India'>India</option>
+                  <option value='Japan'>Japan</option>
+                  {/* Add more countries as needed */}
+                </select>
+              </div>
+
             </fieldset>
 
-            <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-2">
-              <div className="">
-                <label htmlFor="releaseDate" className="text-sm block font-semibold text-gray-600">
-                  Release Date
-                </label>
+            <fieldset className='border p-4'>
+              <legend>MEDIA</legend>
+              <div className='my-4'>
+              <span className='py-2 bg-slate-800 px-4'>Upload File {videoUploadPercent} %</span>
+              </div>
+              <div className='mb-4'>
+                <label className='block text-sm font-medium text-gray-600'>Thumbnail:</label>
                 <input
-                  type="date"
-                  id="releaseDate"
-                  name="releaseDate"
-                  value={showData.releaseDate}
-                  onChange={handleChange}
-                  className="mt-1 p-2 border bg-slate-800 rounded w-full"
+                  type='file'
+                  name='thumbnail'
+                  onChange={handleFileUpload}
+                  className='mt-1 p-2 border bg-slate-800 rounded w-full'
                 />
               </div>
 
-              <div className="">
-                <label htmlFor="publicDate" className="text-sm block font-semibold text-gray-600">
-                  Public Date
-                </label>
+              <div className='mb-4'>
+                <label className='block text-sm font-medium text-gray-600'>Banner:</label>
                 <input
-                  type="date"
-                  id="publicDate"
-                  name="publicDate"
-                  value={showData.publicDate}
-                  onChange={handleChange}
-                  className="mt-1 p-2 border bg-slate-800 rounded w-full"
+                  type='file'
+                  name='banner'
+                  onChange={handleFileUpload}
+                  className='mt-1 p-2 border bg-slate-800 rounded w-full'
                 />
               </div>
-              <div className="">
-                <label htmlFor="duration" className="text-sm block font-semibold text-gray-600">
-                  Duration
-                </label>
-                <input
-                  type="text"
-                  id="duration"
-                  name="duration"
-                  value={showData.duration}
-                  onChange={handleChange}
-                  placeholder="Enter duration (e.g., 120 minutes)"
-                  className="mt-1 p-2 border bg-slate-800 rounded w-full"
-                />
-              </div>
-            </div>
+             
 
-            <div className="flex justify-between text-sm lg:text-lg gap-x-2 py-2">
-              <button
-                type="button"
-                onClick={handleSave}
-                className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-green-600"
-              >
-                Save
-              </button>
-
-              <div className="">
-                <button
-                  type="button"
-                  onClick={closeModal}
-                  className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
-                >
-                  Close Modal
-                </button>
-              </div>
-            </div>
+            </fieldset>
           </form>
+
+          <div className='flex justify-between text-sm lg:text-lg gap-x-2 py-2'>
+            <button
+              type='button'
+              onClick={handleSave}
+              className='bg-blue-500  text-white py-2 px-4 rounded hover:bg-green-600'
+            >
+              Save
+            </button>
+            <button
+              onClick={closeModal}
+              className='bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600'
+            >
+              Close Modal
+            </button>
+          </div>
         </div>
       </div>
       <Toaster
-        position="top-center"
+        position='top-center'
         reverseOrder={false}
       />
     </div>

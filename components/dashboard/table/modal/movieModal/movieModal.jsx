@@ -6,27 +6,26 @@ import axios from 'axios';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 
 const MovieModal = ({ closeModal }) => {
+  const [videoUploadPercent, setVideoUploadPercent] = useState(0);
   const [movieInfo, setMovieInfo] = useState({
-    movieName: '',
+    title: '',
     description: '',
     access: 'standard',
     language: 'English',
     genres: 'Action',
-    seoTitle: '',
-    seoDescription: '',
-    keywords: '',
     thumbnail: { file: null, link: null },
-    poster: { file: null, link: null },
-    trailerUrl: '',
+ 
     videoQuality: '480',
     video: { file: null, link: null },
-    audience: '', // New state variable for audience selection
+    publisDate: '',
+    audience: '',
+    views: 0,
+    category:'',
+    cast: [{ name: '', image: { file: null, link: null } }], // Default one empty cast member
   });
 
-  const [isClient, setIsClient] = useState(false);
-
   useEffect(() => {
-    setIsClient(true);
+    // Add any initial setup logic here
   }, []);
 
   const handleInputChange = (e) => {
@@ -37,58 +36,42 @@ const MovieModal = ({ closeModal }) => {
     }));
   };
 
-  const getStoragePath = (name, file) => {
-    if (name === 'thumbnail' || name === 'poster') {
-      return `images/${file.name}`;
-    } else if (name === 'video') {
-      return `videos/${file.name}`;
-    }
-    return '';
-  };
-
-  const handleFileUpload = async (e) => {
-    if (!isClient) return;
-
+  const handleFileUpload = async (e, index) => {
     const { name, files } = e.target;
-
+  
     if (!files || files.length === 0) {
       console.error('No files selected for upload');
       return;
     }
-
+  
     const uploadedFile = files[0];
-
+  
     if (!uploadedFile) {
       console.error('Uploaded file is not defined');
       return;
     }
-
-    const storagePath = getStoragePath(name, uploadedFile);
+  
+    const storagePath = `images/${uploadedFile.name}`;
     const storageRef = ref(storage, storagePath);
-
+  
     try {
       const uploadTask = uploadBytesResumable(storageRef, uploadedFile);
-
+  
       uploadTask.on('state_changed', (snapshot) => {
         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        setVideoUploadPercent(progress);
         console.log(`Upload is ${progress}% done`);
       });
-
+  
       await uploadTask;
-
+  
       const downloadURL = await getDownloadURL(storageRef);
-
+  
       switch (name) {
         case 'thumbnail':
           setMovieInfo((prevInfo) => ({
             ...prevInfo,
             thumbnail: { file: uploadedFile, link: downloadURL },
-          }));
-          break;
-        case 'poster':
-          setMovieInfo((prevInfo) => ({
-            ...prevInfo,
-            poster: { file: uploadedFile, link: downloadURL },
           }));
           break;
         case 'video':
@@ -97,46 +80,73 @@ const MovieModal = ({ closeModal }) => {
             video: { file: uploadedFile, link: downloadURL },
           }));
           break;
+        case 'castImage':
+          const updatedCast = [...movieInfo.cast];
+          updatedCast[index].image = { file: uploadedFile, link: downloadURL };
+          setMovieInfo((prevInfo) => ({
+            ...prevInfo,
+            cast: updatedCast,
+          }));
+          break;
         default:
           break;
       }
-
+  
       toast.success(`${name} uploaded successfully!`);
     } catch (error) {
       console.error(`Error uploading ${name}:`, error);
       toast.error(`Error uploading ${error}`);
     }
   };
+  
+  const handleNameChange = (index, name) => {
+    const updatedCast = [...movieInfo.cast];
+    updatedCast[index].name = name;
+    setMovieInfo((prevInfo) => ({
+      ...prevInfo,
+      cast: updatedCast,
+    }));
+  };
+
+  const handleAddCastMember = () => {
+    setMovieInfo((prevInfo) => ({
+      ...prevInfo,
+      cast: [...prevInfo.cast, { name: '', image: { file: null, link: null } }],
+    }));
+  };
+
+  const handleRemoveCastMember = (index) => {
+    setMovieInfo((prevInfo) => ({
+      ...prevInfo,
+      cast: prevInfo.cast.filter((_, idx) => idx !== index),
+    }));
+  };
 
   const handleSave = async () => {
     try {
       console.log('Movie Info:', movieInfo);
-  
+
       const response = await axios.post('https://endgame-team-server.vercel.app/movies', movieInfo);
-  
+
       if (response.status === 200) {
         console.log('Movie saved successfully:', response.data);
-  
-        // Access the properties from the response and include them in the toast
-        const { acknowledged, insertedId } = response.data;
-  
-        toast.success(`Movie saved successfully! Acknowledged: ${acknowledged}, Inserted ID: ${insertedId}`, {
-          autoClose: 5000, // Set the duration in milliseconds (e.g., 5000ms or 5 seconds)
-          // Other toast options can be set here
+
+        const { acknowledged } = response.data;
+
+        toast.success(`Movie saved successfully! Acknowledged: ${acknowledged}`, {
+          autoClose: 5000,
         });
-        
-        closeModal(); 
+
+        closeModal();
       } else {
         console.error('Failed to save movie:', response.status, response.statusText);
         toast.error('Failed to save movie. Please try again.');
       }
-      
     } catch (error) {
       console.error('Error saving movie:', error.message);
       toast.error('Error saving movie. Please try again.');
     }
   };
-  
 
   return (
     <div className='w-full'>
@@ -151,8 +161,8 @@ const MovieModal = ({ closeModal }) => {
                 <label className='block text-sm font-medium text-white'>Movie Name:</label>
                 <input
                   type='text'
-                  name='movieName'
-                  value={movieInfo.movieName}
+                  name='title'
+                  value={movieInfo.title}
                   onChange={(e) => handleInputChange(e)}
                   className='mt-1 p-2 border text-white bg-slate-800 rounded w-full'
                   placeholder='Enter Movie Name'
@@ -201,26 +211,95 @@ const MovieModal = ({ closeModal }) => {
                     <option value="China">China</option>
                   </select>
                 </div>
+                <div className='w-full'>
+                  <label htmlFor="publicDate" className="text-sm block font-semibold text-gray-600">
+                    Public Date
+                  </label>
+                  <input
+                    type="date"
+                    id="publisDate"
+                    name="publisDate"
+                    value={movieInfo.publisDate}
+                    onChange={(e) =>handleInputChange(e)}
+                    className="mt-1 p-2 border bg-slate-800 rounded w-full"
+                  />
+                </div>
+                <div className='w-full'>
+                  <label className='block text-sm font-medium text-gray-600'>Genres:</label>
+                  <select
+                    name="genres"
+                    id="genres"
+                    className='mt-1 p-2 border bg-slate-800 rounded w-full'
+                    value={movieInfo.genres}
+                    onChange={(e) => handleInputChange(e)}
+                  >
+                    <option value="Action">Action</option>
+                    <option value="Adventure">Adventure</option>
+                    <option value='Romance'>Romance</option>
+                    <option value="Horror">Horror</option>
+                    <option value="Thriller">Thriller</option>
+                  </select>
+                </div>
               </div>
 
-              <div className='mb-4'>
-                <label className='block text-sm font-medium text-gray-600'>Genres:</label>
+              <div className='w-full'>
+                <label className='block text-sm font-medium text-gray-600'>Category:</label>
                 <select
-                  name="genres"
-                  id="genres"
-                  className='mt-1 p-2 border bg-slate-800 rounded w-full'
-                  value={movieInfo.genres}
+                  name='category'
+                  id='category'
+                  value={movieInfo.category}
                   onChange={(e) => handleInputChange(e)}
+                  className='mt-1 p-2 border bg-slate-800 rounded w-full'
                 >
-                  <option value="Action">Action</option>
-                  <option value="Adventure">Adventure</option>
-                  <option value="Animation">Animation</option>
-                  <option value="Horror">Horror</option>
-                  <option value="Thriller">Thriller</option>
+                  <option value='Movie'>Movie</option>
+                  <option value='Animation'>Animation</option>
+
                 </select>
+              </div>
+
+            </fieldset>
+
+            {/* Cast field */}
+            <fieldset className='border p-4'>
+              <legend>Cast</legend>
+              <span className=' flex justify-center items-center text-center'>
+                {videoUploadPercent &&
+                  <h2 className=' bg-green-500 p-2 text-lg  rounded-md'>
+                    Upload is {videoUploadPercent}% done
+                  </h2>}
+              </span>
+              <div className='mb-4'>
+                {movieInfo.cast.map((member, index) => (
+                  <div key={`cast-${index}`} className="flex flex-col  gap-4 mb-2">
+                    <div >
+                      <label className='block text-sm font-medium text-gray-600'>Cast Image:</label>
+                      <input
+                        type='file'
+                        name={`castImage-${index}`}
+                        onChange={(e) => handleFileUpload(e, index)}
+                        className='mt-1 p-2 border bg-slate-800 rounded w-full'
+                      />
+                    </div>
+                    <div>
+                      <label className='block text-sm font-medium text-gray-600'>Name:</label>
+                      <input
+                        type="text"
+                        value={member.name}
+                        onChange={(e) => handleNameChange(index, e.target.value)}
+                        placeholder={`Cast Name ${index + 1}`}
+                        className='mt-1 p-2 border bg-slate-800 rounded w-full'
+                      />
+                    </div>
+                    <div>
+                    <button type="button" onClick={() => handleRemoveCastMember(index)} className=" bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">Remove Cast</button>
+                    </div>
+                  </div>
+                ))}
+                <button type="button" onClick={handleAddCastMember} className="mt-2 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Add Cast</button>
               </div>
             </fieldset>
 
+            {/* Other movie fields */}
             <fieldset className='border p-4'>
               <legend>Audience</legend>
 
@@ -240,44 +319,13 @@ const MovieModal = ({ closeModal }) => {
               </div>
             </fieldset>
             <fieldset className='border p-4'>
-              <legend>SEO</legend>
-
-              <div className='mb-4'>
-                <label className='block text-sm font-medium text-gray-600'>SEO Title:</label>
-                <input
-                  type='text'
-                  name='seoTitle'
-                  value={movieInfo.seoTitle}
-                  onChange={(e) => handleInputChange(e)}
-                  className='mt-1 p-2 border bg-slate-800 rounded w-full'
-                />
-              </div>
-
-              <div className='mb-4'>
-                <label className='block text-sm font-medium text-gray-600'>SEO Description:</label>
-                <textarea
-                  name='seoDescription'
-                  value={movieInfo.seoDescription}
-                  onChange={(e) => handleInputChange(e)}
-                  className='mt-1 p-2 border bg-slate-800 rounded w-full'
-                />
-              </div>
-
-              <div className='mb-4'>
-                <label className='block text-sm font-medium text-gray-600'>Keywords:</label>
-                <input
-                  type='text'
-                  name='keywords'
-                  value={movieInfo.keywords}
-                  onChange={(e) => handleInputChange(e)}
-                  className='mt-1 p-2 border bg-slate-800 rounded w-full'
-                />
-              </div>
-            </fieldset>
-
-            <fieldset className='border p-4'>
               <legend>MEDIA</legend>
-
+              <span className=' flex justify-center items-center text-center'>
+                {videoUploadPercent &&
+                  <h2 className=' bg-green-500 p-2 text-lg  rounded-md'>
+                    Upload is {videoUploadPercent}% done
+                  </h2>}
+              </span>
               <div className='mb-4'>
                 <label className='block text-sm font-medium text-gray-600'>Thumbnail:</label>
                 <input
@@ -288,28 +336,7 @@ const MovieModal = ({ closeModal }) => {
                 />
               </div>
 
-              <div className='mb-4'>
-                <label className='block text-sm font-medium text-gray-600'>Poster:</label>
-                <input
-                  type='file'
-                  name='poster'
-                  onChange={handleFileUpload}
-                  className='mt-1 p-2 border bg-slate-800 rounded w-full'
-                />
-              </div>
-
-              <div className='mb-4'>
-                <label className='block text-sm font-medium text-gray-600'>Trailer URL:</label>
-                <input
-                  type='text'
-                  name='trailerUrl'
-                  value={movieInfo.trailerUrl}
-                  onChange={(e) => handleInputChange(e)}
-                  className='mt-1 p-2 border bg-slate-800 rounded w-full'
-                />
-              </div>
-
-              <h2>Video Quality</h2>
+          
               <div className='flex flex-col lg:justify-between items-center mb-4 gap-4'>
                 <div className='w-full'>
                   <label className='block text-sm font-medium text-gray-600'>Quality</label>

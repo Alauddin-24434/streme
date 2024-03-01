@@ -1,16 +1,27 @@
 "use client"
-import { useState } from 'react';
-import { login, signInWithGoogle } from '@/Provider/AuthProvider';
-import toast, { Toaster } from 'react-hot-toast';
-import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
 import { FaGoogle } from 'react-icons/fa';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { login, signInWithGoogle } from '@/Provider/AuthProvider';
+import toast, { Toaster } from 'react-hot-toast';
+import useUserInfo from '@/hooks/useUser';
+
+
 export default function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+   
 
-    const router = useRouter()
+    const [loading, setLoading] = useState(false)
+    const router = useRouter();
+
+
+
+
+
+
     const handleLogin = async (e) => {
         setError(''); // Clear error state
         e.preventDefault();
@@ -18,8 +29,7 @@ export default function LoginPage() {
             await login(email, password);
             // Redirect to dashboard or another page upon successful login
             toast.success('Logged in successfully');
-            await router.push('/subscribe');
-
+            await router.push('/home');
         } catch (error) {
             setError(error.message);
         }
@@ -32,12 +42,10 @@ export default function LoginPage() {
             // toast.success("Signed in with Google successfully");
 
             // Fetch user data from localhost:5000/user
-
-
             toast.success("Login successfully");
-            await router.push('/subscribe');
-
-
+            await router.push('/home');
+            
+    
         } catch (error) {
             if (error.code === 'auth/popup-closed-by-user') {
                 setError("Sign-in process was closed by the user. Please try again.");
@@ -53,7 +61,7 @@ export default function LoginPage() {
             backgroundRepeat: "no-repeat",
             backgroundSize: "cover",
             maxHeight: "100vh"
-          }}>
+        }}>
             <div className="max-w-sm w-full space-y-4 border border-spacing-1 p-4 rounded-md backdrop-blur-md bg-black bg-opacity-75">
                 <div>
                     <h2 className="mt-6 text-center text-3xl font-extrabold text-white">Login</h2>
@@ -86,8 +94,7 @@ export default function LoginPage() {
                     </div>
 
                     <div>
-                        <button type="submit" className=" w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium  text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-
+                        <button type="submit" className="w-full flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium border-gray-300 placeholder-gray-500 text-gray-300 bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             Sign in
                         </button>
                     </div>
@@ -95,11 +102,10 @@ export default function LoginPage() {
 
                 <button
                     onClick={handleGoogleSignIn}
-                    className="flex items-center w-full justify-center gap-2 py-2 px-4 border border-transparent shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                    className="flex items-center w-full justify-center gap-2 py-2 px-4 border border-transparent shadow-sm text-sm font-medium text-gray-300 bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                 >
                     <FaGoogle />
                     Sign Up with Google
-
                 </button>
                 <div className="text-center text-sm">
                     <span className='text-gray-300'>  If you don't have an account,</span> <Link href="/signup"><span className="text-red-600 font-medium hover:text-red-400">Sign up</span></Link>

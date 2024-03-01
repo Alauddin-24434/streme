@@ -1,93 +1,70 @@
+"use client"
 import React from 'react';
 import styles from "./sidebar.module.css"
 import {
     MdDashboard,
-    MdSupervisedUserCircle,
-    MdShoppingBag,
-    MdAttachMoney,
     MdWork,
     MdAnalytics,
-    MdPeople,
-    MdOutlineSettings,
-    MdHelpCenter,
-    // MdLogout,
 } from "react-icons/md";
 import MenuLinks from './menuLinks';
 import Link from 'next/link';
+import useUserInfo from '@/hooks/useUser';
+
 const Sidebar = () => {
-    const menuItems = [
-        {
-           
-                    title: "Dashboard",
-                    path: '/dashboard',
-                    icon: <MdDashboard />
-           
-        },
-        // {
-          
-        //             title: "Rating",
-        //             path: 'dashboard/rating',
-        //             icon: <MdSupervisedUserCircle />,
-        //         },
-        //         {
-        //             title: "Comments",
-        //             path: 'dashboard/comments',
-        //             icon: <MdShoppingBag />,
-        //         },
-        //         {
-        //             title:"Users",
-        //             path:'dashboard/users',
-        //             icon: <MdSupervisedUserCircle />,
-        //         }
-           
+    const userInfo = useUserInfo();
+    const userItems = [
        
-        // ,
         {
-          
-                    title: "Movie List",
-                    path: "/dashboard/movies",
-                    icon: <MdWork />,
-                },
-               
-                {
-                    title: "Show List",
-                    path: "/dashboard/shows",
-                    icon: <MdAnalytics />,
-                },
-                {
-                    title: "Season",
-                    path: "/dashboard/season",
-                    icon: <MdAnalytics />,
-                },
-                {
-                    title: "Episode",
-                    path: "/dashboard/episode",
-                    icon: <MdAnalytics />,
-                },
-                
-
-        
+            title: "Profile",
+            path: '/dashboard',
+            icon: <MdDashboard />
+        },
+        {
+            title: "Upload",
+            path: '/dashboard/upload',
+            icon: <MdDashboard />
+        },
     ]
+
+    const adminItems = [
+        {
+            title: "Dashboard",
+            path: '/dashboard',
+            icon: <MdDashboard />
+        },
+        {
+            title: "Movie List",
+            path: "/dashboard/movies",
+            icon: <MdWork />,
+        },
+       
+        {
+            title: "Show List",
+            path: "/dashboard/shows",
+            icon: <MdAnalytics />,
+        },
+        {
+            title: "Episode",
+            path: "/dashboard/episode",
+            icon: <MdAnalytics />,
+        },
+       
+       
+    ]
+    const menuItems = userInfo?.isAdmin ? adminItems : userItems;
     return (
-        <section className='hidden   lg:block bg-slate-900' >
-          <Link href="/home">
+        <section className='hidden  h-screen px-6 lg:block bg-slate-900  mt-3 rounded-lg' >
+            <Link href="/home">
                 <img className="w-36" src="https://i.ibb.co/B396qB4/Screenshot-2024-02-07-031511-removebg-preview.png" alt="Your Logo" />
-              </Link>
-
-        <div className="static p-4  h-screen"  >
-
-            <ul className={styles.list}>
-                {
-                    menuItems?.map((item) => (
-                  
-                          <MenuLinks key={item.title} item={item} />
-                         
-                       
-                    ))
-                }
-            </ul>
-        </div>
-                    
+            </Link>
+            <hr />
+            <div className="static">
+                <ul className={styles.list}>
+                    {menuItems.map((item) => (
+                        <MenuLinks key={item.title} item={item} />
+                    ))}
+                </ul>
+            </div>
         </section>
     );
 };
