@@ -5,6 +5,7 @@ import ShowModal from '../../table/modal/showModal/showModal';
 
 import UploadModal from '../../table/modal/UserRelated/uploadModal/uploadModal';
 import EpisodeModal from '@/components/dashboard/table/modal/episodeModal/episodeModal';
+
 const HeaderChildren = ({ dbutton }) => {
 
   const [isModalOpen, setModalOpen] = useState(false);
@@ -18,6 +19,7 @@ const HeaderChildren = ({ dbutton }) => {
     setModalOpen(false);
   };
 
+  
 
 
   const getModalComponent = () => {
@@ -50,6 +52,7 @@ const HeaderChildren = ({ dbutton }) => {
               </p>
             )}
           </div>
+        
         </div>
         <hr />
 

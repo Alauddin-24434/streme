@@ -8,7 +8,7 @@ const PlaylistButton = ({ data, playList, setStatePlaylike, Playlist }) => {
   const [addedToPlaylist, setAddedToPlaylist] = useState(false);
   const userInfo = useUserInfo();
   const email = userInfo?.email;
-  console.log(playList);
+  // console.log(playList);
 
 
   const togglePlaylist = async () => {

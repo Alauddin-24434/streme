@@ -54,7 +54,7 @@ const Like = ({ data, likeData, setStateLike, stateLike }) => {
             <button onClick={toggleLike} style={{ color: liked ? 'red' : 'black' }}>
                 {data?._id === likeData?.data?._id ? <SlLike className='text-red-500'/> : <SlLike className='text-white'/>}
             </button>
-            <p>{like?.length}</p>
+            <p className='text-white'>{like?.length}</p>
         </div>
     );
 };

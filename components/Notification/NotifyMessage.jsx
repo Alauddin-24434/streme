@@ -33,7 +33,13 @@ const NotifyMessage = ({ notify, handleNotifyRead, userInfo }) => {
 
     return (
 
-        <Link onClick={() => handleNotifyRead(notify._id)} href={notify.type === "video" ? `https://streme-eight.vercel.app/movies/${notify.videoId}` : ''}>
+        <Link onClick={() => handleNotifyRead(notify._id)} href={
+            notify.type === "video"
+              ? `https://streme-eight.vercel.app/movies/${notify.videoId}`
+              : notify.type === "episode"
+              ? `https://streme-eight.vercel.app/drama/episode/video/${notify.otherId}`
+              : ''
+          }>
             <Box display={'flex'} justifyContent={'space-between'} paddingLeft={2} paddingY={1} marginY={'2px'} gap={3} paddingRight={2} bgcolor={readData ? '#24314f' : '#203a25'} sx={{ '&:hover': { backgroundColor: readData ? '#38476a' : '#395c40' } }}>
                 <Box display={'flex'} >
                     <NotificationsNoneIcon sx={{ fontSize: 28, padding: 1, height: { xs: '30px', sm: '50px' }, width: { xs: '30px', sm: '50px' }, borderRadius: '50px', backgroundColor: '#353535', marginRight: '8px', color: readData ? '#ffffff' : '#8ceaa4' }} />

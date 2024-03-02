@@ -4,7 +4,7 @@ import { IoPlayForwardOutline } from "react-icons/io5";
 import { IoPlayBackOutline } from "react-icons/io5";
 
 import './player.css';
-const VideoPlayer = ({ video }) => {
+const VideoPlayer = ({ video ,handleVideoProgress}) => {
   const videoRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -29,6 +29,7 @@ const VideoPlayer = ({ video }) => {
         ref={videoRef}
         src={video}
         controls// Hide default controls
+        onProgress={handleVideoProgress}
       />
       <div className="custom-controls">
         <button className={`play-button ${isPlaying ? 'pause' : 'play'}`} onClick={togglePlay}>

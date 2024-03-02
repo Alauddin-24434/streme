@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 const VideoCard = () => {
     const [moviesData, setMoviesData] = useState([]);
 
-
+const age=12;
     useEffect(() => {
         const fetchData = async () => {
             try {

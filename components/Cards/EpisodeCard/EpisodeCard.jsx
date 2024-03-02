@@ -71,7 +71,7 @@ const EpisodeCard = ({ id }) => {
                     </div>
                     <p className="text-lg mb-2">Romance, Friendship, Costume, Ancient, Novel Adaptation</p>
                     <p className="text-lg mb-2">Cast: Zhang Tian'ai, Zhang Haowei, Wang Ruichang</p>
-                    <p className="text-lg mb-2">Description:</p>
+                    <p className="text-lg mb-2">{showsData?.description}</p>
                     <div className='flex gap-2 items-center'>
                         {updateData?.episodes && updateData.episodes.length > 0 && (
                             <Link href={`/drama/episode/video/${updateData.episodes[0]._id}`}>

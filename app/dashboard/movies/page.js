@@ -28,6 +28,7 @@ const MoviesPage = () => {
     const handleCurrentVisibilityStatus = async (movieId, currentStatus) => {
         try {
             await axios.put(`https://endgame-team-server.vercel.app/latestMovies/${movieId}`, { status: currentStatus });
+            setMovieData(prevMovies => prevMovies.filter(movie => movie._id !== movieId));
             toast.success('Status updated successfully', {
                 icon: '🚀',
                 style: {
@@ -35,6 +36,7 @@ const MoviesPage = () => {
                     color: '#FFFFFF',
                 },
             });
+            
         } catch (error) {
             console.error('Error updating status:', error);
             toast.error('Error updating status', {
@@ -46,7 +48,9 @@ const MoviesPage = () => {
             });
         }
     };
-
+   
+    
+  
     const handleDeleteData = async (movieId) => {
         try {
             await axios.delete(`https://endgame-team-server.vercel.app/latestMovies/${movieId}`); // Correct endpoint

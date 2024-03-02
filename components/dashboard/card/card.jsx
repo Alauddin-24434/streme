@@ -1,6 +1,7 @@
 "use client"
 import React, { useEffect, useState } from 'react';
-import { FaDownload, FaUser, FaEye, FaYoutube } from 'react-icons/fa';
+import {  FaUser } from 'react-icons/fa';
+import { MdPayments } from "react-icons/md";
 import StackBars from '@/components/dashboard/chart/stackChart/stackChart';
 import ProfileCard from './profile/profileCard';
 import WeekLyLineChart from '../chart/lineChart/lineChart';
@@ -8,6 +9,7 @@ import axios from 'axios';
 
 const Card = () => {
   const [usersData, setUsersData] = useState([]);
+  const [usersPaymentData, setUsersPaymentData] = useState([]);
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -21,12 +23,24 @@ const Card = () => {
 
     fetchMovies();
   }, []);
+  useEffect(() => {
+    const fetchPaymentUsers = async () => {
+      try {
+        const response = await axios.get('https://endgame-team-server.vercel.app/payments');
+        setUsersPaymentData(response.data);
+      } catch (error) {
+        console.error('Error fetching movies:', error);
+      }
+    };
+
+    fetchPaymentUsers();
+  }, []);
 
   const cards = [
     {
       id: 1,
       title: 'All Users',
-      number: usersData.length,
+      number: usersData?.length,
       color: 'linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%)',
       icon: FaUser,
     },
@@ -34,10 +48,10 @@ const Card = () => {
     {
       id: 3,
       title: 'Subscription',
-      number: 8.236,
+      number: usersPaymentData?.length,
       change: -2,
       color:  'linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%)',
-      icon: FaYoutube,
+      icon:  MdPayments,
     },
 
    

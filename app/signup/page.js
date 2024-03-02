@@ -16,7 +16,8 @@ export default function SignupPage() {
     const [username, setUsername] = useState('');
     const [gender, setGender] = useState(''); // Initialize with empty string
     const [country, setCountry] = useState(''); // Initialize with empty string
-    const [age, setAge] = useState(0); // Initialize with default value
+ 
+    const [age, setAge] = useState(''); // Initialize with default value
     const [error, setError] = useState('');
     const router = useRouter();
     const [loading, setLoading] = useState(false);
@@ -30,12 +31,12 @@ export default function SignupPage() {
             setError("Passwords do not match");
             return;
         }
-        if (age === 0) {
+        if (age === '') {
             setError("Please enter your age");
             return;
         }
         try {
-            await signup(inputEmail, password, username, gender, age, country); // Include gender and age in signup
+            await signup(inputEmail, password, username, gender,age, country); // Include gender and age in signup
             toast.success("Signup successfully");
 
             await router.push('/home');
@@ -160,17 +161,19 @@ export default function SignupPage() {
                             </select>
                         </div>
                         <div>
+                            <label htmlFor="birthdate" className="block text-sm font-medium text-white">
+                                Birthdate
+                            </label>
                             <input
                                 id="age"
                                 name="age"
-                                type="number"
-
-                                placeholder='Enter your age number'
-                                onChange={(e) => setAge(parseInt(e.target.value))}
-                                required
-                                className="mt-1 focus:ring-indigo-500 rounded-lg text-white px-3 py-2 bg-white bg-opacity-20 focus:border-indigo-500 block w-full shadow-sm sm:text-sm "
+                                type="date"
+                                value={age}
+                                onChange={(e) => setAge(e.target.value)}
+                                className="mt-1 focus:ring-indigo-500 rounded-lg text-white px-3 py-2 bg-white bg-opacity-20 focus:border-indigo-500 block w-full shadow-sm sm:text-sm"
                             />
                         </div>
+
                         <div className="flex items-center justify-between">
                             <button
                                 type="submit"

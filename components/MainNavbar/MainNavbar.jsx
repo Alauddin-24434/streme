@@ -24,7 +24,7 @@ const MainNavbar = ({ isOpen, handleSidebarToggle }) => {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const userInfo = useUserInfo();
   const router = useRouter()
-  console.log(userInfo)
+  // console.log(userInfo)
   const { logout } = useContext(AuthContext)
   const handleLogOut = () => {
     logout()
@@ -101,7 +101,7 @@ const MainNavbar = ({ isOpen, handleSidebarToggle }) => {
 
                 <div>
                   <button onClick={toggleDropdown} className="flex items-center text-white focus:outline-none">
-                    <img src={userInfo?.photoURL} alt="User Avatar" className="w-10 h-10 rounded-full" />
+                    <img src={userInfo?.photoURL} alt="User Avatar" className="w-6 h-6 rounded-full" />
                     <span className="ml-2">{userInfo?.displayName}</span>
                   </button>
                   {isDropdownOpen && (
