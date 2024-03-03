@@ -14,7 +14,7 @@ const MovieModal = ({ closeModal }) => {
     language: 'English',
     genres: 'Action',
     thumbnail: { file: null, link: null },
-    poster: { file: null, link: null },
+ 
     videoQuality: '480',
     video: { file: null, link: null },
     publisDate: '',
@@ -72,12 +72,6 @@ const MovieModal = ({ closeModal }) => {
           setMovieInfo((prevInfo) => ({
             ...prevInfo,
             thumbnail: { file: uploadedFile, link: downloadURL },
-          }));
-          break;
-        case 'poster':
-          setMovieInfo((prevInfo) => ({
-            ...prevInfo,
-            poster: { file: uploadedFile, link: downloadURL },
           }));
           break;
         case 'video':
@@ -342,19 +336,7 @@ const MovieModal = ({ closeModal }) => {
                 />
               </div>
 
-              <div className='mb-4'>
-                <label className='block text-sm font-medium text-gray-600'>Poster:</label>
-                <input
-                  type='file'
-                  name='poster'
-                  onChange={handleFileUpload}
-                  className='mt-1 p-2 border bg-slate-800 rounded w-full'
-                />
-              </div>
-
-
-
-              <h2>Video Quality</h2>
+          
               <div className='flex flex-col lg:justify-between items-center mb-4 gap-4'>
                 <div className='w-full'>
                   <label className='block text-sm font-medium text-gray-600'>Quality</label>

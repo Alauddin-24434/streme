@@ -51,7 +51,7 @@ const ShowBannerSlide = () => {
     };
 
     return (
-        <div className="max-w-7xl h-[500px]  mx-auto  relative">
+        <div className="max-w-7xl h-[500px] py-20 mx-auto  relative">
             {/* Slider component with settings */}
             <Slider {...settings}>
                 {showsData.map((slide, index) => (

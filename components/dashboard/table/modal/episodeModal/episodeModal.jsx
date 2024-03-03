@@ -12,7 +12,6 @@ const EpisodeModal = ({ closeModal }) => {
     description: '',
     title: '', // Initialize to empty string
     thumbnail: { file: null, link: null },
-    poster: { file: null, link: null },
     video: { file: null, link: null },
     status: 'enable',
     views:0,
@@ -89,12 +88,6 @@ const EpisodeModal = ({ closeModal }) => {
             thumbnail: { file: uploadedFile, link: downloadURL },
           }));
           break;
-        case 'poster':
-          setFormData((prevData) => ({
-            ...prevData,
-            poster: { file: uploadedFile, link: downloadURL },
-          }));
-          break;
         case 'video':
           setFormData((prevData) => ({
             ...prevData,
@@ -137,8 +130,10 @@ const EpisodeModal = ({ closeModal }) => {
 
       const showResponse = await axios.put(`https://endgame-team-server.vercel.app/shows/${selectedShowId}/episodes`, {
         episodeId: insertedId,
+        
       });
       console.log('Show updated successfully:', showResponse.data);
+      closeModal()
     } catch (error) {
       console.error('Error saving episode:', error.message);
       toast.error('Error saving episode. Please try again.');
@@ -188,6 +183,7 @@ const EpisodeModal = ({ closeModal }) => {
           className="mt-1 p-2 border bg-slate-800 rounded w-full"
         >
           <option value="">Select a show</option>
+         
           {showNames.map((show) => (
             <option key={show._id} value={show._id}>
               {show.title}
@@ -209,15 +205,7 @@ const EpisodeModal = ({ closeModal }) => {
           className="mt-1 p-2 border bg-slate-800 rounded w-full"
         />
       </div>
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-600">Poster:</label>
-        <input
-          type="file"
-          name="poster"
-          onChange={handleFileUpload}
-          className="mt-1 p-2 border bg-slate-800 rounded w-full"
-        />
-      </div>
+     
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-600">Video:</label>
         <input
@@ -227,12 +215,15 @@ const EpisodeModal = ({ closeModal }) => {
           className="mt-1 p-2 border bg-slate-800 rounded w-full"
         />
       </div>
-      <button onClick={handleSave} className="bg-blue-500 text-white p-2 rounded mt-4">
+     <div className='flex justify-between items-center'>
+
+     <button onClick={handleSave} className="bg-blue-500 text-white p-2 rounded mt-4">
         Save
       </button>
-      <button onClick={closeModal} className="bg-gray-500 text-white p-2 rounded mt-2">
+      <button onClick={closeModal} className="bg-red-500 text-white p-2 rounded mt-2">
         Close Modal
       </button>
+     </div>
       <Toaster position="top-center" reverseOrder={false} />
     </div>
   );

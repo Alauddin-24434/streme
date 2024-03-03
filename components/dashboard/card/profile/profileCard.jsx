@@ -25,7 +25,7 @@ const ProfileCard = () => {
           </>
         ) : (
           <img
-            src="https://i.ibb.co/dgPCtjH/profileavt.jpg"
+            src="https://i.ibb.co/cQ3YJ85/static-Profile.jpg"
             alt="Profile"
             className="rounded-full w-36 h-36 object-cover border-4 border-blue-500"
           />
@@ -38,11 +38,11 @@ const ProfileCard = () => {
           {dynamicUserProfile.status}
         </p>
       </div>
-      <div className="mt-4 flex absolute -bottom-1 p-2 right-0 justify-center">
+      {/* <div className="mt-4 flex absolute -bottom-1 p-2 right-0 justify-center">
         <button className="bg-slate-950 text-sm text-white px-4  rounded-sm  focus:outline-none">
           Edit
         </button>
-      </div>
+      </div> */}
     </div>
   );
 };

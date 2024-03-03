@@ -24,7 +24,9 @@ const EpisodeCard = ({ id }) => {
                     throw new Error(`Failed to fetch episode data. Status: ${episodesResponse.status}`);
                 }
                 const episodes = await episodesResponse.json();
-                setEpisodesData(episodes);
+               
+                const filteredEpisodes =episodes.filter(item => item.status==="enable");
+                setEpisodesData(filteredEpisodes);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -47,7 +49,7 @@ const EpisodeCard = ({ id }) => {
 
     return (
         <section>
-            <div className="flex flex-col max-w-7xl mx-auto gap-6 relative">
+            <div className="flex flex-col py-20 max-w-7xl mx-auto gap-6 relative">
                 {/* Banner image with gradient overlay */}
                 <div className="relative">
                     <img
@@ -58,7 +60,8 @@ const EpisodeCard = ({ id }) => {
                     <div className="absolute inset-0 bg-gradient-to-br from-slate-950 to-transparent opacity-100"></div>
                 </div>
                 {/* Video details */}
-                <div className="absolute top-1/4 ml-8 flex flex-col gap-4 right-0 left-0 text-white ">
+                <div className='hidden lg:block '>
+                <div className="absolute  top-1/4 ml-8 flex flex-col gap-4 right-0 left-0 text-white ">
                     <h1 className="text-3xl font-bold mb-4">{updateData?.title}</h1>
                     <div className='flex  items-center gap-2 '>
                         <p className="text-lg">9.6</p>
@@ -83,6 +86,8 @@ const EpisodeCard = ({ id }) => {
 
                     </div>
                 </div>
+                </div>
+           
                 {/* List of episodes */}
                 <div className="my-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     {updateData?.episodes?.map((episode, index) => (

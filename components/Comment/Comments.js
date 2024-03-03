@@ -1,5 +1,4 @@
 "use client";
-// import {updateComment as updateCommentApi } from "./api"
 import { Avatar, Box, Divider, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import CommentForm from './CommentForm';
@@ -7,6 +6,11 @@ import Comment from './Comment';
 import axios from "axios";
 import Swal from 'sweetalert2';
 import useUserInfo from '@/hooks/useUser';
+<<<<<<< HEAD
+
+=======
+import NotificationMenu from '../Notification/Notification';
+>>>>>>> 7bbde21ea3ae70eb2e5066b50d780bf7a21dd18c
 const Comments = ({videoId}) => {
     const [backendComments, setBackendComment] = useState([]);
     const [activeComment, setActiveComment] = useState(null)
@@ -35,7 +39,7 @@ const Comments = ({videoId}) => {
             createdAt: date,
             videoId,
         }
-        axios.post('https://endgame-team-server.vercel.app/comments', postComment)
+        axios.post('http://localhost:5000/comments', postComment)
             .then(res => {
                 if (res.data.acknowledged) {
                     setData(data + 1)
@@ -61,7 +65,11 @@ const Comments = ({videoId}) => {
             confirmButtonText: "Yes, delete it!"
         }).then((result) => {
             if (result.isConfirmed) {
+<<<<<<< HEAD
                 axios.delete(`https://endgame-team-server.vercel.app/comments/${commentId}`)
+=======
+                axios.delete(`http://localhost:5000/comments/${commentId}`)
+>>>>>>> 7bbde21ea3ae70eb2e5066b50d780bf7a21dd18c
                     .then(res => {
                         console.log(res.data.deletedCount)
                         if (res.data.deletedCount > 0) {
@@ -83,7 +91,11 @@ const Comments = ({videoId}) => {
         // updateCommentApi(text, commentId).then(() => {
 
 
+<<<<<<< HEAD
         axios.patch(`https://endgame-team-server.vercel.app/comments/${commentId}`, { body: text })
+=======
+        axios.patch(`http://localhost:5000/comments/${commentId}`, { body: text })
+>>>>>>> 7bbde21ea3ae70eb2e5066b50d780bf7a21dd18c
             .then(res => {
                 if (res.data.modifiedCount > 0) {
                     setData(data + 1)
@@ -104,7 +116,11 @@ const Comments = ({videoId}) => {
         const userLike = user.email
         const like = { parentId, _id, userLike }
         console.log(like)
+<<<<<<< HEAD
         axios.patch(`https://endgame-team-server.vercel.app/comment/like`, { like })
+=======
+        axios.patch(`http://localhost:5000/comment/like`, { like })
+>>>>>>> 7bbde21ea3ae70eb2e5066b50d780bf7a21dd18c
             .then(res => {
                 console.log(res.data)
                 if (res.data.modifiedCount > 0) {
@@ -116,12 +132,17 @@ const Comments = ({videoId}) => {
                 console.log('like', error)
             })
     }
+    
     // disLike
     const handleDislike = ({ parentId, _id }) => {
         const userDislike = user.email
         const dislike = { parentId, _id, userDislike }
         console.log(dislike)
+<<<<<<< HEAD
         axios.patch(`https://endgame-team-server.vercel.app/comment/dislike`, { dislike })
+=======
+        axios.patch(`http://localhost:5000/comment/dislike`, { dislike })
+>>>>>>> 7bbde21ea3ae70eb2e5066b50d780bf7a21dd18c
             .then(res => {
                 console.log(res.data)
                 if (res.data.modifiedCount > 0) {
@@ -135,19 +156,28 @@ const Comments = ({videoId}) => {
 
     //Root Comment Data
     useEffect(() => {
-        axios.get(`https://endgame-team-server.vercel.app/comments?videoId=${videoId}`)
+        axios.get(`http://localhost:5000/comments?videoId=${videoId}`)
             .then(res => {
                 setBackendComment(res.data)
             })
             .catch(error => {
                 console.log(error)
             })
-    }, [data])
+    }, [data, videoId])
 
 
     return (
         <Box maxWidth={'1280px'} margin={'auto'} >
+           
+
             <Box marginX={2} sx={{ color: "white", }}>
+            <Box display={'flex'} justifyContent={'end'}>
+<<<<<<< HEAD
+          
+=======
+            <NotificationMenu ></NotificationMenu>
+>>>>>>> 7bbde21ea3ae70eb2e5066b50d780bf7a21dd18c
+            </Box>
                 <Typography marginBottom={3} sx={{ fontSize: { xs: 17, sm: 20 }, fontWeight: 700, color: "white" }}>({backendComments.length})Comments</Typography>
                 <Box display={'flex'} justifyContent={'space-between'} marginRight={4} sx={{ color: "white" }}>
                     <Avatar alt="Remy Sharp" src={user.photoURL} />

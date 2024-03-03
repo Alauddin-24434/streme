@@ -15,7 +15,9 @@ const VideoCard = () => {
                     console.error(`Failed to fetch data. Status: ${res.status}`);
                 } else {
                     const data = await res.json();
-                    setMoviesData(data);
+                   
+                    const filteredMovies =data.filter(item => item.status==="enable");
+                    setMoviesData(filteredMovies);
                 }
             } catch (error) {
                 console.error('Error fetching data:', error);
