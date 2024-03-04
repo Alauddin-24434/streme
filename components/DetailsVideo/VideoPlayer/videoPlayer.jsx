@@ -4,8 +4,6 @@ import { IoPlayForwardOutline } from "react-icons/io5";
 import { IoPlayBackOutline } from "react-icons/io5";
 import { CiPlay1 } from "react-icons/ci";
 
-
-
 import './player.css';
 import { IoIosPause } from 'react-icons/io';
 const VideoPlayer = ({ video ,handleVideoProgress}) => {
