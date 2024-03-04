@@ -88,7 +88,7 @@ const BodyChildren = ({ tableData, onDelete,searchQuery, onCurrentVisibleStatus,
             {currentData.map((row) => (
               <tr key={row.id}>
                 <td className="py-2 px-4 border border-gray-300 text-center">
-                  {row?.title? row?.title.slice(0,20):"N/A"}
+                  {row?.title? row?.title.slice(0,20): row?.userName ? row?.userName.slice(0,20) :"N/A"}
                 </td>
                 <td className="py-2 px-4 border border-gray-300 text-center">{row.publisDate ? row.publisDate : "N/A"}</td>
                 <td className="py-2 px-4 border border-gray-300 text-center">{row.status ? row.status : "N/A"}</td>

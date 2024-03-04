@@ -74,7 +74,7 @@ const Comment = ({ comment, replies, currentUserId, deleteComment, updateComment
                     {/* Reply Comment Sections...................................... */}
                     {isReplying && (
                         <Box marginRight={5} marginTop={2}>
-                            <CommentForm submitLabel="Reply" handleSubmit={(text) => addComment(text, replyId, userId)} />
+                            <CommentForm submitLabel="Reply" handleSubmit={(text) => addComment(text, replyId)} />
                         </Box>
                     )}
                     {replies.length > 0 && (
