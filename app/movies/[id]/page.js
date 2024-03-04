@@ -148,7 +148,7 @@ const VideoDetail = ({ params }) => {
   }, [id]);
 
 
-
+console.log(playlist)
 
   useEffect(() => {
     const fetchVideoDetails = async () => {

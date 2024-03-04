@@ -16,7 +16,7 @@ import useUserInfo from '@/hooks/useUser';
 
 // Assuming the Sidebar component exists
 
-const MainNavbar = ({ isOpen, handleSidebarToggle }) => {
+const MainNavbar = ({ isOpen, handleSidebarToggle,epis }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); // New state for sidebar
   const [selectedGenre, setSelectedGenre] = useState('');
   const [searchQuery, setSearchQuery] = useState('');

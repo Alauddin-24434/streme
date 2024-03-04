@@ -11,7 +11,7 @@ const EpisodePlayList = ({ handleEpisodeClick, playlist, episodeNumber, handlePr
                             <button
                                 key={episode._id}
                                 onClick={() => handleEpisodeClick(episode._id, episode.video.link, episode.episodes, index, episode.views)}
-                                className={`hover:bg-gray-300 ${episode.episodes === episodeNumber ? 'bg-green-500' : ''}`}
+                                className={`hover:bg-green-700 rounded-lg ${episode.episodes === episodeNumber ? 'bg-green-700' : ''}`}
                             >
                                 <div className="px-2 py-3 border rounded-lg shadow-md">
                                     <div className="flex items-center">

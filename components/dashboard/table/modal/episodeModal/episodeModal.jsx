@@ -5,7 +5,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import { storage } from '@/utils/firebase-config';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 
-const EpisodeModal = ({ closeModal }) => {
+const EpisodeModal = ({ closeModal,  fetchEpisodes }) => {
   const [videoUploadPercent, setVideoUploadPercent] = useState(0);
   const [formData, setFormData] = useState({
     episodes: 0,
@@ -138,11 +138,13 @@ const EpisodeModal = ({ closeModal }) => {
       toast.success(`Episode saved successfully! Acknowledged: ${acknowledged}`, {
         autoClose: 5000,
       });
-
+      
       const showResponse = await axios.put(`https://endgame-team-server.vercel.app/shows/${selectedShowId}/episodes`, {
         episodeId: insertedId,
       });
       console.log('Show updated successfully:', showResponse.data);
+      
+      fetchEpisodes()
       closeModal();
     } catch (error) {
       console.error('Error saving episode:', error.message);

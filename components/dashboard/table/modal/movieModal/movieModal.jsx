@@ -5,7 +5,7 @@ import { storage } from '@/utils/firebase-config';
 import axios from 'axios';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 
-const MovieModal = ({ closeModal }) => {
+const MovieModal = ({ closeModal, fetchMovies }) => {
   const [videoUploadPercent, setVideoUploadPercent] = useState(0);
   const [movieInfo, setMovieInfo] = useState({
     title: '',
@@ -129,19 +129,22 @@ const MovieModal = ({ closeModal }) => {
       const response = await axios.post('https://endgame-team-server.vercel.app/movies', movieInfo);
 
       if (response.status === 200) {
-        console.log('Movie saved successfully:', response.data);
+        // console.log('Movie saved successfully:', response.data);
 
         const { acknowledged } = response.data;
 
         toast.success(`Movie saved successfully! Acknowledged: ${acknowledged}`, {
           autoClose: 5000,
         });
-
+      
+        fetchMovies()
         closeModal();
       } else {
         console.error('Failed to save movie:', response.status, response.statusText);
         toast.error('Failed to save movie. Please try again.');
       }
+
+   
     } catch (error) {
       console.error('Error saving movie:', error.message);
       toast.error('Error saving movie. Please try again.');

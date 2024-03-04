@@ -21,7 +21,7 @@ const VideoDetail = ({ params }) => {
     return (
         <ProtectedRoute>
             <div>
-                <MainNavbar isOpen={isOpen} handleSidebarToggle={handleSidebarToggle} />
+                <MainNavbar  isOpen={isOpen} handleSidebarToggle={handleSidebarToggle} />
 
                 <section className="max-w-7xl mx-auto px-2">
 

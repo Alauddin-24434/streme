@@ -6,7 +6,7 @@ import ShowModal from '../../table/modal/showModal/showModal';
 import UploadModal from '../../table/modal/UserRelated/uploadModal/uploadModal';
 import EpisodeModal from '@/components/dashboard/table/modal/episodeModal/episodeModal';
 
-const HeaderChildren = ({ dbutton }) => {
+const HeaderChildren = ({ dbutton,  fetchEpisodes , fetchMovies,fetchShows}) => {
 
   const [isModalOpen, setModalOpen] = useState(false);
 
@@ -25,14 +25,14 @@ const HeaderChildren = ({ dbutton }) => {
   const getModalComponent = () => {
     switch (dbutton) {
       case "Add Movie":
-        return <MovieModal closeModal={handleModalClose} />;
+        return <MovieModal closeModal={handleModalClose}  fetchMovies={fetchMovies} />;
 
       case "Add Show":
-        return <ShowModal closeModal={handleModalClose} />;
+        return <ShowModal closeModal={handleModalClose} fetchShows={fetchShows} />;
       case "Video Upload":
         return <UploadModal closeModal={handleModalClose} />;
       case "Add Episode":
-        return <EpisodeModal closeModal={handleModalClose} />;
+        return <EpisodeModal closeModal={handleModalClose}   fetchEpisodes={fetchEpisodes} />;
 
       default:
         return null;

@@ -10,7 +10,6 @@ const MoviesPage = () => {
     const [movies, setMovieData] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
 
-    useEffect(() => {
         const fetchMovies = async () => {
             try {
                 const response = await axios.get('https://endgame-team-server.vercel.app/moviesSearch', {
@@ -22,8 +21,13 @@ const MoviesPage = () => {
             }
         };
 
+
+
+    useEffect(() => {
         fetchMovies();
-    }, [searchQuery]); // Include searchQuery in the dependency array
+      }, [movies]);
+
+
 
     const handleCurrentVisibilityStatus = async (movieId, currentStatus) => {
         try {
@@ -36,7 +40,7 @@ const MoviesPage = () => {
                     color: '#FFFFFF',
                 },
             });
-            
+            fetchMovies();
         } catch (error) {
             console.error('Error updating status:', error);
             toast.error('Error updating status', {
@@ -83,6 +87,7 @@ const MoviesPage = () => {
                 onCurrentVisibleStatus={handleCurrentVisibilityStatus}
                 searchQuery={searchQuery}
                 setSearchQuery={setSearchQuery}
+                fetchMovies={fetchMovies}
             />
             <Toaster position="top-center" reverseOrder={false} />
         </div>
