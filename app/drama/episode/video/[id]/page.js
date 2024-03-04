@@ -11,6 +11,7 @@ import useUserInfo from '@/hooks/useUser';
 import Share from '@/components/DetailsVideo/share/Share';
 import EpisodePlayList from '../../../../../components/DetailsVideo/EpisodePlayList/EpisodePlayList';
 import EpisodeWatchLaterButton from '@/components/DetailsVideo/EpisodeWacthLaterButton/EpisodeWatchLaterButton';
+import Comments from '@/components/Comment/Comments';
 
 const EpisodeDetail = ({ params }) => {
   const { id } = params;
@@ -157,13 +158,14 @@ const EpisodeDetail = ({ params }) => {
               </div>
             </div>
 
-
+            
           </div>
           <div className="md:col-span-1 lg:col-span-1 px-2  text-white">
            <EpisodePlayList handleEpisodeClick={handleEpisodeClick} playlist={playlist} episodeNumber={episodeNumber}  handlePreviousEpisode={handlePreviousEpisode} handleNextEpisode={handleNextEpisode}   />
           </div>
         </div>
       </div>
+      <Comments videoId={episodeId} />
       <div className='mb-8 px-1 max-w-screen-xl flex flex-col gap-3 lg:grid lg:grid-cols-11 lg:gap-2  mx-auto'>
         <div className='mt-16 py-5 col-span-9 '>
           <div className='text-green-400 flex flex-row items-center gap-2'><FaEye />{episodeViews}</div>
