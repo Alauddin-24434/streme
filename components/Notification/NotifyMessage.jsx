@@ -29,8 +29,7 @@ const NotifyMessage = ({ notify, handleNotifyRead, userInfo }) => {
     const notifyDate = timeAgo(date);
 
     const readData = notify?.readeNotify?.find(read => read === userInfo?.email)
-    console.log(readData)
-
+    console.log(notify.notifyImg)
     return (
 
         <Link onClick={() => handleNotifyRead(notify._id)} href={
@@ -54,9 +53,8 @@ const NotifyMessage = ({ notify, handleNotifyRead, userInfo }) => {
                 </Box>
 
                 <Box >
-
-                    {/* {notify.type === 'video' ? <Image src={notify.notifyImg} height={30} width={50} alt='image'></Image> : readData ? <DraftsIcon/>:<EmailIcon /> 
-                    } */}
+                    {notify.type === 'video' ? <Image src={notify?.notifyImg === null ? 'https://i.ibb.co/jypVvJz/Screenshot-2024-02-07-031511-removebg-preview.png': notify?.notifyImg} height={30} width={50} alt='image'></Image> : readData ? <DraftsIcon/>:<EmailIcon /> 
+                    } 
 
                 </Box>
             </Box>
