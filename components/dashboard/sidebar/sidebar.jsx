@@ -1,15 +1,19 @@
 "use client"
 import React from 'react';
+import { MdReport } from "react-icons/md";
 import styles from "./sidebar.module.css"
 import {
     MdDashboard,
-    MdWork,
-    MdAnalytics,
+    
+    
 } from "react-icons/md";
+import { RiMovieFill } from "react-icons/ri";
+import { FaUser } from "react-icons/fa";
 import MenuLinks from './menuLinks';
 import Link from 'next/link';
 import useUserInfo from '@/hooks/useUser';
-
+import { BiSolidSlideshow } from "react-icons/bi";
+import { MdLocalMovies } from "react-icons/md";
 const Sidebar = () => {
     const userInfo = useUserInfo();
     const userItems = [
@@ -22,7 +26,7 @@ const Sidebar = () => {
         {
             title: "Upload",
             path: '/dashboard/upload',
-            icon: <MdDashboard />
+            icon: <RiMovieFill/>
         },
     ]
 
@@ -30,23 +34,33 @@ const Sidebar = () => {
         {
             title: "Dashboard",
             path: '/dashboard',
-            icon: <MdDashboard />
+            icon: <MdDashboard  />
+        },
+        {
+            title: "All Users",
+            path: '/dashboard/allUsers',
+            icon: <FaUser />
         },
         {
             title: "Movie List",
             path: "/dashboard/movies",
-            icon: <MdWork />,
+            icon: < RiMovieFill  />,
         },
        
         {
             title: "Show List",
             path: "/dashboard/shows",
-            icon: <MdAnalytics />,
+            icon: <BiSolidSlideshow  />,
         },
         {
             title: "Episode",
             path: "/dashboard/episode",
-            icon: <MdAnalytics />,
+            icon: <MdLocalMovies  />,
+        },
+        {
+            title: "Report",
+            path: "/dashboard/report",
+            icon: <MdReport  />,
         },
        
        
@@ -65,6 +79,8 @@ const Sidebar = () => {
                     ))}
                 </ul>
             </div>
+          
+           
         </section>
     );
 };

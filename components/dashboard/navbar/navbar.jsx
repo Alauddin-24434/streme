@@ -78,6 +78,7 @@ const DashboardNavbar = () => {
                           <Link href="/dashboard/upload" onClick={closeSidebar}>
                               <p className="route-link bg-gray-700 p-2 hover:bg-gray-600">Upload</p>
                           </Link>
+                          
                       </li>
 
                    
