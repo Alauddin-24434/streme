@@ -8,19 +8,17 @@ const Like = ({ data, likeData, setStateLike, stateLike }) => {
     const userInfo = useUserInfo();
     const email=userInfo?.email
     const [like, setLike] = useState();
-    // console.log(like);
-    
-    
+  
     const toggleLike = async () => {
         try {
             
             const response = await axios.post("https://endgame-team-server.vercel.app/like", {data,email});
-            // console.log("Response:", response.data);
-            // console.log({
-            //     videos: data,
-            //     liked: true
+            console.log("Response:", response.data);
+            console.log({
+                videos: data,
+                liked: true
                 
-            // });
+            });
             setLiked(!liked);
             setStateLike(stateLike + 1);
            
@@ -34,14 +32,7 @@ const Like = ({ data, likeData, setStateLike, stateLike }) => {
         }
     };
 
-    
-
-    const handleSidebarToggle = () => {
-        setIsOpen(!isOpen);
-      };
-
-
-      useEffect(() => {
+    useEffect(() => {
         const fetchData = async () => {
             try {
                 {
@@ -56,13 +47,14 @@ const Like = ({ data, likeData, setStateLike, stateLike }) => {
     
         fetchData();
     }, []);
+    
 
     return (
         <div className='flex gap-2'>
             <button onClick={toggleLike} style={{ color: liked ? 'red' : 'black' }}>
                 {data?._id === likeData?.data?._id ? <SlLike className='text-red-500'/> : <SlLike className='text-white'/>}
             </button>
-            <p>{like?.length}</p>
+            <p className='text-white'>{like?.length}</p>
         </div>
     );
 };

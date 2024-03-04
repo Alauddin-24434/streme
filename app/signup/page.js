@@ -1,11 +1,13 @@
 "use client"
-import { useState } from 'react';
-import { signup, signInWithGoogle, } from '@/Provider/AuthProvider';
+import { useContext, useState } from 'react';
+
 import toast, { Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link'; // Import Link from Next.js
 import { FaGoogle } from 'react-icons/fa';
-import useUserInfo from '@/hooks/useUser';
+
+import { AuthContext } from '@/Provider/AuthProvider';
+
 
 export default function SignupPage() {
     const [inputEmail, setInputEmail] = useState('');
@@ -14,10 +16,12 @@ export default function SignupPage() {
     const [username, setUsername] = useState('');
     const [gender, setGender] = useState(''); // Initialize with empty string
     const [country, setCountry] = useState(''); // Initialize with empty string
-    const [age, setAge] = useState(0); // Initialize with default value
+ 
+    const [age, setAge] = useState(''); // Initialize with default value
     const [error, setError] = useState('');
     const router = useRouter();
-    const userInfo = useUserInfo();
+    const [loading, setLoading] = useState(false);
+    const { signup, signInWithGoogle } = useContext(AuthContext)
 
     const handleSignup = async (e) => {
         setError(''); // Clear error state
@@ -27,24 +31,20 @@ export default function SignupPage() {
             setError("Passwords do not match");
             return;
         }
-        if (age === 0) {
+        if (age === '') {
             setError("Please enter your age");
             return;
         }
         try {
-            await signup(inputEmail, password, username, gender, age, country); // Include gender and age in signup
+            await signup(inputEmail, password, username, gender,age, country); // Include gender and age in signup
             toast.success("Signup successfully");
-            if (userInfo && userInfo.isAdmin) {
-                await router.push('/dashboard');
-            } else if (userInfo && userInfo.isPayment) {
-                await router.push('/home');
-            }
-            else {
-                await router.push('/home');
-            }
+
+            await router.push('/home');
 
         } catch (error) {
             setError(error.message);
+        } finally {
+            setLoading(false); // Set loading state back to false
         }
     };
 
@@ -53,18 +53,12 @@ export default function SignupPage() {
         try {
             await signInWithGoogle();
 
-            if (userInfo && userInfo.isAdmin) {
-                await router.push('/dashboard');
-            } else {
-                await router.push('/videos');
-            }
-            toast.success("Signup successfully");
+            await router.push('/home');
+
         } catch (error) {
-            if (error.code === 'auth/popup-closed-by-user') {
-                setError("Sign-in process was closed by the user. Please try again.");
-            } else {
-                setError(error.message);
-            }
+            setError(error.message);
+        } finally {
+            setLoading(false); // Set loading state back to false
         }
     };
 
@@ -167,25 +161,28 @@ export default function SignupPage() {
                             </select>
                         </div>
                         <div>
+                            <label htmlFor="birthdate" className="block text-sm font-medium text-white">
+                                Birthdate
+                            </label>
                             <input
                                 id="age"
                                 name="age"
-                                type="number"
-                             
-                                placeholder='Enter your age number'
-                                onChange={(e) => setAge(parseInt(e.target.value))}
-                                required
-                                className="mt-1 focus:ring-indigo-500 rounded-lg text-white px-3 py-2 bg-white bg-opacity-20 focus:border-indigo-500 block w-full shadow-sm sm:text-sm "
+                                type="date"
+                                value={age}
+                                onChange={(e) => setAge(e.target.value)}
+                                className="mt-1 focus:ring-indigo-500 rounded-lg text-white px-3 py-2 bg-white bg-opacity-20 focus:border-indigo-500 block w-full shadow-sm sm:text-sm"
                             />
                         </div>
+
                         <div className="flex items-center justify-between">
                             <button
                                 type="submit"
                                 className="w-full flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium border-gray-300 placeholder-gray-500 text-gray-300 bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                             >
-                                Sign Up
+                                {loading ? 'Signup In...' : 'Sign up'}
                             </button>
                         </div>
+
                     </form>
                     <div className="flex items-center justify-center mt-4">
                         <button

@@ -49,18 +49,18 @@ const Page = () => {
     setIsOpenMenu(updateOpenMenu);
   };
 
-  const handleDelete = async(data) =>{
-        
-        try {
-            
-            await axios.delete(`https://endgame-team-server.vercel.app/playlist/${data._id}`);
-            console.log('Video deleted successfully');
-            setPlaylist((prevPlaylist) => prevPlaylist.filter(item => item._id !== data._id))
-            
-          } catch (error) {
-            console.error('Error deleting video:', error);
-            
-          }
+  const handleDelete = async (data) => {
+    // console.log('data', data);
+    try {
+
+      await axios.delete(`https://endgame-team-server.vercel.app/playlist/${data._id}`);
+      console.log('Video deleted successfully');
+      setPlaylist((prevPlaylist) => prevPlaylist.filter(item => item._id !== data._id))
+
+    } catch (error) {
+      console.error('Error deleting video:', error);
+
+    }
   }
 
   return (
@@ -73,7 +73,7 @@ const Page = () => {
         ></MainNavbar>
         <div className="flex mt-24 flex-col md:flex-col lg:flex-row max-w-6xl mx-auto justify-evenly px-3 ">
           <div className="mt-7">
-            <h2 className="text-sm md:text-lg xl:text-2xl 2xl:text-2xl font-serif">
+            <h2 className="text-sm text-white md:text-lg lg:text-xl xl:text-2xl 2xl:text-2xl font-serif">
               Playlist Total Video: {playlist?.length}
             </h2>
           </div>
@@ -83,7 +83,7 @@ const Page = () => {
                 playlist.map((data, index) => (
                   <div key={index} className="">
                     <div className="max-w-2xl">
-                      
+
                       <div className="flex items-center mt-7 bg-red-lightest">
                         <div
                           className="bg-slate-900 shadow-lg rounded-lg w-[320px] md:w-[480px] lg:w-[600px] xl:w-[720px] 2xl:w-[720px]">
@@ -101,10 +101,10 @@ const Page = () => {
                               <div className="flex justify-between">
                                 <Link href={`/movies/${data?.data._id}`}>
                                   <div>
-                                    <h3 className="text-base md:text-xl lg:text-2xl hover:text-green-600 text-grey-darkest font-medium">
+                                    <h3 className="text-base text-white md:text-xl lg:text-2xl hover:text-green-600 text-grey-darkest font-medium">
                                       {data?.data?.title}{" "}
                                     </h3>
-                                    <p className="text-sm text-grey mt-1">
+                                    <p className="text-sm text-white text-grey mt-1">
                                       {data?.data?.publisDate}
                                     </p>
                                   </div>
@@ -120,7 +120,7 @@ const Page = () => {
                                     <div className="absolute z-10 mt-2 bg-gray-800 rounded-md shadow-lg">
                                       <ul className="py-1">
                                         <li>
-                                          <button onClick={()=>handleDelete(data)} className="block px-4 py-2 text-sm text-white hover:bg-gray-700 w-full text-left">
+                                          <button onClick={() => handleDelete(data)} className="block px-4 py-2 text-sm text-white hover:bg-gray-700 w-full text-left">
                                             Delete
                                           </button>
                                         </li>

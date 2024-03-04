@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 const VideoCard = () => {
     const [moviesData, setMoviesData] = useState([]);
 
-
+const age=12;
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -15,7 +15,9 @@ const VideoCard = () => {
                     console.error(`Failed to fetch data. Status: ${res.status}`);
                 } else {
                     const data = await res.json();
-                    setMoviesData(data);
+                   
+                    const filteredMovies =data.filter(item => item.status==="enable");
+                    setMoviesData(filteredMovies);
                 }
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -32,17 +34,19 @@ const VideoCard = () => {
 
 
 
+
+
     return (
 
         <>
            
 
-            <div className=' flex justify-between py-4 mt-10 items-center'>
+            <div className=' flex justify-between py-4 items-center'>
                 <h2 className='text-white  text-lg font-semibold'>Latest Movies</h2>
 
             </div>
 
-            <div className="grid  grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 place-items-center  gap-4 gap-y-8">
+            <div className="grid place-content-center grid-cols-1 md:grid-cols-2 lg:grid-cols-6  gap-4 gap-y-8">
                 {moviesData.map(item => (
                     <div key={item._id}>
                         <Link href={`/movies/${item._id}`}>

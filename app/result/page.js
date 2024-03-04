@@ -133,7 +133,7 @@ const Page = () => {
 })?.map(movie => (
             <div  key={movie._id}>
               {movie.episodes ? (
-                <Link href={`/drama/${movie._id}`}>
+                <Link href={`/drama/episode/${movie._id}`}>
                 <div className="max-w-4xl mx-auto mt-3 w-full item lg:flex px-2">
                   <div className="h-44 lg:h-56 lg:w-72 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden" style={{ backgroundImage: `url(${movie.thumbnail.link})` }} title={movie?.title} >
                   </div>

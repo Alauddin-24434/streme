@@ -10,20 +10,20 @@ const ShowsPage = () => {
     const [shows, setShows] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
 
-    useEffect(() => {
-        const fetchShows = async () => {
-            try {
-                const response = await axios.get('https://endgame-team-server.vercel.app/showsSearch', {
-                    params: { searchQuery } // Use searchQuery state as a query parameter
-                });
-                setShows(response.data);
-            } catch (error) {
-                console.error('Error fetching shows:', error);
-            }
-        };
+    const fetchShows = async () => {
+        try {
+            const response = await axios.get('https://endgame-team-server.vercel.app/showsSearch', {
+                params: { searchQuery } // Use searchQuery state as a query parameter
+            });
+            setShows(response.data);
+        } catch (error) {
+            console.error('Error fetching shows:', error);
+        }
+    };
 
-        fetchShows();
-    }, [searchQuery]); // Include searchQuery in the dependency array
+    useEffect(() => {
+        fetchShows()
+    }, [shows])
 
     const handleCurrentVisibilityStatus = async (showId, currentStatus) => {
         try {
@@ -35,6 +35,7 @@ const ShowsPage = () => {
                     color: '#FFFFFF',
                 },
             });
+            fetchShows()
         } catch (error) {
             console.error('Error updating status:', error);
             toast.error('Error updating status', {
@@ -79,6 +80,7 @@ const ShowsPage = () => {
                 onCurrentVisibleStatus={handleCurrentVisibilityStatus}
                 searchQuery={searchQuery}
                 setSearchQuery={setSearchQuery}
+                fetchShows={fetchShows}
             />
             <Toaster position="top-center" reverseOrder={false} />
         </div>

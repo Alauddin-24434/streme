@@ -5,26 +5,24 @@ import toast, { Toaster } from 'react-hot-toast';
 import { storage } from '@/utils/firebase-config';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 
-const EpisodeModal = ({ closeModal }) => {
-  const [videoUploadPercent, setVideoUploadPercent] = useState(0)
+const EpisodeModal = ({ closeModal,  fetchEpisodes }) => {
+  const [videoUploadPercent, setVideoUploadPercent] = useState(0);
   const [formData, setFormData] = useState({
     episodes: 0,
     description: '',
-    title: '', // Changed to empty string
+    title: '', // Initialize to empty string
     thumbnail: { file: null, link: null },
-    poster: { file: null, link: null },
     video: { file: null, link: null },
     status: 'enable',
+    views:0,
   });
 
-  const [isClient, setIsClient] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [showNames, setShowNames] = useState([]);
   const [selectedShowId, setSelectedShowId] = useState(null);
   const [insertedEpisodeId, setInsertedEpisodeId] = useState(null);
 
   useEffect(() => {
-    setIsClient(true);
-
     const fetchShowNames = async () => {
       try {
         const response = await axios.get('https://endgame-team-server.vercel.app/latestShows');
@@ -32,6 +30,8 @@ const EpisodeModal = ({ closeModal }) => {
       } catch (error) {
         console.error('Failed to fetch show names:', error.message);
         toast.error('Failed to fetch show names. Please try again.');
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -41,14 +41,27 @@ const EpisodeModal = ({ closeModal }) => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     const parsedValue = name === 'episodes' ? parseInt(value, 10) : value;
+    
     setFormData({
       ...formData,
       [name]: parsedValue,
     });
   };
 
+  const handleSelectChange = (e) => {
+    const { value } = e.target;
+    
+    const selectedShow = showNames.find((show) => show._id === value);
+    
+    setSelectedShowId(value);
+    setFormData({
+      ...formData,
+      title: selectedShow?.title || '', // Set title based on selected show
+    });
+  };
+
   const handleFileUpload = async (e) => {
-    if (!isClient) return;
+    if (isLoading) return;
 
     const { name, files } = e.target;
 
@@ -72,7 +85,7 @@ const EpisodeModal = ({ closeModal }) => {
 
       uploadTask.on('state_changed', (snapshot) => {
         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        setVideoUploadPercent(progress)
+        setVideoUploadPercent(progress);
         console.log(`Upload is ${progress}% done`);
       });
 
@@ -85,12 +98,6 @@ const EpisodeModal = ({ closeModal }) => {
           setFormData((prevData) => ({
             ...prevData,
             thumbnail: { file: uploadedFile, link: downloadURL },
-          }));
-          break;
-        case 'poster':
-          setFormData((prevData) => ({
-            ...prevData,
-            poster: { file: uploadedFile, link: downloadURL },
           }));
           break;
         case 'video':
@@ -113,7 +120,7 @@ const EpisodeModal = ({ closeModal }) => {
   const handleSave = async () => {
     if (formData.episodes === 0) {
       toast.error('Episode number cannot be 0. Please enter a valid episode number.');
-      return; // Prevent further execution
+      return;
     }
 
     try {
@@ -124,19 +131,21 @@ const EpisodeModal = ({ closeModal }) => {
         toast.error('Error saving episode. Inserted ID is missing.');
         return;
       }
-      setInsertedEpisodeId(insertedId); // Update insertedEpisodeId state
+      setInsertedEpisodeId(insertedId);
 
-      // Wait for insertedEpisodeId state to update
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise((resolve) => setTimeout(resolve, 100));
 
       toast.success(`Episode saved successfully! Acknowledged: ${acknowledged}`, {
         autoClose: 5000,
       });
-
+      
       const showResponse = await axios.put(`https://endgame-team-server.vercel.app/shows/${selectedShowId}/episodes`, {
         episodeId: insertedId,
       });
       console.log('Show updated successfully:', showResponse.data);
+      
+      fetchEpisodes()
+      closeModal();
     } catch (error) {
       console.error('Error saving episode:', error.message);
       toast.error('Error saving episode. Please try again.');
@@ -153,7 +162,7 @@ const EpisodeModal = ({ closeModal }) => {
           value={formData.episodes}
           onChange={handleInputChange}
           className="mt-1 p-2 border bg-slate-800 rounded w-full"
-          min="1" // Assuming episode number starts from 1
+          min="1"
         />
       </div>
       <div className="mb-4">
@@ -171,15 +180,8 @@ const EpisodeModal = ({ closeModal }) => {
         <label className="block text-sm font-medium text-gray-600">Choose Show Name:</label>
         <select
           name="title"
-          value={formData.title}
-          onChange={(e) => {
-            const { value } = e.target;
-            setFormData((prevData) => ({
-              ...prevData,
-              title: showNames.find((show) => show._id === value).title, // Set title based on _id
-            }));
-            setSelectedShowId(value);
-          }}
+          value={selectedShowId}
+          onChange={handleSelectChange}
           className="mt-1 p-2 border bg-slate-800 rounded w-full"
         >
           <option value="">Select a show</option>
@@ -190,26 +192,16 @@ const EpisodeModal = ({ closeModal }) => {
           ))}
         </select>
       </div>
-      <span className=' flex justify-center items-center text-center'>
-                                {videoUploadPercent &&
-                                    <h2 className=' bg-green-500 p-2 text-lg  rounded-md'>
-                                        Upload is {videoUploadPercent}% done
-                                    </h2>}
-                            </span>
+      <span className="flex justify-center items-center text-center">
+        {videoUploadPercent && (
+          <h2 className="bg-green-500 p-2 text-lg rounded-md">Upload is {videoUploadPercent}% done</h2>
+        )}
+      </span>
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-600">Thumbnail:</label>
         <input
           type="file"
           name="thumbnail"
-          onChange={handleFileUpload}
-          className="mt-1 p-2 border bg-slate-800 rounded w-full"
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-600">Poster:</label>
-        <input
-          type="file"
-          name="poster"
           onChange={handleFileUpload}
           className="mt-1 p-2 border bg-slate-800 rounded w-full"
         />
@@ -223,12 +215,14 @@ const EpisodeModal = ({ closeModal }) => {
           className="mt-1 p-2 border bg-slate-800 rounded w-full"
         />
       </div>
-      <button onClick={handleSave} className="bg-blue-500 text-white p-2 rounded mt-4">
-        Save
-      </button>
-      <button onClick={closeModal} className="bg-gray-500 text-white p-2 rounded mt-2">
-        Close Modal
-      </button>
+      <div className='flex justify-between items-center'>
+        <button onClick={handleSave} className="bg-blue-500 text-white p-2 rounded mt-4">
+          Save
+        </button>
+        <button onClick={closeModal} className="bg-red-500 text-white p-2 rounded mt-2">
+          Close Modal
+        </button>
+      </div>
       <Toaster position="top-center" reverseOrder={false} />
     </div>
   );

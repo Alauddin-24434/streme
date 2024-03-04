@@ -23,7 +23,7 @@ export default function Sidebar({ isOpen, handleSidebarToggle }) {
           </li>
           <li className="mb-2">
             <Link href={'/Sidebar/playlist'} className="block hover:text-indigo-400">
-              Playlist Video
+              Watch Later
             </Link>
           </li>
           <li className="mb-2">

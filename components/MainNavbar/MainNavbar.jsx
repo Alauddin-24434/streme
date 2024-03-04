@@ -1,17 +1,22 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Link from 'next/link';
-import useUserInfo from '@/hooks/useUser';
-import LogoutButton from '../Logout/LogoutButton';
+
+
 import { IoMdMenu } from "react-icons/io";
 import Sidebar from '@/app/Sidebar/Sidebar';
-import { HiOutlineMenuAlt4 } from "react-icons/hi";
+
 import { useRouter } from 'next/navigation';
+import NotificationMenu from '../Notification/Notification';
+import { AuthContext } from '@/Provider/AuthProvider';
+
+import useUserInfo from '@/hooks/useUser';
+
 
 
 // Assuming the Sidebar component exists
 
-const MainNavbar = ({ isOpen, handleSidebarToggle }) => {
+const MainNavbar = ({ isOpen, handleSidebarToggle,epis }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); // New state for sidebar
   const [selectedGenre, setSelectedGenre] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
@@ -19,7 +24,14 @@ const MainNavbar = ({ isOpen, handleSidebarToggle }) => {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const userInfo = useUserInfo();
   const router = useRouter()
+  // console.log(userInfo)
+  const { logout } = useContext(AuthContext)
+  const handleLogOut = () => {
+    logout()
+  
+    console.log(userInfo)
 
+  }
 
   const handleGenreChange = (e) => {
     const genre = e.target.value;
@@ -65,9 +77,7 @@ const MainNavbar = ({ isOpen, handleSidebarToggle }) => {
                 <Link href="/movies">
                   <span className="text-white text-xs md:text-base lg:text-lg xl:text-lg 2xl:text-lg mr-3 cursor-pointer">Movies</span>
                 </Link>
-                <Link href="/animation">
-                  <span className="text-white text-xs md:text-base lg:text-lg xl:text-lg 2xl:text-lg mr-3 cursor-pointer">Animation</span>
-                </Link>
+
                 <Link href="/drama">
                   <span className="text-white text-xs md:text-base lg:text-lg xl:text-lg 2xl:text-lg mr-3 cursor-pointer">Drama</span>
                 </Link>
@@ -76,41 +86,40 @@ const MainNavbar = ({ isOpen, handleSidebarToggle }) => {
                 </Link>
               </div>
               <div className="flex items-center  relative">
-              
+
                 <input
                   type="text"
                   placeholder="Search movies..."
                   className="bg-gray-700 text-white rounded-md py-1 px-3 focus:outline-none focus:ring-2 mr-2
-             w-full" 
+             w-full"
                   onChange={handleSearch}
-                  onKeyDown={handleEnterPress} 
+                  onKeyDown={handleEnterPress}
                 />
 
 
-                {userInfo ? (
-                  <div>
-                    <button onClick={toggleDropdown} className="flex items-center text-white focus:outline-none">
-                      <img src={userInfo?.photoURL} alt="User Avatar" className="w-7 h-7 rounded-full" />
-                      <span className="ml-2">{userInfo?.displayName}</span>
-                    </button>
-                    {isDropdownOpen && (
-                      <div className="absolute right-0 mt-2 w-48 bg-slate-950 rounded-md shadow-lg">
-                        <div className="py-1 px-4">
-                          <div className="block  py-2 text-white " >
-                            <Link href="/dashboard">
-                              <span className="text-white"> Dashboard</span>
-                            </Link>
-                          </div>
-                          <LogoutButton />
+                <NotificationMenu />
+
+                <div>
+                  <button onClick={toggleDropdown} className="flex items-center text-white focus:outline-none">
+                    <img src={userInfo?.photoURL} alt="User Avatar" className="w-6 h-6 rounded-full" />
+                    <span className="ml-2">{userInfo?.displayName}</span>
+                  </button>
+                  {isDropdownOpen && (
+                    <div className="absolute right-0 mt-2 w-48 bg-slate-950 rounded-md shadow-lg">
+                      <div className="py-1 px-4">
+                        <div className="block  py-2 text-white " >
+                          <Link href="/dashboard">
+                            <span className="text-white"> Dashboard</span>
+                          </Link>
                         </div>
+                      <div className='text-white'>
+                      <button onClick={handleLogOut}>Logout</button>
                       </div>
-                    )}
-                  </div>
-                ) : (
-                  <Link href="/login">
-                    <span className="text-black">Login</span>
-                  </Link>
-                )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
 
               </div>
             </div>
