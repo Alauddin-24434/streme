@@ -66,32 +66,35 @@ const VideoDetail = ({ params }) => {
   const handleClose = () => setOpen(false);
   // video Report
 
-  const AllUserRating = ratingDatas.filter(user => user.Id == id);
-  console.log(AllUserRating)
+ // =-=-=-=-=-=-=-=-user rating=-=-=-=-=-=-
+ const AllUserRating = ratingDatas.filter(user => user.Id == id);
+ console.log(AllUserRating)
 
-  const totaluserRating = AllUserRating.reduce((total, totalRating) => total + totalRating.ratings
-    , 0);
+ const totaluserRating = AllUserRating.reduce((total, totalRating) => total + totalRating.ratings
+   , 0);
 
-  const handleStarClick = async (selectedRating) => {
-    await axios.post("https://endgame-team-server.vercel.app/addratings", {
-      ratings: selectedRating,
-      Id: id
-    })
-      .then(res => {
-        if (res.data.acknowledged) {
-          setData(data + 1)
-          console.log(res)
-        }
-      })
-      .catch(error => console.error(error))
-    setUserRating(selectedRating)
-  };
-  useEffect(() => {
-    fetch('https://endgame-team-server.vercel.app/ratings')
-      .then(res => res.json())
-      .then(dataes => setRatingData(dataes))
+ const handleStarClick = async (selectedRating) => {
+   await axios.post("https://endgame-team-server.vercel.app/rating", {
+     ratings: selectedRating,
+     Id: id
+   })
+     .then(res => {
+       if (res.data.acknowledged) {
+         setData(data + 1)
+         console.log(res)
+       }
+     })
+     .catch(error => console.error(error))
+   setUserRating(selectedRating)
+ };
 
-  }, [])
+ useEffect(() => {
+   fetch('https://endgame-team-server.vercel.app/ratings')
+     .then(res => res.json())
+     .then(dataes => setRatingData(dataes))
+     .catch(error => console.error('Error fetching ratings:', error));
+ }, []);
+ // =-=-=-=-=-=-=-=-user rating=-=-=-=-=-=-
 
 
   useEffect(() => {
@@ -228,7 +231,11 @@ console.log(playlist)
 
   };
   // user Report function
-
+// =-=-=-=-=-=-=-=-user rating=-=-=-=-=-=-
+const totleRatingValue = !isNaN(parseFloat((((totaluserRating + usersRating)) / AllUserRating.length).toFixed(3)))
+? parseFloat((((totaluserRating + usersRating)) / AllUserRating.length).toFixed(2))
+: 0 
+  // =-=-=-=-=-=-=-=-user rating=-=-=-=-=-=-
   return (
     <section>
       <Sidebar isOpen={isOpen} handleSidebarToggle={handleSidebarToggle} />
@@ -367,7 +374,8 @@ console.log(playlist)
               <FaRegStar className='text-green-600' />
               <p className='flex my-2 gap-4'>
                 <span className='text-white flex'> <p>{
-                  parseFloat((((totaluserRating + usersRating)) / AllUserRating.length).toFixed(3))}</p></span>
+                isFinite(totleRatingValue) ? totleRatingValue : usersRating 
+}</p></span>
                 <div className='max-w-6xl mx-auto'>
                   <h1 className='hove text-green-600 font-bold'>Rate now</h1>
                   <div className='rating'>
