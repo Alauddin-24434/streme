@@ -5,7 +5,7 @@ import { storage } from '@/utils/firebase-config';
 import axios from 'axios';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 
-const ShowModal = ({ closeModal }) => {
+const ShowModal = ({ closeModal, fetchShows }) => {
   const [videoUploadPercent, setVideoUploadPercent] = useState(0);
   const [showData, setShowData] = useState({
     title: '',
@@ -19,9 +19,9 @@ const ShowModal = ({ closeModal }) => {
     episodes: [],
     category: '',
     country: '',
-    status:'enable',
+    status: 'enable',
     views: 0,
-    IsComplete:false,
+    IsComplete: false,
 
   });
 
@@ -103,11 +103,14 @@ const ShowModal = ({ closeModal }) => {
         toast.success(`show saved successfully! Acknowledged: ${acknowledged}, Inserted ID: ${insertedId}`, {
           autoClose: 5000,
         });
+        fetchShows()
         closeModal()
       } else {
         console.error('Failed to save show:', response.status, response.statusText);
         toast.error('Failed to save show. Please try again.');
       }
+
+
     } catch (error) {
       console.error('Error saving show:', error.message);
       toast.error('Error saving show. Please try again.');
@@ -234,7 +237,7 @@ const ShowModal = ({ closeModal }) => {
             <fieldset className='border p-4'>
               <legend>MEDIA</legend>
               <div className='my-4'>
-              <span className='py-2 bg-slate-800 px-4'>Upload File {videoUploadPercent} %</span>
+                <span className='py-2 bg-slate-800 px-4'>Upload File {videoUploadPercent} %</span>
               </div>
               <div className='mb-4'>
                 <label className='block text-sm font-medium text-gray-600'>Thumbnail:</label>
@@ -255,7 +258,7 @@ const ShowModal = ({ closeModal }) => {
                   className='mt-1 p-2 border bg-slate-800 rounded w-full'
                 />
               </div>
-             
+
 
             </fieldset>
           </form>

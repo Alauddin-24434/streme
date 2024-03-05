@@ -1,4 +1,3 @@
-// authProvider.js
 "use client";
 import React, { useEffect, useState } from 'react';
 import { initializeApp } from 'firebase/app';
@@ -56,7 +55,7 @@ export const signup = async (email, password, username, gender, age, country) =>
       await axios.post('https://endgame-team-server.vercel.app/users', {
         uid: userCredential.user.uid,
         userName: username,
-        photoURL: userCredential.user.photoURL,
+        photoURL: 'https://i.ibb.co/cQ3YJ85/static-Profile.jpg',
         email: userCredential.user.email,
         provider: 'manual',
         isAdmin: false,

@@ -57,7 +57,7 @@ const VideoDetail = ({ params }) => {
   const [playList, setPlayList] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   // console.log(likeData);
-  // console.log("chek", videoData)
+  console.log("chek", videoData)
 
   // video Report
   const [selectedOptions1, setSelectedOptions1] = useState([]);
@@ -148,7 +148,7 @@ const VideoDetail = ({ params }) => {
   }, [id]);
 
 
-
+console.log(playlist)
 
   useEffect(() => {
     const fetchVideoDetails = async () => {
@@ -205,7 +205,7 @@ const VideoDetail = ({ params }) => {
   };
 
   const handleSubmit = async () => {
-    await axios.post(('http://localhost:5000/report'), {
+    await axios.post(('https://endgame-team-server.vercel.app/report'), {
      videoId: id,
       report: selectedOptions1,
       email,
@@ -238,18 +238,23 @@ const VideoDetail = ({ params }) => {
           <div className="md:col-span-1 lg:col-span-2">
             <VideoPlayer video={videoLink} />
           </div>
-          <div className="md:col-span-1 lg:col-span-1 px-1  h-[580px]">
-            <h2 className='text-center py-2 rounded-t-lg text-white bg-slate-900'>Suggested Video</h2>
+          <div className="md:col-span-1  mb-2 lg:col-span-1 px-1  h-[580px]">
+            <h2 className='text-center py-2 rounded-t-lg text-white bg-slate-900'>{videoData?.genres}</h2>
             <Playlist videoData={videoData} handlePlayVideo={handlePlayVideo}></Playlist>
+            <h2 className='text-center py-4 mt-1 rounded-b-lg text-white bg-slate-900'></h2>
           </div>
         </div>
 
-        <div className=' bg-slate-950 px-1 h-[450px] max-w-screen-xl mx-auto '>
-           {/* start Report */}
+        <div className=' bg-slate-950 px-1 h-[450px] max-w-screen-xl mx-auto '>  <h1 className='tex-sm lg:text-3xl  text-white py-5 font-bold'>{videoData?.title}</h1>    
+          <div className='flex px-1 mb-2 flex-row gap-4 items-center md:flex-row lg:flex-row xl:flex-row 2xl:flex lg:items-center xl:items-center 2xl:items-center'>
+            <Like setStateLike={setStateLike} likeData={likeData} data={videoData} stateLike={stateLike}></Like>
+            <PlaylistButton playlist={playlist} setStatePlaylike={setStatePlaylike} data={videoData} playList={playList}></PlaylistButton>
+            <Share video={videoData.video.link} />
+             {/* start Report */}
           <div className='grid grid-cols-2 items-center'>
-            <h1 className='tex-sm lg:text-3xl  text-white py-5 font-bold'>{videoData?.title}</h1>    
+          
             <div>
-              <button onClick={handleOpen} className='text-white flex items-center bg-slate-700 rounded px-3 py-2 hover:bg-gray-600'><MdReport className='text-red-700 text-xl' />Report</button>
+              <button onClick={handleOpen} className='text-white flex items-center rounded px-3 py-2 hover:bg-slate-800'><MdReport className='text-red-700 text-xl' />Report</button>
 
               <Modal
 
@@ -355,10 +360,6 @@ const VideoDetail = ({ params }) => {
             </div>
                       </div>
                       {/* End Report */}
-          <div className='flex px-1 mb-2 flex-row gap-4 items-center md:flex-row lg:flex-row xl:flex-row 2xl:flex lg:items-center xl:items-center 2xl:items-center'>
-            <Like setStateLike={setStateLike} likeData={likeData} data={videoData} stateLike={stateLike}></Like>
-            <PlaylistButton playlist={playlist} setStatePlaylike={setStatePlaylike} data={videoData} playList={playList}></PlaylistButton>
-            <Share video={videoData.video.link} />
           </div>
 
           <div className='flex items-center px-1 gap-2'>

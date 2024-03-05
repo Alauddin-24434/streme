@@ -2,9 +2,11 @@
 import React, { useState } from 'react';
 import MovieModal from '../../table/modal/movieModal/movieModal';
 import ShowModal from '../../table/modal/showModal/showModal';
-import EpisodeModal from '../../table/modal/episodeModal/EpisodeModal';
+
 import UploadModal from '../../table/modal/UserRelated/uploadModal/uploadModal';
-const HeaderChildren = ({ dbutton }) => {
+import EpisodeModal from '@/components/dashboard/table/modal/episodeModal/episodeModal';
+
+const HeaderChildren = ({ dbutton,  fetchEpisodes , fetchMovies,fetchShows}) => {
 
   const [isModalOpen, setModalOpen] = useState(false);
 
@@ -17,19 +19,20 @@ const HeaderChildren = ({ dbutton }) => {
     setModalOpen(false);
   };
 
+  
 
 
   const getModalComponent = () => {
     switch (dbutton) {
       case "Add Movie":
-        return <MovieModal closeModal={handleModalClose} />;
+        return <MovieModal closeModal={handleModalClose}  fetchMovies={fetchMovies} />;
 
       case "Add Show":
-        return <ShowModal closeModal={handleModalClose} />;
+        return <ShowModal closeModal={handleModalClose} fetchShows={fetchShows} />;
       case "Video Upload":
         return <UploadModal closeModal={handleModalClose} />;
       case "Add Episode":
-        return <EpisodeModal closeModal={handleModalClose} />;
+        return <EpisodeModal closeModal={handleModalClose}   fetchEpisodes={fetchEpisodes} />;
 
       default:
         return null;
@@ -49,6 +52,7 @@ const HeaderChildren = ({ dbutton }) => {
               </p>
             )}
           </div>
+        
         </div>
         <hr />
 

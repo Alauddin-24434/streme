@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 const UserReport = () => {
     const [reports, setReport] = useState([])
     useEffect(() => {
-        fetch('http://localhost:5000/allreport')
+        fetch('https://endgame-team-server.vercel.app/allreport')
             .then(res => res.json())
             .then(data => setReport(data))
     }, [])
@@ -20,7 +20,7 @@ const UserReport = () => {
     //     setOpen(isOpen);
     // }, []);
 
-    console.log(reports)
+    // console.log(reports)
     return (
         <div>
             <div className="max-w-screen-md mx-auto">
@@ -37,7 +37,7 @@ const UserReport = () => {
                     </thead>
                     <tbody>
                         {
-                            reports?.map((reported) => <tr>
+                            reports?.map((reported) => <tr key={reported._id} >
                                 <td className="py-2 px-4 border-b"><img className="h-10 w-10 rounded" src={reported?.imageurl}></img></td>
                                 <td className="py-2 px-4 border-b">{reported?.title}</td>
                                 <td className="py-2 px-4 border-b">{reported.email}</td>
@@ -50,7 +50,7 @@ const UserReport = () => {
                                                 </summary>
                                                 <ul className="text-white">
                                                     {
-                                                        reported?.report?.map((reporte)=><li>{reporte}</li>                            
+                                                        reported?.report?.map((reporte)=><li key={reporte._id}>{reporte}</li>                            
                                                         )
                                                     }
                                                 </ul>
