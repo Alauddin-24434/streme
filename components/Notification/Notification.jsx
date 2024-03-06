@@ -27,7 +27,7 @@ const NotificationMenu = () => {
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
-    axios.patch(`https://endgame-team-server.vercel.app/openNotify?email=${userInfo?.email}`)
+    axios.patch(`https://endgame-team-server.vercel.app/notifications/openNotify?email=${userInfo?.email}`)
       .then(res => {
         if (res.data) {
           setOpenBox(openBox + 1)
@@ -35,7 +35,7 @@ const NotificationMenu = () => {
       })
   };
   const handleNotifyRead = (id) => {
-    axios.patch(`https://endgame-team-server.vercel.app/completeRead/${id}?email=${userInfo?.email}`)
+    axios.patch(`https://endgame-team-server.vercel.app/notifications/completeRead/${id}?email=${userInfo?.email}`)
       .then(res => {
         if (res.data) {
           setNotifyRead(notifyRead + 1)
@@ -50,7 +50,7 @@ const NotificationMenu = () => {
   // notification box length show
   useEffect(() => {
     if (userInfo?.email) {
-      axios.get(`https://endgame-team-server.vercel.app?email=${userInfo?.email}`)
+      axios.get(`https://endgame-team-server.vercel.app/notifications?email=${userInfo?.email}`)
         .then(res => {
           setOpenNotification(res.data)
         })
@@ -61,7 +61,7 @@ const NotificationMenu = () => {
   //readable notification
   useEffect(() => {
     if (userInfo?.email) {
-      axios.get(`https://endgame-team-server.vercel.app/read?email=${userInfo?.email}`)
+      axios.get(`https://endgame-team-server.vercel.app/notifications/read?email=${userInfo?.email}`)
         .then(res => {
           setReadNotification(res.data)
         })
