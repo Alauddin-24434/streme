@@ -4,16 +4,16 @@ const EpisodePlayList = ({ handleEpisodeClick, playlist, episodeNumber, handlePr
     return (
         <>
             {playlist && (
-                <div className="md:col-span-1 mb-2 lg:col-span-1 px-1 ">
-                    <h2 className='text-center py-2 rounded-t-lg text-white bg-slate-800'>Play List</h2>
-                    <div className="w-80 mx-auto grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 px-3 py-2 gap-4 overflow-y-auto max-h-[57vh]">
+                <div >
+                    <h2 className='text-center my-4 lg:my-0 py-2 rounded-t-lg text-white bg-slate-800'>Play List</h2>
+                    <div className="max-w-[300px] lg:w-80 mx-auto grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 px-3 py-2 gap-4 overflow-y-auto max-h-[57vh]">
                         {playlist?.map((episode, index) => (
                             <button
                                 key={episode._id}
                                 onClick={() => handleEpisodeClick(episode._id, episode.video.link, episode.episodes, index, episode.views)}
                                 className={`hover:bg-green-700 rounded-lg ${episode.episodes === episodeNumber ? 'bg-green-700' : ''}`}
                             >
-                                <div className="px-2 py-3 border rounded-lg shadow-md">
+                                <div className=" py-1 border rounded-lg shadow-md">
                                     <div className="flex items-center">
                                         <img src={episode.thumbnail.link} alt={episode.title} className="h-14 w-auto mr-2" />
                                         <p className="text-base text-white font-semibold">{episode.title.length > 20 ? `${episode.title.slice(0, 20)}...` : episode.title}</p>
