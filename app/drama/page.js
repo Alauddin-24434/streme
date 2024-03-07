@@ -1,7 +1,7 @@
 "use client";
 import ProtectedRoute from "@/utils/ProtectedRoute";
 import MainNavbar from "@/components/MainNavbar/MainNavbar";
-import ShowBannerSlide from "@/components/Cards/ShowCard/ShowBannerSlide/ShowBannerSlide";
+
 import ShowCard from "@/components/Cards/ShowCard/ShowCard";
 
 const DramaPage = () => {
@@ -10,14 +10,13 @@ const DramaPage = () => {
             <div>
                 <MainNavbar />
 
-                <section className="max-w-7xl mx-auto h-screen">
-                    <div >
-                        <ShowBannerSlide />
+                <section className="max-w-7xl py-20 mx-auto h-screen">
+                  
+                     
                         <div >
                             <ShowCard />
                         </div>
 
-                    </div>
                 </section >
             </div >
         </ProtectedRoute>

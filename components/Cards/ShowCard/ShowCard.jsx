@@ -29,7 +29,7 @@ const ShowCard = () => {
 
     return (
         <>
-            <section className='max-w-7xl mx-auto p-4 lg:p-0'>
+            <section className='max-w-7xl  mx-auto p-4 lg:p-0'>
                 <h2 className='text-white my-2 text-lg font-semibold'>Latest Shows</h2>
                 <div className="grid place-content-center grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4 gap-y-8 ">
                     {showsData.map((item) => (

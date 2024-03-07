@@ -12,7 +12,7 @@ const ProfileCard = () => {
   };
 
   return (
-    <div className="h-full p-4 relative  rounded-lg shadow-md bg-slate-900">
+    <div className="h-full p-4 relative text-black rounded-lg shadow-md bg-[#09526C]">
       <div className="flex  justify-center">
         {userInfo ? (
           <>
@@ -33,7 +33,7 @@ const ProfileCard = () => {
       </div>
       <div className="text-center mt-4">
         <h2 className="text-xl font-semibold">{dynamicUserProfile.name}</h2>
-        <p className="text-gray-500">{dynamicUserProfile.role}</p>
+        <p className=" text-black">{dynamicUserProfile.role}</p>
         <p className={`mt-2 text-sm ${dynamicUserProfile.status === 'Active' ? 'text-green-500' : 'text-red-500'}`}>
           {dynamicUserProfile.status}
         </p>
