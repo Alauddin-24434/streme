@@ -30,11 +30,11 @@ const ContactUs = () => {
 
     return (
         <div className='bg-[#101010]'>
-            <div className='max-w-[1400px] md:px-10 mx-auto py-[50px] md:py-[150px]'>
+            <div className='max-w-[1440px] px-3 md:px-10 mx-auto py-[50px] md:py-[150px]'>
                 <div className="md:flex gap-2 lg:gap-8">
                     <div data-aos="fade-up" data-aos-duration="1000">
                         <p className="text-[#00B84B] text-[20px]">Your info</p>
-                        <h1 className="text-4xl md:text-[46px] text-white pt-5 pb-11 md:max-w-[300px] lg:max-w-[450px] leading-snug">Get connected to your advertisement</h1>
+                        <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-5xl text-white pt-5 pb-11 md:max-w-[300px] lg:max-w-[450px] leading-snug">Get connected to your advertisement</h1>
                     </div>
                     <div data-aos="fade-up" data-aos-duration="1000" className="flex-auto">
                         <form ref={form} onSubmit={sendEmail} className="space-y-6 md:space-y-8" action="">

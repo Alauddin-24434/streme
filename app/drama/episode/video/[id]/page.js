@@ -1,3 +1,4 @@
+
 "use client"
   import React, { useEffect, useState } from 'react';
   import axios from 'axios';
@@ -171,8 +172,10 @@
             <h1 className='text-sm lg:text-2xl text-white font-bold'>{videoData?.title} Episode {episodeNumber} </h1>
             <Comments videoId={episodeId} />
           </div>
+
         </>
       )}
+
 
       <Toaster />
     </section>

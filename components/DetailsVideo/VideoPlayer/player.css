@@ -22,17 +22,35 @@
   border: none;
   cursor: pointer;
   padding: 5px;
-  margin: 0 10px;
+  margin: 13px 10px;
   color: #fff;
   font-size: 1.5em;
   transition: transform 0.2s ease;
+  visibility: visible;
 }
 
 .play-button:hover,
 .rewind-button:hover,
 .forward-button:hover {
   transform: scale(1.2);
+  visibility: visible;
 }
+
+.video-player-container .custom-controls {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  opacity: 0; /* Initially hide the controls */
+  transition: opacity 0.5s; /* Add transition for smooth visibility */
+}
+
+.video-player-container:hover .custom-controls {
+  opacity: 1; /* Show controls on hover */
+}
+
 
 .play-button.play:before {
   content: "\f04b"; /* Unicode for play icon */
@@ -44,7 +62,7 @@
 
 .rewind-button,
 .forward-button {
-  background-color: rgba(255, 255, 255, 0.5);
+  
   border-radius: 50%;
 }
 
