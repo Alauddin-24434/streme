@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 
 const AllUsersPage = () => {
-    
+    const dbutton = "Add Users";
     const [allUsersData, setAllUsersData] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
 
@@ -78,7 +78,7 @@ const AllUsersPage = () => {
         <div>
             <ChildrenBox
                 tableData={allUsersData}
-        
+                dbutton={dbutton}
                 onDelete={handleDeleteData}
                 onCurrentVisibleStatus={handleCurrentVisibilityStatus}
                 searchQuery={searchQuery}

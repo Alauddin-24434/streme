@@ -44,13 +44,13 @@ const data = [
 const WeekLyLineChart = () => {
     return (
 
-        <div className=' bg-slate-900 shadow-xl' >
+        <div className=' bg-[#09526C] shadow-xl text-white' >
             <div className={styles.container}>
                 <h2 className={styles.title}>Weekly Recap</h2>
                 <ResponsiveContainer width="100%" height="90%">
                     <LineChart
                         width={500}
-                        height={300}
+                        height={500}
                         data={data}
                         margin={{
                             top: 5,
@@ -61,7 +61,7 @@ const WeekLyLineChart = () => {
                     >
                         <XAxis dataKey="name" />
                         <YAxis />
-                        <Tooltip contentStyle={{ background: "#151c2c", border: "none" }} />
+                        <Tooltip contentStyle={{ background: "#026376", border: "none" }} />
                         <Legend />
                         <Line type="monotone" dataKey="view" stroke="#8884d8" strokeDasharray="5 5" />
                         <Line type="monotone" dataKey="click" stroke="#82ca9d" strokeDasharray="3 4 5 2" />

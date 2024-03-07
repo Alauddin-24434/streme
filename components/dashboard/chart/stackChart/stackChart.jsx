@@ -126,7 +126,7 @@ const valueFormatter = (value) => `${value}mm`;
 
 export default function BarsDataset() {
   return (
-    <div  className=' mt-2 hidden lg:block p-3 w-full bg-slate-900' >
+    <div  className=' mt-2 hidden lg:block p-3 w-full bg-[#09526C]' >
 
 
     <BarChart

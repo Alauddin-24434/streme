@@ -16,7 +16,7 @@ import useUserInfo from '@/hooks/useUser';
 
 // Assuming the Sidebar component exists
 
-const MainNavbar = ({ isOpen, handleSidebarToggle,epis }) => {
+const MainNavbar = ({ isOpen, handleSidebarToggle, epis }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); // New state for sidebar
   const [selectedGenre, setSelectedGenre] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
@@ -28,7 +28,7 @@ const MainNavbar = ({ isOpen, handleSidebarToggle,epis }) => {
   const { logout } = useContext(AuthContext)
   const handleLogOut = () => {
     logout()
-  
+
     console.log(userInfo)
 
   }
@@ -107,14 +107,21 @@ const MainNavbar = ({ isOpen, handleSidebarToggle,epis }) => {
                   {isDropdownOpen && (
                     <div className="absolute right-0 mt-2 w-48 bg-slate-950 rounded-md shadow-lg">
                       <div className="py-1 px-4">
-                        <div className="block  py-2 text-white " >
-                          <Link href="/dashboard">
-                            <span className="text-white"> Dashboard</span>
-                          </Link>
+                        {
+                          userInfo?.isAdmin ? <div className="block  py-2 text-white " >
+                            <Link href="/dashboard">
+                              <span className="text-white">Dashboard</span>
+                            </Link>
+                          </div> :
+                            <div className="block  py-2 text-white " >
+                              <Link href="/userprofile">
+                                <span className="text-white">Profile</span>
+                              </Link>
+                            </div>
+                        }
+                        <div className='text-white'>
+                          <button onClick={handleLogOut}>Logout</button>
                         </div>
-                      <div className='text-white'>
-                      <button onClick={handleLogOut}>Logout</button>
-                      </div>
                       </div>
                     </div>
                   )}
