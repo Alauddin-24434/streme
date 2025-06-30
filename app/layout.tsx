@@ -1,8 +1,7 @@
 
 import { Inter } from 'next/font/google'
 import './globals.css'
-import AuthProvider from '@/Provider/AuthProvider'
-
+import AuthProvider from 'Provider/AuthProvider'
 
 
 

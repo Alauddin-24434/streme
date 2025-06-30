@@ -1,8 +1,7 @@
-import { AuthContext } from '@/Provider/AuthProvider';
-import useUserInfo from '@/hooks/useUser';
 
+import useUserInfo from 'hooks/useUser';
 import Link from 'next/link';
-import { useContext } from 'react';
+
 const Navbar = () => {
 const userInfo=useUserInfo()
 

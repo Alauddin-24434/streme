@@ -1,17 +1,14 @@
-/* eslint-disable @next/next/no-img-element */
 
 
 "use client"
 
-import Packages from "@/section/Packages";
+import Navbar from "components/LandingNavbar/Navbar";
 import { useState } from "react";
-import Faq from "../section/Faq";
-import Footer from "../section/Footer";
-import Review from "../section/Review";
-import Navbar from "@/components/LandingNavbar/Navbar";
-
-import ContactUs from "@/section/ContactUs";
-
+import ContactUs from "section/ContactUs";
+import Faq from "section/Faq";
+import Footer from "section/Footer";
+import Packages from "section/Packages";
+import Review from "section/Review";
 
 
 
@@ -27,6 +24,7 @@ export default function LandingPage() {
 
 
 
+
     <main className="">
 
 
@@ -37,7 +35,7 @@ export default function LandingPage() {
         maxHeight: "100vh"
       }}>
         {/* landing navbar  */}
-        <Navbar></Navbar>
+        <Navbar/>
         <div className="  h-[100vh] px-3  flex flex-col lg:flex-row items-center justify-center overflow-hidden gap-5 lg:gap-10  max-w-[1400px] mx-auto">
           {/* <div className="bg-[#f3f9fc] w-full absolute left-0 h-[100vh] lg:h-[100vh] -z-40"></div> */}
           <div className="w-2/3 lg:w-2/4 lg:mb-16 text-center lg:text-left space-y-2 lg:space-y-5 lg:py-5 pt-16">
@@ -70,11 +68,11 @@ export default function LandingPage() {
         </div>
       </div>
 
-      <Packages></Packages>
-      <Faq></Faq>
-      <Review></Review>
+      <Packages/>
+      <Faq/>
+      <Review/>
       <ContactUs />
-      <Footer></Footer>
+      <Footer/>
 
 
     </main>
