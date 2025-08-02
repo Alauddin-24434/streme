@@ -2,14 +2,13 @@
 
 "use client"
 
-import Navbar from "components/LandingNavbar/Navbar";
+import Navbar from "@/components/LandingNavbar/Navbar";
+import ContactUs from "@/section/ContactUs";
+import Faq from "@/section/Faq";
+import Footer from "@/section/Footer";
+import Packages from "@/section/Packages";
+import Review from "@/section/Review";
 import { useState } from "react";
-import ContactUs from "section/ContactUs";
-import Faq from "section/Faq";
-import Footer from "section/Footer";
-import Packages from "section/Packages";
-import Review from "section/Review";
-
 
 
 
