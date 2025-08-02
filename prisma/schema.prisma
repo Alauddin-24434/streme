@@ -1,0 +1,153 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// =========================
+// User & Related Models
+// =========================
+
+model User {
+  id        String   @id @default(cuid()) // Unique user ID
+  email     String   @unique // Unique email
+  password  String? // Hashed password
+  name      String? // Optional name
+  isAdmin   Boolean  @default(false) // Admin flag
+  isActive  Boolean  @default(true) // Active status
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  Subscription  Subscription[]
+  Advertisement Advertisement[]
+  reactions     Reaction[]
+}
+
+model SubscriptionPlan {
+  id          String   @id @default(cuid()) // Unique plan ID
+  name        String   @unique // e.g., Basic, Premium, Pro
+  description String? // Optional description
+  price       Float // Monthly/Yearly price
+  duration    Int // Duration in days (e.g., 30, 365)
+  features    String[] // List of features (optional)
+
+  subscriptions Subscription[] // All users subscribed to this plan
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Subscription {
+  id        String    @id @default(cuid())
+  userId    String
+  planId    String // FK to SubscriptionPlan
+  status    String // e.g., Active, Cancelled
+  startDate DateTime  @default(now())
+  endDate   DateTime?
+
+  // Relations
+  user User             @relation(fields: [userId], references: [id])
+  plan SubscriptionPlan @relation(fields: [planId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Advertisement {
+  id           String  @id @default(cuid()) // Unique ad ID
+  title        String // Ad title
+  description  String // Ad description
+  price        Float // Price
+  userId       String // Foreign key to User
+  thumbnailUrl String? // Optional image URL
+
+  // Relations
+  user User @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// =========================
+// Show & Episode Models
+// =========================
+
+model MediaContent {
+  id           String    @id @default(cuid())
+  title        String
+  description  String?
+  category     String[] // spelling fixed from categiry -> category
+  cast         String[]
+  releaseDate  DateTime?
+  genres       String[]
+  rating       Float?
+  language     String?
+  director     String?
+  production   String?
+  country      String?
+  ageLimit     String?
+  thumbnailUrl String?
+  trailerUrl   String?
+  isPublished  Boolean   @default(false)
+  views        Int       @default(0)
+  type         MediaType // Type of media content (e.g., Movie, Series, Documentary, ShortFilm)
+  // Like/Dislike count fields
+  likeCount    Int       @default(0)
+  dislikeCount Int       @default(0)
+
+  // Relations
+  episodes  Episode[]
+  reactions Reaction[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Episode {
+  id             Int     @id @default(autoincrement())
+  title          String
+  description    String?
+  mediaContentId String
+
+  // Like/Dislike count fields
+  likeCount    Int @default(0)
+  dislikeCount Int @default(0)
+
+  // Relations
+  mediaContent MediaContent @relation(fields: [mediaContentId], references: [id])
+  reactions    Reaction[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Reaction {
+  id             String       @id @default(cuid())
+  userId         String
+  type           ReactionType
+  mediaContentId String?
+  episodeId      Int?
+
+  mediaContent MediaContent? @relation(fields: [mediaContentId], references: [id])
+  episode      Episode?      @relation(fields: [episodeId], references: [id])
+
+  createdAt DateTime @default(now())
+  User      User     @relation(fields: [userId], references: [id])
+}
+
+enum ReactionType {
+  LIKE
+  DISLIKE
+}
+
+enum MediaType {
+  MOVIE
+  SERIES
+  DOCUMENTARY
+  SHORTFILM
+}
