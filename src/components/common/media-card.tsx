@@ -18,7 +18,7 @@ export default function MediaCard({ item }: MediaCardProps) {
       href={`/media/${item.id}`}
       className="flex-none w-[200px] sm:w-[240px] cursor-pointer group"
     >
-      <div className="relative w-full h-[140px] sm:h-[160px] rounded-xl overflow-hidden border">
+      <div className="relative w-full h-[140px] sm:h-[160px] rounded-xl overflow-hidden  shadow-sm transition-transform duration-300 hover:scale-105">
         <Image
           src={item.thumbnailUrl || "/placeholder.svg"}
           alt={item.title}

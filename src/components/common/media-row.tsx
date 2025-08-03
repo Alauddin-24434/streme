@@ -11,8 +11,8 @@ interface MediaRowProps {
 export default function MediaRow({ title, items }: MediaRowProps) {
   return (
     <section className="mb-8">
-      <h2 className="text-xl sm:text-2xl font-bold text-gray-50 mb-4 flex items-center">
-        {title} <ChevronRight className="ml-2 h-6 w-6 text-red-500" />
+      <h2 className="text-xl sm:text-2xl font-bold text-green-500 mb-4 flex  items-center">
+        {title}
       </h2>
       <div className="grid grid-cols-6 scrollbar-hide">
         {items.map((item) => (

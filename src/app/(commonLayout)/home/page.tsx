@@ -1,5 +1,6 @@
 import HeroCarousel from "@/components/common/hero-caro";
 import MediaRow from "@/components/common/media-row";
+import ChatModal from "@/components/shared/chat/chatModal";
 import { MediaContent } from "@/generated/prisma";
 import { ConetentStatus, MediaType } from "@/lib/interface";
 
@@ -36,6 +37,7 @@ export default async function HomePage() {
         <MediaRow title="Movies" items={movies} />
         <MediaRow title="Anime" items={animeItems} />
         <MediaRow title="Upcoming" items={upcomingItems} />
+        <ChatModal />
       </section>
     </div>
   );

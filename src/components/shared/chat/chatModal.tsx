@@ -107,14 +107,14 @@ const user= useSelector(selectCurrentUser);
   return (
     <>
       <button
-        className="fixed bottom-4 mr-14 right-4 inline-flex items-center justify-center text-sm font-medium disabled:pointer-events-none disabled:opacity-50 border rounded-full w-16 h-16 bg-gray-700 hover:bg-gray-600 m-0 cursor-pointer border-gray-200 bg-none p-0 normal-case leading-5 hover:text-gray-900"
+        className="fixed bottom-4 mr-14 right-4 inline-flex items-center justify-center border-green-500 text-sm font-medium disabled:pointer-events-none disabled:opacity-50 border rounded-full w-16 h-16 bg-[#1D1D1D] m-0 cursor-pointer bg-none p-0 normal-case leading-5 hover:text-gray-900"
         type="button"
         aria-haspopup="dialog"
         aria-expanded={isOpen}
         data-state={isOpen ? 'open' : 'closed'}
         onClick={toggleModal}
       >
-        <IoChatbubbleOutline className="w-8 h-8" />
+        <IoChatbubbleOutline className="w-8 h-8 text-green-500" />
       </button>
 
       {isOpen && (
