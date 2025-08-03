@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -18,8 +22,11 @@
         "name": "next"
       }
     ],
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]
+      "@/*": [
+        "src/*"
+      ]
     }
   },
   "include": [
@@ -30,6 +37,8 @@
     "tailwind.config.mjs",
     "public/locales/bn/common.js",
     "components/shared/language-switcher"
-  ],
-  "exclude": ["node_modules"]
+, "src/app/api/delete-media"  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

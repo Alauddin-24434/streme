@@ -1,7 +1,8 @@
 'use client';
 
 
-import { selectCurrentUser } from '@/src/redux/features/auth/authSlice';
+
+import { selectCurrentUser } from '@/redux/features/auth/authSlice';
 import React, { useEffect, useState, ChangeEvent, MouseEvent } from 'react';
 
 import { IoMdClose } from 'react-icons/io';

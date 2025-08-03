@@ -5,8 +5,8 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { serialize } from "cookie";
 import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient } from "@/src/generated/prisma";
-import { loginSchema } from "@/src/lib/validationSchemas";
+import { PrismaClient } from "@/generated/prisma";
+import { UserSchema } from "@/lib/validationSchemas";
 
 const prisma = new PrismaClient();
 
@@ -16,9 +16,8 @@ const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET!;
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const validData = loginSchema.parse(body);
     
-    const { email, password } = validData;
+    const { email, password } = body;
 
     if (!email || !password) {
       return NextResponse.json({ message: "Email and password are required" }, { status: 400 });

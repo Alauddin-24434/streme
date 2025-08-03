@@ -25,7 +25,6 @@ model User {
   // Relations
   Subscription  Subscription[]
   Advertisement Advertisement[]
-  reactions     Reaction[]
 }
 
 model SubscriptionPlan {
@@ -78,31 +77,20 @@ model Advertisement {
 // =========================
 
 model MediaContent {
-  id           String    @id @default(cuid())
+  id           String         @id @default(cuid())
   title        String
   description  String?
-  category     String[] // spelling fixed from categiry -> category
-  cast         String[]
+  category     String[]
   releaseDate  DateTime?
   genres       String[]
-  rating       Float?
-  language     String?
-  director     String?
-  production   String?
   country      String?
-  ageLimit     String?
   thumbnailUrl String?
-  trailerUrl   String?
-  isPublished  Boolean   @default(false)
-  views        Int       @default(0)
-  type         MediaType // Type of media content (e.g., Movie, Series, Documentary, ShortFilm)
-  // Like/Dislike count fields
-  likeCount    Int       @default(0)
-  dislikeCount Int       @default(0)
-
-  // Relations
-  episodes  Episode[]
-  reactions Reaction[]
+  videoUrl     String?
+  isPublished  Boolean        @default(false)
+  views        Int            @default(0)
+  type         MediaType
+  status       ConetentStatus
+  episodes     Episode[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -112,42 +100,27 @@ model Episode {
   id             Int     @id @default(autoincrement())
   title          String
   description    String?
+  videoUrl       String? // ✅ URL for the episode video
   mediaContentId String
 
-  // Like/Dislike count fields
-  likeCount    Int @default(0)
-  dislikeCount Int @default(0)
-
-  // Relations
+  likeCount    Int          @default(0)
+  dislikeCount Int          @default(0)
+  isPublished  Boolean      @default(false)
   mediaContent MediaContent @relation(fields: [mediaContentId], references: [id])
-  reactions    Reaction[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model Reaction {
-  id             String       @id @default(cuid())
-  userId         String
-  type           ReactionType
-  mediaContentId String?
-  episodeId      Int?
-
-  mediaContent MediaContent? @relation(fields: [mediaContentId], references: [id])
-  episode      Episode?      @relation(fields: [episodeId], references: [id])
-
-  createdAt DateTime @default(now())
-  User      User     @relation(fields: [userId], references: [id])
-}
-
-enum ReactionType {
-  LIKE
-  DISLIKE
-}
-
 enum MediaType {
+  ANIME
   MOVIE
-  SERIES
-  DOCUMENTARY
-  SHORTFILM
+  TV_SHOW
+}
+
+// Upcoming ONGONIG COMpLETE Enum
+enum ConetentStatus {
+  UPCOMING
+  ONGOING
+  COMPLETED
 }

@@ -1,30 +1,29 @@
-// Enums
-export enum ReactionType {
-  LIKE = "LIKE",
-  DISLIKE = "DISLIKE",
-}
-
 export enum MediaType {
+  ANIME = "ANIME",
   MOVIE = "MOVIE",
-  SERIES = "SERIES",
-  DOCUMENTARY = "DOCUMENTARY",
-  SHORTFILM = "SHORTFILM",
+  TV_SHOW = "TV_SHOW",
 }
 
-// Interfaces
+export enum ConetentStatus {
+  UPCOMING = "UPCOMING",
+  ONGOING = "ONGOING",
+  COMPLETED = "COMPLETED",
+}
+
+
 
 export interface IUser {
   id: string;
   email: string;
-  password: string;
+  password?: string | null;
   name?: string | null;
   isAdmin: boolean;
   isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
+
   Subscription?: ISubscription[];
   Advertisement?: IAdvertisement[];
-  reactions?: IReaction[];
 }
 
 export interface ISubscriptionPlan {
@@ -34,7 +33,9 @@ export interface ISubscriptionPlan {
   price: number;
   duration: number;
   features: string[];
+
   subscriptions?: ISubscription[];
+
   createdAt: Date;
   updatedAt: Date;
 }
@@ -46,8 +47,10 @@ export interface ISubscription {
   status: string;
   startDate: Date;
   endDate?: Date | null;
+
   user?: IUser;
   plan?: ISubscriptionPlan;
+
   createdAt: Date;
   updatedAt: Date;
 }
@@ -59,7 +62,9 @@ export interface IAdvertisement {
   price: number;
   userId: string;
   thumbnailUrl?: string | null;
+
   user?: IUser;
+
   createdAt: Date;
   updatedAt: Date;
 }
@@ -69,24 +74,17 @@ export interface IMediaContent {
   title: string;
   description?: string | null;
   category: string[];
-  cast: string[];
   releaseDate?: Date | null;
   genres: string[];
-  rating?: number | null;
-  language?: string | null;
-  director?: string | null;
-  production?: string | null;
   country?: string | null;
-  ageLimit?: string | null;
   thumbnailUrl?: string | null;
-  trailerUrl?: string | null;
+  videoUrl?: string | null;
   isPublished: boolean;
   views: number;
   type: MediaType;
-  likeCount: number;
-  dislikeCount: number;
+  status: ConetentStatus;
   episodes?: IEpisode[];
-  reactions?: IReaction[];
+
   createdAt: Date;
   updatedAt: Date;
 }
@@ -95,23 +93,15 @@ export interface IEpisode {
   id: number;
   title: string;
   description?: string | null;
+  videoUrl?: string | null;
   mediaContentId: string;
+
   likeCount: number;
   dislikeCount: number;
+  isPublished: boolean;
+
   mediaContent?: IMediaContent;
-  reactions?: IReaction[];
+
   createdAt: Date;
   updatedAt: Date;
-}
-
-export interface IReaction {
-  id: string;
-  userId: string;
-  type: ReactionType;
-  mediaContentId?: string | null;
-  episodeId?: number | null;
-  mediaContent?: IMediaContent | null;
-  episode?: IEpisode | null;
-  createdAt: Date;
-  User?: IUser;
 }

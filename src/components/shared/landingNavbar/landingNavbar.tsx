@@ -1,6 +1,7 @@
 "use client";
 
-import { selectCurrentUser } from '@/src/redux/features/auth/authSlice';
+
+import { selectCurrentUser } from '@/redux/features/auth/authSlice';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
 

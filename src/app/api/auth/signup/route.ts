@@ -5,8 +5,8 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { serialize } from "cookie";
 import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient } from "@/src/generated/prisma";
-import { registerSchema } from "@/src/lib/validationSchemas";
+import { PrismaClient } from "@/generated/prisma";
+import { UserSchema } from "@/lib/validationSchemas";
 
 const prisma = new PrismaClient();
 
@@ -16,7 +16,7 @@ const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET!;
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const validData = registerSchema.parse(body);
+    const validData = UserSchema.parse(body);
 
     const exists = await prisma.user.findUnique({
       where: { email: validData.email },

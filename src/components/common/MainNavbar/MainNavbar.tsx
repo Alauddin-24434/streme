@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '@/src/redux/features/auth/authSlice';
+import { selectCurrentUser } from '@/redux/features/auth/authSlice';
 
 
 const MainNavbar = () => {
@@ -38,8 +38,8 @@ const MainNavbar = () => {
     <>
 
       {/* Navbar */}
-      <div className="w-full fixed z-30 ">
-        <nav className="bg-slate-900">
+      <div className="w-full">
+        <nav className="bg-[#1D1D1D]">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between py-2 items-center">
 
