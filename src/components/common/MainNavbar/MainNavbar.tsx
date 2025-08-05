@@ -18,7 +18,7 @@ const MainNavbar = () => {
   return (
     <div className="w-full">
       <nav className="bg-[#1D1D1D]">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className=" px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between py-2 items-center">
             {/* Logo */}
             <Link href="/">

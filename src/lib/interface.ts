@@ -74,7 +74,6 @@ export interface IMediaContent {
   title: string;
   description?: string | null;
   category: string[];
-  releaseDate?: Date | null;
   genres: string[];
   country?: string | null;
   thumbnailUrl?: string | null;

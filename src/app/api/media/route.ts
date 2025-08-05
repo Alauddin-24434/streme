@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
   const body = await req.json();
   // Validate body structure if needed
 
- 
+ console.log("Received body:", body);
   try {
     const newMedia = await prisma.mediaContent.create({
       data: body,

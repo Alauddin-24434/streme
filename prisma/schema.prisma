@@ -81,12 +81,11 @@ model MediaContent {
   title        String
   description  String?
   category     String[]
-  releaseDate  DateTime?
   genres       String[]
   country      String?
   thumbnailUrl String?
   videoUrl     String?
-  isPublished  Boolean        @default(false)
+  isPublished  Boolean     
   views        Int            @default(0)
   type         MediaType
   status       ConetentStatus
@@ -99,10 +98,8 @@ model MediaContent {
 model Episode {
   id             Int     @id @default(autoincrement())
   title          String
-  description    String?
   videoUrl       String? // ✅ URL for the episode video
   mediaContentId String
-
   likeCount    Int          @default(0)
   dislikeCount Int          @default(0)
   isPublished  Boolean      @default(false)

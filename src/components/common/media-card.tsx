@@ -16,9 +16,9 @@ export default function MediaCard({ item }: MediaCardProps) {
   return (
     <Link
       href={`/media/${item.id}`}
-      className="flex-none w-[200px] sm:w-[240px] cursor-pointer group"
+      className="flex-none w-[200px] sm:w-[240px] cursor-pointer border bg-green-800 group"
     >
-      <div className="relative w-full h-[140px] sm:h-[160px] rounded-xl overflow-hidden  shadow-sm transition-transform duration-300 hover:scale-105">
+      <div className="relative w-full h-[140px] sm:h-[160px]  overflow-hidden  shadow-sm transition-transform duration-300 hover:scale-105">
         <Image
           src={item.thumbnailUrl || "/placeholder.svg"}
           alt={item.title}
@@ -39,7 +39,7 @@ export default function MediaCard({ item }: MediaCardProps) {
           </div>
         )}
       </div>
-      <h3 className="mt-2 text-base font-semibold truncate text-gray-100 group-hover:text-red-400">
+      <h3 className="mt-2 text-base font-semibold truncate text-gray-100 ">
         {item.title}
       </h3>
     </Link>

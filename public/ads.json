@@ -1,0 +1,30 @@
+[
+  {
+    "id": "ad1",
+    "image": "/placeholder.svg?height=200&width=300",
+    "title": "Go Ad-Free!",
+    "description": "Enjoy uninterrupted viewing and exclusive content. Upgrade now!",
+    "link": "#"
+  },
+  {
+    "id": "ad2",
+    "image": "/placeholder.svg?height=200&width=300",
+    "title": "New Blockbuster Out!",
+    "description": "Don't miss the most anticipated movie of the year. Watch it today!",
+    "link": "#"
+  },
+  {
+    "id": "ad3",
+    "image": "/placeholder.svg?height=200&width=300",
+    "title": "Hungry? Get Food Delivered!",
+    "description": "Order your favorite snacks and meals right to your couch.",
+    "link": "#"
+  },
+  {
+    "id": "ad4",
+    "image": "/placeholder.svg?height=200&width=300",
+    "title": "Level Up Your Entertainment!",
+    "description": "Discover the next generation of gaming. Shop consoles now!",
+    "link": "#"
+  }
+]

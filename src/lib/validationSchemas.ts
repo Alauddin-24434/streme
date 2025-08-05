@@ -81,12 +81,11 @@ export const AdvertisementSchema = z.object({
 // ======================
 
 export const EpisodeSchema = z.object({
-  id: z.number(),
+
   title: z.string(),
   description: z.string().nullable().optional(),
   videoUrl: z.string().nullable().optional(),
   mediaContentId: z.string(),
-
   likeCount: z.number(),
   dislikeCount: z.number(),
   isPublished: z.boolean(),
@@ -101,8 +100,8 @@ export const EpisodeSchema = z.object({
 // Media Content
 // ======================
 
-export const MediaContentSchema: z.ZodType<any> = z.object({
-  id: z.string(),
+export const MediaContentSchema= z.object({
+
   title: z.string(),
   description: z.string().nullable().optional(),
   category: z.array(z.string()),
@@ -115,9 +114,7 @@ export const MediaContentSchema: z.ZodType<any> = z.object({
   views: z.number(),
   type: MediaTypeEnum,
   status: ContentStatusEnum,
-
-  episodes: z.array(z.lazy(() => EpisodeSchema)).optional(),
-
+  
   createdAt: z.date(),
   updatedAt: z.date(),
 });

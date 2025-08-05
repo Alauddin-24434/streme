@@ -24,7 +24,6 @@ type FormValues = {
   title: string;
   description?: string;
   category?: string;
-  releaseDate?: string;
   genres?: string;
   country?: string;
   thumbnailUrl?: string;
@@ -41,13 +40,7 @@ export default function AddMediaForm() {
     reset,
     setValue,
     formState: { errors },
-  } = useForm<FormValues>({
-    defaultValues: {
-      isPublished: false,
-      type: MediaType.MOVIE,
-      status: ConetentStatus.UPCOMING,
-    },
-  });
+  } = useForm<FormValues>();
 
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
   const [videoFile, setVideoFile] = useState<File | null>(null);
@@ -76,13 +69,12 @@ export default function AddMediaForm() {
 
       const payload = {
         ...data,
+        isPublished: true,
         thumbnailUrl,
         videoUrl,
         category: (data.category ?? "").split(",").map((s) => s.trim()),
         genres: (data.genres ?? "").split(",").map((s) => s.trim()),
-        releaseDate: data.releaseDate
-          ? new Date(data.releaseDate).toISOString()
-          : null,
+       
       };
 
       const res = await fetch("/api/media", {
@@ -166,16 +158,7 @@ export default function AddMediaForm() {
         )}
       </div>
 
-      <div>
-        <Label htmlFor="releaseDate">Release Date</Label>
-        <Input
-          id="releaseDate"
-          type="date"
-          className="bg-gray-800 text-white border-gray-700"
-          {...register("releaseDate")}
-        />
-      </div>
-
+     
       <div>
         <Label htmlFor="country">Country</Label>
         <Input

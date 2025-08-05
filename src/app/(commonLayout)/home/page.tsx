@@ -32,7 +32,7 @@ export default async function HomePage() {
   return (
     <div className="min-h-screen bg-[#101010] text-white">
       <HeroCarousel items={latestFiveItems} />
-      <section className="container mx-auto px-4 py-8">
+      <section className=" px-4 py-8">
         <MediaRow title="Tv Shows" items={drama} />
         <MediaRow title="Movies" items={movies} />
         <MediaRow title="Anime" items={animeItems} />

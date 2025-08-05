@@ -14,7 +14,7 @@ export default function MediaRow({ title, items }: MediaRowProps) {
       <h2 className="text-xl sm:text-2xl font-bold text-green-500 mb-4 flex  items-center">
         {title}
       </h2>
-      <div className="grid grid-cols-6 scrollbar-hide">
+      <div className="grid grid-cols-7 scrollbar-hide">
         {items.map((item) => (
           <MediaCard key={item.id} item={item} />
         ))}
